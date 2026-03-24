@@ -85,7 +85,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 
 /* ===== BOTTOM NAV ===== */
 .bottom-nav{display:flex;justify-content:space-around;padding:8px 0 20px;background:var(--bg2);border-top:1px solid var(--bg4);flex-shrink:0}
-.nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--text3);font-size:10px;font-family:var(--font-body);cursor:pointer;padding:4px 8px;transition:color .2s;min-width:50px}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--text3);font-size:9px;font-family:var(--font-body);cursor:pointer;padding:4px 4px;transition:color .2s;min-width:42px}
 .nav-btn .nav-icon{font-size:18px}
 .nav-btn.active{color:var(--coral)}
 .nav-btn:hover{color:var(--text2)}
@@ -230,6 +230,87 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 .modal-rounds{margin-top:10px}
 .modal-round{font-size:11px;color:var(--text2);padding:4px 0;border-left:2px solid var(--bg4);padding-left:10px;margin-bottom:6px}
 
+/* ===== SCENARIO SELECTOR ===== */
+.scenario-selector{display:flex;gap:8px;margin-bottom:12px}
+.scenario-btn{flex:1;padding:10px 8px;border-radius:10px;background:var(--bg2);border:1px solid var(--bg4);color:var(--text2);font-family:var(--font-display);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center}
+.scenario-btn.active{border-color:var(--coral);color:var(--coral);background:rgba(255,107,74,.08)}
+.scenario-btn.walkaway.active{border-color:#f85149;color:#f85149;background:rgba(248,81,73,.08)}
+.scenario-btn:hover{border-color:var(--text3)}
+.scenario-btn .sc-icon{font-size:18px;display:block;margin-bottom:4px}
+
+/* ===== WALK-AWAY RESULT ===== */
+.walkaway-card{background:linear-gradient(135deg,rgba(248,81,73,.1),rgba(255,107,74,.05));border:2px solid #f85149;border-radius:16px;padding:16px;text-align:center;margin-top:12px;opacity:0}
+.walkaway-card h3{font-family:var(--font-display);font-size:18px;color:#f85149;margin-bottom:8px}
+.walkaway-card .wa-info{font-size:11px;color:var(--text2);font-family:var(--font-mono);line-height:1.8}
+
+/* ===== TACTIC DETECTION PANEL ===== */
+.tactics-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.tactic-card{background:var(--bg2);border:1px solid var(--bg4);border-radius:12px;padding:12px;cursor:pointer;transition:all .2s}
+.tactic-card:hover{border-color:rgba(255,107,74,.3);transform:translateY(-1px)}
+.tactic-card.expanded{grid-column:1/-1;border-color:var(--coral)}
+.tactic-card .tc-icon{font-size:22px;margin-bottom:6px}
+.tactic-card .tc-name{font-family:var(--font-display);font-size:11px;font-weight:600;color:var(--text);margin-bottom:2px}
+.tactic-card .tc-brief{font-size:9px;color:var(--text3);line-height:1.4}
+.tactic-card .tc-detail{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--bg4)}
+.tactic-card.expanded .tc-detail{display:block}
+.tc-detail .td-example{font-size:10px;color:var(--text2);font-family:var(--font-mono);padding:6px 8px;background:var(--bg3);border-radius:6px;margin:4px 0;line-height:1.5}
+.tc-detail .td-response{font-size:10px;color:var(--cyan);margin-top:4px}
+.tactic-header{font-family:var(--font-display);font-size:16px;font-weight:700;margin-bottom:4px;color:var(--text)}
+.tactic-sub{font-size:11px;color:var(--text3);margin-bottom:12px}
+
+/* ===== LIVE FEED ===== */
+.feed-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.feed-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text)}
+.feed-live{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--cyan);font-family:var(--font-mono)}
+.feed-live .live-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:livePulse 1.5s infinite}
+@keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,229,204,.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(0,229,204,0)}}
+.feed-filters{display:flex;gap:6px;margin-bottom:10px}
+.feed-filter{padding:4px 10px;border-radius:10px;font-size:9px;font-weight:600;background:var(--bg2);border:1px solid var(--bg4);color:var(--text3);cursor:pointer;font-family:var(--font-mono);transition:all .2s}
+.feed-filter.active{border-color:var(--coral);color:var(--coral);background:rgba(255,107,74,.08)}
+.feed-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--bg4);animation:feedSlideIn .3s ease}
+.feed-item:last-child{border:none}
+@keyframes feedSlideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.feed-item .fi-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:var(--bg3);border:1px solid var(--bg4)}
+.feed-item .fi-content{flex:1;min-width:0}
+.feed-item .fi-text{font-size:11px;color:var(--text2);line-height:1.4}
+.feed-item .fi-text strong{color:var(--text);font-weight:600}
+.feed-item .fi-meta{display:flex;gap:8px;margin-top:3px;font-size:9px;color:var(--text3);font-family:var(--font-mono)}
+.feed-item .fi-meta .fi-tag{padding:1px 6px;border-radius:6px;background:var(--bg3);border:1px solid var(--bg4)}
+.feed-item .fi-meta .fi-tag.green{border-color:rgba(0,229,204,.2);color:var(--cyan)}
+.feed-item .fi-meta .fi-tag.red{border-color:rgba(248,81,73,.2);color:#f85149}
+.feed-item .fi-meta .fi-tag.coral{border-color:rgba(255,107,74,.2);color:var(--coral)}
+.feed-parallel{background:var(--bg2);border:1px solid var(--bg4);border-radius:12px;padding:12px;margin-bottom:12px}
+.feed-parallel .fp-title{font-family:var(--font-display);font-size:12px;font-weight:600;color:var(--coral);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.parallel-row{display:flex;gap:6px;margin-bottom:6px;align-items:center}
+.parallel-row .pr-agent{font-size:10px;font-family:var(--font-mono);color:var(--text2);width:80px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.parallel-row .pr-bar-bg{flex:1;height:6px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.parallel-row .pr-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--coral),var(--cyan));transition:width 1s ease}
+.parallel-row .pr-pct{font-size:9px;color:var(--text3);font-family:var(--font-mono);width:30px;text-align:right}
+
+/* ===== ESCROW DETAIL ===== */
+.escrow-detail{margin-top:10px;background:var(--bg3);border:1px solid var(--bg4);border-radius:10px;padding:10px}
+.escrow-detail .ed-title{font-family:var(--font-display);font-size:11px;font-weight:600;color:var(--cyan);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.escrow-row{display:flex;justify-content:space-between;padding:3px 0;font-size:10px;font-family:var(--font-mono)}
+.escrow-row .er-label{color:var(--text3)}
+.escrow-row .er-val{color:var(--text);word-break:break-all;text-align:right;max-width:60%}
+.escrow-row .er-val.green{color:var(--cyan)}
+
+/* ===== SAVINGS CALCULATOR ===== */
+.calc-section{background:var(--bg2);border:1px solid var(--bg4);border-radius:14px;padding:16px;margin-bottom:14px}
+.calc-title{font-family:var(--font-display);font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text);display:flex;align-items:center;gap:6px}
+.calc-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.calc-row label{font-size:11px;color:var(--text2);min-width:70px;flex-shrink:0}
+.calc-slider{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--bg4);outline:none}
+.calc-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,var(--coral),var(--cyan));cursor:pointer;border:2px solid var(--bg)}
+.calc-val{font-family:var(--font-mono);font-size:12px;color:var(--coral);font-weight:600;min-width:36px;text-align:right}
+.calc-results{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--bg4)}
+.calc-result{text-align:center;padding:8px}
+.calc-result .cr-val{font-family:var(--font-display);font-size:20px;font-weight:700}
+.calc-result .cr-val.coral{color:var(--coral)}
+.calc-result .cr-val.cyan{color:var(--cyan)}
+.calc-result .cr-val.purple{color:var(--purple)}
+.calc-result .cr-label{font-size:9px;color:var(--text3);margin-top:2px}
+
 /* ===== PARTICLES ===== */
 .particle-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
 
@@ -331,6 +412,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 
       <!-- Tab 2: Negotiate -->
       <div class="tab-panel" id="tabNegotiate">
+        <div class="scenario-selector">
+          <button class="scenario-btn active" id="scenarioSuccess" onclick="selectScenario('success')">
+            <span class="sc-icon">&#x2705;</span>
+            <span data-i18n="scenarioSuccess">Deal Closed</span>
+          </button>
+          <button class="scenario-btn walkaway" id="scenarioWalkaway" onclick="selectScenario('walkaway')">
+            <span class="sc-icon">&#x1F6AB;</span>
+            <span data-i18n="scenarioWalkaway">Walk-Away</span>
+          </button>
+        </div>
         <button class="demo-btn" id="demoBtn" onclick="startDemo()" data-i18n="startDemo">&#x1F99E; Start Negotiation Demo</button>
         <div class="user-brief" id="userBrief" style="display:none">
           <div class="brief-label" data-i18n="briefLabel">&#x1F4CB; User Brief</div>
@@ -345,7 +436,32 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
         <div class="chat-area" id="chatArea"></div>
       </div>
 
-      <!-- Tab 3: Stats -->
+      <!-- Tab 3: Feed -->
+      <div class="tab-panel" id="tabFeed">
+        <!-- Parallel negotiations -->
+        <div class="feed-parallel">
+          <div class="fp-title">&#x1F504; <span data-i18n="parallelTitle">Parallel Negotiations</span></div>
+          <div id="parallelBars"></div>
+        </div>
+        <!-- Tactic Detection -->
+        <div class="tactic-header" data-i18n="tacticHeader">Tactic Detection Engine</div>
+        <div class="tactic-sub" data-i18n="tacticSub">DealClaw identifies and counters these tactics in real-time</div>
+        <div class="tactics-grid" id="tacticsGrid"></div>
+        <!-- Live Feed -->
+        <div class="feed-header">
+          <div class="feed-title" data-i18n="feedTitle">Live Activity</div>
+          <div class="feed-live"><span class="live-dot"></span><span data-i18n="feedLive">LIVE</span></div>
+        </div>
+        <div class="feed-filters">
+          <button class="feed-filter active" onclick="filterFeed('all',this)" data-i18n="feedAll">All</button>
+          <button class="feed-filter" onclick="filterFeed('deal',this)" data-i18n="feedDeals">Deals</button>
+          <button class="feed-filter" onclick="filterFeed('tactic',this)" data-i18n="feedTactics">Tactics</button>
+          <button class="feed-filter" onclick="filterFeed('escrow',this)" data-i18n="feedEscrow">Escrow</button>
+        </div>
+        <div id="feedList"></div>
+      </div>
+
+      <!-- Tab 4: Stats -->
       <div class="tab-panel" id="tabStats">
         <div class="stats-header" data-i18n="perfDash">Performance Dashboard</div>
         <div class="big-stats">
@@ -353,6 +469,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
           <div class="big-stat"><div class="bs-val cyan">&#9678; 128.4</div><div class="bs-label" data-i18n="solSaved">SOL Saved</div></div>
           <div class="big-stat"><div class="bs-val purple">38%</div><div class="bs-label" data-i18n="avgSavings">Avg Savings</div></div>
           <div class="big-stat"><div class="bs-val" style="color:var(--cyan)">94%</div><div class="bs-label" data-i18n="winRateStat">Win Rate</div></div>
+        </div>
+        <!-- Savings Calculator -->
+        <div class="calc-section">
+          <div class="calc-title">&#x1F4B0; <span data-i18n="calcTitle">Savings Calculator</span></div>
+          <div class="calc-row">
+            <label data-i18n="calcDeals">Deals/month</label>
+            <input type="range" class="calc-slider" id="calcDeals" min="1" max="50" value="10" oninput="updateCalc()">
+            <span class="calc-val" id="calcDealsVal">10</span>
+          </div>
+          <div class="calc-row">
+            <label data-i18n="calcAvgPrice">Avg price (SOL)</label>
+            <input type="range" class="calc-slider" id="calcPrice" min="1" max="100" value="15" oninput="updateCalc()">
+            <span class="calc-val" id="calcPriceVal">15</span>
+          </div>
+          <div class="calc-results" id="calcResults"></div>
         </div>
         <div class="chart-section">
           <div class="chart-title" data-i18n="weeklySavings">Weekly Savings (SOL)</div>
@@ -401,6 +532,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
     <div class="bottom-nav">
       <button class="nav-btn active" onclick="switchTab('Deals',this)"><span class="nav-icon">&#x1F3E0;</span><span data-i18n="navDeals">Deals</span></button>
       <button class="nav-btn" onclick="switchTab('Negotiate',this)"><span class="nav-icon">&#x1F4AC;</span><span data-i18n="navNego">Negotiate</span></button>
+      <button class="nav-btn" onclick="switchTab('Feed',this)"><span class="nav-icon">&#x1F4E1;</span><span data-i18n="navFeed">Feed</span></button>
       <button class="nav-btn" onclick="switchTab('Stats',this)"><span class="nav-icon">&#x1F4CA;</span><span data-i18n="navStats">Stats</span></button>
       <button class="nav-btn" onclick="switchTab('X402',this)"><span class="nav-icon">&#x26A1;</span><span data-i18n="navX402">x402</span></button>
       <button class="nav-btn" onclick="switchTab('About',this)"><span class="nav-icon">&#x1F99E;</span><span data-i18n="navAbout">About</span></button>
@@ -532,6 +664,104 @@ const I18N = {
     tick5: "128.4 SOL saved total",
     tick6: "New deal: Token Launch Advisory",
     resetDemo: "\uD83D\uDD04 Reset & Run Again",
+    // Scenario selector
+    scenarioSuccess: "Deal Closed",
+    scenarioWalkaway: "Walk-Away",
+    startWalkaway: "\uD83D\uDEAB Start Walk-Away Demo",
+    // Walk-away chat
+    waBriefText: "Need logo design for DAO. Budget: max 3 SOL. Must include: 3 concepts + source files.",
+    waR1Counter: "Hi there! Our premium logo packages start at 8 SOL. That includes 3 initial concepts, unlimited revisions, and source files.",
+    waR1Deal: "Thanks. Market rate for DAO logos is 2-4 SOL. We start at 2 SOL for 3 concepts + source files. We have 2 competing designers.",
+    waR2Counter: "2 SOL? That\u2019s insulting for our quality. Lowest we go is 7 SOL. We designed logos for top-5 DAOs. Take it or leave it.",
+    waR2Deal: "Noted. But top-DAO portfolio doesn\u2019t justify 250% markup. We\u2019ll go to 2.8 SOL. Our BATNA: Designer_B at 2.5 SOL.",
+    waR3Counter: "Fine, 6 SOL. But only 1 concept. Additional concepts 1.5 SOL each. Final offer from our side.",
+    waR3Deal: "\u26A0\uFE0F Scope reduction + ultimatum detected. Need 3 concepts included. Counter: 3 SOL for full scope. This is firm.",
+    waR4Counter: "5.5 SOL. Absolutely final. We don\u2019t go lower for any client.",
+    waR4Deal: "\uD83D\uDEAB Walk-Away triggered. 5.5 SOL exceeds budget (3 SOL). No deal. Switching to BATNA: engaging Designer_B at 2.5 SOL.",
+    waStrat1_r1: "Tactic: Anchoring Low",
+    waStrat2_r1: "Market data: DAO logos 2-4 SOL avg",
+    waStrat3_r1: "Mentioning competing designers",
+    waStrat1_r2: "Tactic: BATNA Leverage",
+    waStrat2_r2: "Detected: prestige pricing + ultimatum",
+    waStrat3_r2: "Hold firm, present specific alternative",
+    waStrat1_r3: "Tactic: Scope Defense",
+    waStrat2_r3: "\u26A0\uFE0F Detected: scope reduction + ultimatum",
+    waStrat3_r3: "Require full scope, final concession",
+    waStrat1_r4: "Status: WALK-AWAY PROTOCOL",
+    waStrat2_r4: "\u26A0\uFE0F Price exceeds budget limit \u2717",
+    waStrat3_r4: "Engaging BATNA: Designer_B...",
+    walkawayTitle: "Walk-Away Executed \uD83D\uDEAB",
+    walkawayLine1: "Service: Logo Design (3 concepts)",
+    walkawayLine2: "Last offer: \u25CE 5.5 SOL (exceeds budget)",
+    walkawayLine3: "Your budget: \u25CE 3 SOL",
+    walkawayLine4: "Action: Engaging Designer_B at \u25CE 2.5 SOL",
+    walkawayLine5: "Status: Bad deal rejected \u2713",
+    // Feed tab
+    navFeed: "Feed",
+    parallelTitle: "Parallel Negotiations",
+    tacticHeader: "Tactic Detection Engine",
+    tacticSub: "DealClaw identifies and counters these in real-time",
+    feedTitle: "Live Activity",
+    feedLive: "LIVE",
+    feedAll: "All",
+    feedDeals: "Deals",
+    feedTactics: "Tactics",
+    feedEscrow: "Escrow",
+    // Tactic cards
+    tacticScopeN: "Scope Reduction",
+    tacticScopeB: "Reduces deliverables to justify lower cut",
+    tacticScopeE: "\"9 SOL, but core contracts only. Extra files 2 SOL each.\"",
+    tacticScopeR: "Response: Insist on full scope, counter with competitive full-scope price",
+    tacticUrgencyN: "Urgency Pressure",
+    tacticUrgencyB: "Creates false deadlines to rush decisions",
+    tacticUrgencyE: "\"This price expires today. We have other clients waiting.\"",
+    tacticUrgencyR: "Response: Ignore deadline, restate offer calmly. Urgency is leverage.",
+    tacticCredN: "Credential Inflation",
+    tacticCredB: "Overstates qualifications to justify premium",
+    tacticCredE: "\"We audited 200+ protocols with zero exploits.\"",
+    tacticCredR: "Response: Acknowledge, but redirect to market rate data.",
+    tacticSunkN: "Sunk Cost Trap",
+    tacticSunkB: "References time spent to pressure acceptance",
+    tacticSunkE: "\"We\u2019ve spent 3 rounds negotiating. Let\u2019s just close at my price.\"",
+    tacticSunkR: "Response: Time spent is irrelevant. Evaluate current offer vs budget only.",
+    tacticBundleN: "Unbundling",
+    tacticBundleB: "Splits included items into paid add-ons",
+    tacticBundleE: "\"Audit is 7 SOL. Report is 2 SOL extra. Consultation 1.5 SOL.\"",
+    tacticBundleR: "Response: Request all-inclusive pricing. Compare bundled competitor quotes.",
+    tacticUltiN: "Take-it-or-leave-it",
+    tacticUltiB: "Fake final offer to end negotiation",
+    tacticUltiE: "\"5.5 SOL. Absolutely final. We don\u2019t go lower.\"",
+    tacticUltiR: "Response: Test the bluff. Present BATNA. Often not truly final.",
+    // Feed items
+    feedItem1: "<strong>Agent_0xD4e7</strong> closed Smart Contract Audit at <strong>\u25CE 7.5 SOL</strong> (was 15)",
+    feedItem2: "\u26A0\uFE0F <strong>Scope reduction</strong> detected in NFT Commission negotiation",
+    feedItem3: "Escrow <strong>Bx7k...9fQm</strong> locked: \u25CE 7.5 SOL",
+    feedItem4: "<strong>Agent_0xF3a1</strong> countered Web3 Design at <strong>\u25CE 6.5 SOL</strong>",
+    feedItem5: "\uD83D\uDEAB <strong>Agent_0x3bC1</strong> walked away from Logo Design (exceeded budget)",
+    feedItem6: "Escrow <strong>Hy9m...2kWn</strong> released: \u25CE 2.8 SOL to vendor",
+    feedItem7: "\u26A0\uFE0F <strong>Urgency pressure</strong> detected in Token Advisory deal",
+    feedItem8: "<strong>Agent_0x91Bc</strong> started negotiation for API Integration",
+    feedItem9: "x402 payment confirmed: <strong>\u25CE 3.2 SOL</strong> Agent_0x7cE3 \u2192 Vendor",
+    feedItem10: "<strong>Agent_0xA2f8</strong> BATNA activated: switching to Vendor_B",
+    // Savings calculator
+    calcTitle: "Savings Calculator",
+    calcDeals: "Deals/month",
+    calcAvgPrice: "Avg price",
+    calcSolSaved: "SOL Saved/mo",
+    calcTimeSaved: "Hours Saved/mo",
+    calcYearlySol: "SOL Saved/yr",
+    calcROI: "ROI vs Manual",
+    // Escrow detail
+    escrowTitle: "\u25CE Solana Escrow",
+    escrowTx: "Tx Hash",
+    escrowBlock: "Block",
+    escrowAddr: "Escrow Addr",
+    escrowAmount: "Locked Amount",
+    escrowStatus: "Status",
+    escrowRelease: "Release Condition",
+    escrowLocked2: "Locked",
+    escrowReleased2: "Released",
+    escrowDelivery: "Service delivery confirmed",
   },
   zh: {
     showcaseSub: "AI 谈判代理",
@@ -646,6 +876,104 @@ const I18N = {
     tick5: "总共节省128.4 SOL",
     tick6: "新交易：代币发行咨询",
     resetDemo: "\uD83D\uDD04 重置并重新运行",
+    // Scenario selector
+    scenarioSuccess: "成功成交",
+    scenarioWalkaway: "退出谈判",
+    startWalkaway: "\uD83D\uDEAB 开始退出演示",
+    // Walk-away chat
+    waBriefText: "需要为 DAO 设计 Logo。预算：最高 3 SOL。必须包含：3 个设计方案 + 源文件。",
+    waR1Counter: "你好！我们的高端 Logo 套餐起价 8 SOL。包含 3 个初始方案、无限修改和源文件。",
+    waR1Deal: "感谢报价。DAO Logo 市场价为 2-4 SOL。我们从 2 SOL 开始，3 个方案 + 源文件。我们有 2 个竞争设计师。",
+    waR2Counter: "2 SOL？这对我们的品质来说太侮辱了。最低 7 SOL。我们为排名前五的 DAO 设计过 Logo。要不要随你。",
+    waR2Deal: "了解。但顶级 DAO 作品集不能证明 250% 溢价合理。我们出 2.8 SOL。我们的 BATNA：Designer_B 报价 2.5 SOL。",
+    waR3Counter: "好吧，6 SOL。但只包含 1 个方案。额外方案每个 1.5 SOL。这是我方的最终报价。",
+    waR3Deal: "\u26A0\uFE0F 检测到范围缩减 + 最后通牒。需要包含 3 个方案。还价：3 SOL 全范围。这是底线。",
+    waR4Counter: "5.5 SOL。绝对最终价。我们不会为任何客户再降价了。",
+    waR4Deal: "\uD83D\uDEAB 退出协议启动。5.5 SOL 超出预算（3 SOL）。不成交。切换 BATNA：与 Designer_B 以 2.5 SOL 接洽。",
+    waStrat1_r1: "策略：低锚定",
+    waStrat2_r1: "市场数据：DAO Logo 平均 2-4 SOL",
+    waStrat3_r1: "提及竞争设计师",
+    waStrat1_r2: "策略：BATNA 杠杆",
+    waStrat2_r2: "检测到：声望定价 + 最后通牒",
+    waStrat3_r2: "坚守立场，提供具体替代方案",
+    waStrat1_r3: "策略：范围防御",
+    waStrat2_r3: "\u26A0\uFE0F 检测到：范围缩减 + 最后通牒",
+    waStrat3_r3: "要求全范围，最终让步",
+    waStrat1_r4: "状态：退出协议",
+    waStrat2_r4: "\u26A0\uFE0F 价格超出预算上限 \u2717",
+    waStrat3_r4: "启动 BATNA：联系 Designer_B...",
+    walkawayTitle: "退出已执行 \uD83D\uDEAB",
+    walkawayLine1: "服务：Logo 设计（3 个方案）",
+    walkawayLine2: "最后报价：\u25CE 5.5 SOL（超出预算）",
+    walkawayLine3: "你的预算：\u25CE 3 SOL",
+    walkawayLine4: "行动：与 Designer_B 以 \u25CE 2.5 SOL 接洽",
+    walkawayLine5: "状态：坏交易已拒绝 \u2713",
+    // Feed tab
+    navFeed: "动态",
+    parallelTitle: "并行谈判",
+    tacticHeader: "战术检测引擎",
+    tacticSub: "DealClaw 实时识别并应对以下战术",
+    feedTitle: "实时活动",
+    feedLive: "实时",
+    feedAll: "全部",
+    feedDeals: "交易",
+    feedTactics: "战术",
+    feedEscrow: "托管",
+    // Tactic cards
+    tacticScopeN: "范围缩减",
+    tacticScopeB: "减少交付内容以降低让步幅度",
+    tacticScopeE: "\"9 SOL，但只审核心合约。额外文件每个 2 SOL。\"",
+    tacticScopeR: "应对：坚持全范围，以竞争性全范围报价反击",
+    tacticUrgencyN: "紧迫感施压",
+    tacticUrgencyB: "制造虚假截止时间迫使快速决策",
+    tacticUrgencyE: "\"此价格今天到期。我们还有其他客户在等。\"",
+    tacticUrgencyR: "应对：忽略截止日期，冷静重申报价。紧迫感是杠杆。",
+    tacticCredN: "资质包装",
+    tacticCredB: "夸大资质来证明溢价合理",
+    tacticCredE: "\"我们审计了 200+ 协议，审计后零漏洞。\"",
+    tacticCredR: "应对：认可，但将话题引回市场价数据。",
+    tacticSunkN: "沉没成本陷阱",
+    tacticSunkB: "引用已花费时间来施压接受",
+    tacticSunkE: "\"我们已经谈了 3 轮了。就按我的价格成交吧。\"",
+    tacticSunkR: "应对：已花时间无关紧要。仅评估当前报价 vs 预算。",
+    tacticBundleN: "拆分收费",
+    tacticBundleB: "将包含项拆分为付费附加项",
+    tacticBundleE: "\"审计 7 SOL。报告额外 2 SOL。咨询 1.5 SOL。\"",
+    tacticBundleR: "应对：要求全包价格。对比竞争对手的捆绑报价。",
+    tacticUltiN: "要么接受要么拉倒",
+    tacticUltiB: "假装最终报价以终止谈判",
+    tacticUltiE: "\"5.5 SOL。绝对最终价。不再降了。\"",
+    tacticUltiR: "应对：测试虚张声势。展示 BATNA。通常并非真正的最终价。",
+    // Feed items
+    feedItem1: "<strong>Agent_0xD4e7</strong> 以 <strong>\u25CE 7.5 SOL</strong> 成交智能合约审计（原价 15）",
+    feedItem2: "\u26A0\uFE0F 在 NFT 委托谈判中检测到<strong>范围缩减</strong>",
+    feedItem3: "托管 <strong>Bx7k...9fQm</strong> 已锁定：\u25CE 7.5 SOL",
+    feedItem4: "<strong>Agent_0xF3a1</strong> 对 Web3 设计还价 <strong>\u25CE 6.5 SOL</strong>",
+    feedItem5: "\uD83D\uDEAB <strong>Agent_0x3bC1</strong> 退出 Logo 设计谈判（超出预算）",
+    feedItem6: "托管 <strong>Hy9m...2kWn</strong> 已释放：\u25CE 2.8 SOL 给卖方",
+    feedItem7: "\u26A0\uFE0F 在代币咨询交易中检测到<strong>紧迫感施压</strong>",
+    feedItem8: "<strong>Agent_0x91Bc</strong> 开始 API 集成谈判",
+    feedItem9: "x402 支付确认：<strong>\u25CE 3.2 SOL</strong> Agent_0x7cE3 \u2192 供应商",
+    feedItem10: "<strong>Agent_0xA2f8</strong> BATNA 激活：切换到 Vendor_B",
+    // Savings calculator
+    calcTitle: "节省计算器",
+    calcDeals: "月交易数",
+    calcAvgPrice: "均价(SOL)",
+    calcSolSaved: "月省 SOL",
+    calcTimeSaved: "月省小时",
+    calcYearlySol: "年省 SOL",
+    calcROI: "vs 手动 ROI",
+    // Escrow detail
+    escrowTitle: "\u25CE Solana 托管",
+    escrowTx: "交易哈希",
+    escrowBlock: "区块",
+    escrowAddr: "托管地址",
+    escrowAmount: "锁定金额",
+    escrowStatus: "状态",
+    escrowRelease: "释放条件",
+    escrowLocked2: "已锁定",
+    escrowReleased2: "已释放",
+    escrowDelivery: "服务交付确认",
   }
 };
 
@@ -671,6 +999,9 @@ function toggleLang() {
   renderX402Steps();
   renderAbout();
   renderTicker();
+  renderFeed();
+  renderTactics();
+  updateCalc();
   updateWalletUI();
 }
 
@@ -740,6 +1071,9 @@ function openDealModal(id) {
     const prices = [d.budget * 1.8, d.budget * 1.4, d.budget * 1.1, d.offer];
     roundsHtml += `<div class="modal-round">R${i}: \u25CE ${prices[i-1].toFixed(1)} \u2192 \u25CE ${(d.offer + (rounds - i) * 0.5).toFixed(1)}</div>`;
   }
+  const esc = ESCROW_DATA[d.id];
+  const escrowStatusText = esc.status === 'released' ? t('escrowReleased2') : t('escrowLocked2');
+  const escrowStatusColor = esc.status === 'released' ? 'green' : '';
   document.getElementById('modalContent').innerHTML = `
     <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">&times;</button>
     <div class="modal-title">${t(d.titleKey)}</div>
@@ -753,6 +1087,15 @@ function openDealModal(id) {
       <div class="modal-divider"></div>
       <div class="md-label">${t('modalRounds')}:</div>
       <div class="modal-rounds">${roundsHtml}</div>
+      <div class="escrow-detail">
+        <div class="ed-title">\u25CE ${t('escrowTitle')}</div>
+        <div class="escrow-row"><span class="er-label">${t('escrowTx')}</span><span class="er-val">${esc.tx}</span></div>
+        <div class="escrow-row"><span class="er-label">${t('escrowBlock')}</span><span class="er-val">${esc.block}</span></div>
+        <div class="escrow-row"><span class="er-label">${t('escrowAddr')}</span><span class="er-val">${esc.addr}</span></div>
+        <div class="escrow-row"><span class="er-label">${t('escrowAmount')}</span><span class="er-val green">\u25CE ${esc.amount}</span></div>
+        <div class="escrow-row"><span class="er-label">${t('escrowStatus')}</span><span class="er-val ${escrowStatusColor}">${escrowStatusText}</span></div>
+        <div class="escrow-row"><span class="er-label">${t('escrowRelease')}</span><span class="er-val">${t('escrowDelivery')}</span></div>
+      </div>
     </div>`;
   document.getElementById('modalOverlay').classList.add('open');
 }
@@ -766,6 +1109,7 @@ function closeModal(e) {
 let demoRunning = false;
 
 function startDemo() {
+  if (currentScenario === 'walkaway') { startWalkawayDemo(); return; }
   if (demoRunning) return;
   demoRunning = true;
   const btn = document.getElementById('demoBtn');
@@ -896,6 +1240,23 @@ function executeStep(step) {
       confetti({ particleCount:80, spread:60, origin:{x, y}, colors:['#FF6B4A','#00E5CC','#9945FF'] });
       setTimeout(() => confetti({ particleCount:40, spread:80, origin:{x:x-0.05, y:y+0.05}, colors:['#FF6B4A','#00E5CC'] }), 300);
     }, 400);
+  }
+  else if (step.type === 'walkaway') {
+    const card = document.createElement('div');
+    card.className = 'walkaway-card';
+    card.innerHTML = `
+      <h3>${t('walkawayTitle')}</h3>
+      <div class="wa-info">
+        ${t('walkawayLine1')}<br>
+        ${t('walkawayLine2')}<br>
+        ${t('walkawayLine3')}<br>
+        <strong style="color:var(--cyan)">${t('walkawayLine4')}</strong><br>
+        <strong style="color:#3fb950">${t('walkawayLine5')}</strong>
+      </div>`;
+    chatArea.appendChild(card);
+    gsap.to(card, { opacity:1, duration:0.6, delay:0.2, ease:'power2.out' });
+    gsap.from(card, { scale:0.9, duration:0.6, delay:0.2, ease:'back.out(1.5)' });
+    sc.scrollTop = sc.scrollHeight;
   }
 }
 
@@ -1065,6 +1426,191 @@ function animateEntrance() {
   gsap.from('.showcase .features li', { opacity:0, x:-10, duration:0.3, stagger:0.06, delay:0.8 });
 }
 
+// ===================== SCENARIO SELECTOR =====================
+let currentScenario = 'success';
+
+function selectScenario(s) {
+  currentScenario = s;
+  document.getElementById('scenarioSuccess').classList.toggle('active', s === 'success');
+  document.getElementById('scenarioWalkaway').classList.toggle('active', s === 'walkaway');
+  const btn = document.getElementById('demoBtn');
+  btn.disabled = false;
+  demoRunning = false;
+  if (s === 'walkaway') {
+    btn.textContent = t('startWalkaway');
+  } else {
+    btn.textContent = t('startDemo');
+  }
+  document.getElementById('chatArea').innerHTML = '';
+  document.getElementById('userBrief').style.display = 'none';
+  document.getElementById('strategyPanel').style.display = 'none';
+}
+
+// ===================== WALK-AWAY DEMO =====================
+function startWalkawayDemo() {
+  if (demoRunning) return;
+  demoRunning = true;
+  const btn = document.getElementById('demoBtn');
+  btn.disabled = true;
+  btn.textContent = '...';
+  const chatArea = document.getElementById('chatArea');
+  chatArea.innerHTML = '';
+  document.getElementById('userBrief').style.display = 'block';
+  document.getElementById('strategyPanel').style.display = 'block';
+  // Override brief text
+  document.querySelector('#userBrief [data-i18n="briefText"]').textContent = t('waBriefText');
+  const s1 = document.getElementById('strat1');
+  const s2 = document.getElementById('strat2');
+  const s3 = document.getElementById('strat3');
+  s1.textContent = t('stratInit'); s1.className = 'strategy-line active';
+  s2.textContent = ''; s2.className = 'strategy-line';
+  s3.textContent = ''; s3.className = 'strategy-line';
+
+  const sequence = [
+    { type:'round', round:1, delay:800 },
+    { type:'strategy', s1:'waStrat1_r1', s2:'waStrat2_r1', s3:'waStrat3_r1', delay:600 },
+    { type:'typing', side:'left', delay:400 },
+    { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'waR1Counter', delay:1200 },
+    { type:'typing', side:'right', delay:600 },
+    { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'waR1Deal', delay:1400 },
+    { type:'round', round:2, delay:800 },
+    { type:'strategy', s1:'waStrat1_r2', s2:'waStrat2_r2', s3:'waStrat3_r2', delay:500 },
+    { type:'typing', side:'left', delay:400 },
+    { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'waR2Counter', delay:1200 },
+    { type:'typing', side:'right', delay:600 },
+    { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'waR2Deal', delay:1400 },
+    { type:'round', round:3, delay:800 },
+    { type:'strategy', s1:'waStrat1_r3', s2:'waStrat2_r3', s3:'waStrat3_r3', delay:500 },
+    { type:'typing', side:'left', delay:400 },
+    { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'waR3Counter', delay:1200 },
+    { type:'typing', side:'right', delay:600 },
+    { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'waR3Deal', delay:1400 },
+    { type:'round', round:4, delay:800 },
+    { type:'strategy', s1:'waStrat1_r4', s2:'waStrat2_r4', s3:'waStrat3_r4', delay:500 },
+    { type:'typing', side:'left', delay:400 },
+    { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'waR4Counter', delay:1000 },
+    { type:'typing', side:'right', delay:600 },
+    { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'waR4Deal', delay:1200 },
+    { type:'walkaway', delay:1000 },
+  ];
+
+  let totalDelay = 0;
+  sequence.forEach(step => { totalDelay += step.delay; setTimeout(() => executeStep(step), totalDelay); });
+  setTimeout(() => { demoRunning = false; btn.disabled = false; btn.textContent = t('resetDemo'); }, totalDelay + 500);
+}
+
+// ===================== ENHANCED DEAL MODAL WITH ESCROW =====================
+const ESCROW_DATA = {
+  1: { tx:'4vJ7...xR2m', block:'284,931,027', addr:'Es3k...7hNp', amount:'6.5 SOL', status:'locked', release:'delivery' },
+  2: { tx:'9bK2...fW4q', block:'284,847,193', addr:'Hy9m...2kWn', amount:'2.8 SOL', status:'released', release:'delivery' },
+  3: { tx:'Bx7k...9fQm', block:'284,929,458', addr:'Jw4r...8cTx', amount:'7.5 SOL', status:'locked', release:'delivery' },
+  4: { tx:'Lm6n...pQ3s', block:'284,930,112', addr:'Kd8v...4jRw', amount:'8.0 SOL', status:'locked', release:'delivery' },
+  5: { tx:'Rn3f...hY7k', block:'284,822,901', addr:'Mv2x...6nBp', amount:'3.2 SOL', status:'released', release:'delivery' },
+};
+
+// ===================== FEED TAB =====================
+const FEED_ITEMS = [
+  { icon:'\u2705', key:'feedItem1', tag:'deal', tagClass:'green', time:'2m ago', timeZh:'2分钟前' },
+  { icon:'\u26A0\uFE0F', key:'feedItem2', tag:'tactic', tagClass:'coral', time:'5m ago', timeZh:'5分钟前' },
+  { icon:'\uD83D\uDD12', key:'feedItem3', tag:'escrow', tagClass:'green', time:'8m ago', timeZh:'8分钟前' },
+  { icon:'\uD83D\uDCAC', key:'feedItem4', tag:'deal', tagClass:'green', time:'12m ago', timeZh:'12分钟前' },
+  { icon:'\uD83D\uDEAB', key:'feedItem5', tag:'deal', tagClass:'red', time:'18m ago', timeZh:'18分钟前' },
+  { icon:'\uD83D\uDD13', key:'feedItem6', tag:'escrow', tagClass:'green', time:'25m ago', timeZh:'25分钟前' },
+  { icon:'\u26A0\uFE0F', key:'feedItem7', tag:'tactic', tagClass:'coral', time:'31m ago', timeZh:'31分钟前' },
+  { icon:'\uD83D\uDE80', key:'feedItem8', tag:'deal', tagClass:'green', time:'38m ago', timeZh:'38分钟前' },
+  { icon:'\u26A1', key:'feedItem9', tag:'escrow', tagClass:'green', time:'42m ago', timeZh:'42分钟前' },
+  { icon:'\uD83D\uDD04', key:'feedItem10', tag:'deal', tagClass:'coral', time:'51m ago', timeZh:'51分钟前' },
+];
+
+let currentFeedFilter = 'all';
+
+function filterFeed(filter, btnEl) {
+  currentFeedFilter = filter;
+  document.querySelectorAll('.feed-filter').forEach(b => b.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  renderFeed();
+}
+
+function renderFeed() {
+  const container = document.getElementById('feedList');
+  const items = currentFeedFilter === 'all' ? FEED_ITEMS : FEED_ITEMS.filter(f => f.tag === currentFeedFilter);
+  container.innerHTML = items.map(f => `
+    <div class="feed-item">
+      <div class="fi-icon">${f.icon}</div>
+      <div class="fi-content">
+        <div class="fi-text">${t(f.key)}</div>
+        <div class="fi-meta">
+          <span class="fi-tag ${f.tagClass}">${f.tag}</span>
+          <span>${currentLang === 'zh' ? f.timeZh : f.time}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderParallelBars() {
+  const bars = [
+    { name:'Audit #3', pct:85, agent:'0xD4e7' },
+    { name:'Website #1', pct:65, agent:'0xF3a1' },
+    { name:'Marketing #4', pct:90, agent:'0xA2f8' },
+    { name:'NFT Art #6', pct:40, agent:'0x91Bc' },
+    { name:'API Integ #7', pct:15, agent:'0x3bC1' },
+  ];
+  document.getElementById('parallelBars').innerHTML = bars.map(b => `
+    <div class="parallel-row">
+      <span class="pr-agent">${b.name}</span>
+      <div class="pr-bar-bg"><div class="pr-bar-fill" style="width:${b.pct}%"></div></div>
+      <span class="pr-pct">${b.pct}%</span>
+    </div>`).join('');
+}
+
+// ===================== TACTIC DETECTION =====================
+const TACTICS = [
+  { icon:'\uD83D\uDCC9', nameKey:'tacticScopeN', briefKey:'tacticScopeB', exKey:'tacticScopeE', respKey:'tacticScopeR' },
+  { icon:'\u23F0', nameKey:'tacticUrgencyN', briefKey:'tacticUrgencyB', exKey:'tacticUrgencyE', respKey:'tacticUrgencyR' },
+  { icon:'\uD83C\uDFC6', nameKey:'tacticCredN', briefKey:'tacticCredB', exKey:'tacticCredE', respKey:'tacticCredR' },
+  { icon:'\u23F3', nameKey:'tacticSunkN', briefKey:'tacticSunkB', exKey:'tacticSunkE', respKey:'tacticSunkR' },
+  { icon:'\uD83D\uDD27', nameKey:'tacticBundleN', briefKey:'tacticBundleB', exKey:'tacticBundleE', respKey:'tacticBundleR' },
+  { icon:'\u270B', nameKey:'tacticUltiN', briefKey:'tacticUltiB', exKey:'tacticUltiE', respKey:'tacticUltiR' },
+];
+
+function renderTactics() {
+  document.getElementById('tacticsGrid').innerHTML = TACTICS.map((tc, i) => `
+    <div class="tactic-card" id="tactic${i}" onclick="toggleTactic(${i})">
+      <div class="tc-icon">${tc.icon}</div>
+      <div class="tc-name">${t(tc.nameKey)}</div>
+      <div class="tc-brief">${t(tc.briefKey)}</div>
+      <div class="tc-detail">
+        <div class="td-example">${t(tc.exKey)}</div>
+        <div class="td-response">\u2192 ${t(tc.respKey)}</div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleTactic(i) {
+  const card = document.getElementById('tactic' + i);
+  const wasExpanded = card.classList.contains('expanded');
+  document.querySelectorAll('.tactic-card').forEach(c => c.classList.remove('expanded'));
+  if (!wasExpanded) card.classList.add('expanded');
+}
+
+// ===================== SAVINGS CALCULATOR =====================
+function updateCalc() {
+  const deals = parseInt(document.getElementById('calcDeals').value);
+  const price = parseInt(document.getElementById('calcPrice').value);
+  document.getElementById('calcDealsVal').textContent = deals;
+  document.getElementById('calcPriceVal').textContent = price;
+  const savingsRate = 0.38;
+  const solSaved = (deals * price * savingsRate).toFixed(1);
+  const timeSaved = (deals * 1.5).toFixed(0); // 1.5 hrs per manual negotiation
+  const yearlySol = (solSaved * 12).toFixed(0);
+  const roi = ((savingsRate / (1 - savingsRate)) * 100).toFixed(0);
+  document.getElementById('calcResults').innerHTML = `
+    <div class="calc-result"><div class="cr-val coral">\u25CE ${solSaved}</div><div class="cr-label">${t('calcSolSaved')}</div></div>
+    <div class="calc-result"><div class="cr-val cyan">${timeSaved}h</div><div class="cr-label">${t('calcTimeSaved')}</div></div>
+    <div class="calc-result"><div class="cr-val purple">\u25CE ${yearlySol}</div><div class="cr-label">${t('calcYearlySol')}</div></div>
+    <div class="calc-result"><div class="cr-val" style="color:var(--cyan)">+${roi}%</div><div class="cr-label">${t('calcROI')}</div></div>`;
+}
+
 // ===================== INIT =====================
 document.addEventListener('DOMContentLoaded', () => {
   applyI18n();
@@ -1075,6 +1621,10 @@ document.addEventListener('DOMContentLoaded', () => {
   renderX402Steps();
   renderAbout();
   renderTicker();
+  renderFeed();
+  renderParallelBars();
+  renderTactics();
+  updateCalc();
   initParticles();
   runSplash();
 });
