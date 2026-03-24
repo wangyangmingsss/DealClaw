@@ -80,6 +80,42 @@ Real-time canvas chart showing both price lines converging (or not):
 - Dashed purple line: Budget/walk-away limit
 - Updates live during every negotiation round
 
+### 🎯 AI Confidence Meter
+Real-time arc gauge showing DealClaw's negotiation confidence:
+- Animated semicircle gauge with dynamic color (red → orange → cyan → green)
+- Status text updates per round (Analyzing → Anchoring → BATNA Leverage → Tactic Detection → Closing)
+- Factor tags showing what's driving confidence (Anchor, BATNA, Scope, Price, Tactic, Risk)
+- Success scenario climbs to 95%; Walk-Away scenario drops to 18% — visual proof of decision quality
+
+### ⛓️ On-Chain Escrow Confirmation Animation
+After deal closes, animated Solana block confirmation sequence:
+- Sequential steps: Tx Submitted → Confirmation 1/3 → 2/3 → 3/3 → Finalized
+- Real block heights incrementing with each confirmation
+- Visual block chain with connected block icons lighting up
+- Final status: "✓ Confirmed on Solana"
+
+### 👻 Phantom Wallet Connection
+Simulated Phantom wallet connection flow:
+- Click "Connect Wallet" to trigger modal with wallet address
+- Approve/Reject buttons, trust warning
+- Connected state shows truncated address with green indicator
+
+### ⏩ Speed Control
+1x / 2x / 3x playback speed for all demo scenarios — judges can watch at their preferred pace.
+
+### 📤 Share Card
+After any negotiation result, generate a shareable card:
+- DealClaw branding with lobster icon
+- Large savings percentage or walk-away status
+- Deal details (service, price, savings)
+- #AgentTalentShow hashtag
+
+### 🧠 Strategy Commentary
+"Strategy Breakdown" button reveals per-round tactical analysis:
+- Explains the negotiation theory behind each DealClaw move
+- Anchoring, BATNA Leverage, Tactic Detection, Closing rationale
+- Available for both Deal Closed and Walk-Away scenarios
+
 ### 📡 Live Activity Feed
 - 5 parallel negotiations running simultaneously with progress bars
 - 6 tactic detection cards with expandable details
