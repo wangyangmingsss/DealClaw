@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>DealClaw - AI Negotiation Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#07090f;--bg2:#0d1117;--bg3:#161b22;--bg4:#1c2333;
+--coral:#FF6B4A;--cyan:#00E5CC;--purple:#9945FF;
+--text:#e6edf3;--text2:#8b949e;--text3:#484f58;
+--font-display:'Space Grotesk',sans-serif;
+--font-body:'Inter',sans-serif;
+--font-mono:'Fira Code',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;display:flex;justify-content:center;align-items:center;overflow-x:hidden}
+.page-wrapper{display:flex;gap:48px;align-items:center;padding:24px;max-width:1200px;width:100%}
+
+/* ===== SHOWCASE PANEL ===== */
+.showcase{flex:1;max-width:420px;padding:20px}
+.showcase .logo-area{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+.showcase .logo-icon{font-size:48px;filter:drop-shadow(0 0 20px rgba(255,107,74,0.5))}
+.showcase h1{font-family:var(--font-display);font-size:42px;font-weight:700;background:linear-gradient(135deg,var(--coral),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
+.showcase .subtitle{font-size:15px;color:var(--text2);margin-top:4px;font-family:var(--font-mono);font-size:13px}
+.showcase .tagline{font-size:20px;color:var(--text);margin:20px 0 10px;font-family:var(--font-display);font-weight:600;line-height:1.4}
+.showcase .desc{color:var(--text2);font-size:14px;line-height:1.7;margin-bottom:24px}
+.showcase .badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.showcase .badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;font-family:var(--font-mono);border:1px solid var(--bg4);color:var(--text2);background:var(--bg2)}
+.showcase .badge.coral{border-color:rgba(255,107,74,.3);color:var(--coral)}
+.showcase .badge.cyan{border-color:rgba(0,229,204,.3);color:var(--cyan)}
+.showcase .badge.purple{border-color:rgba(153,69,255,.3);color:var(--purple)}
+.showcase .track-info{background:var(--bg2);border:1px solid var(--bg4);border-radius:12px;padding:16px;margin-bottom:20px}
+.showcase .track-info .track-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.showcase .track-info .track-name{font-family:var(--font-display);font-size:14px;color:var(--coral)}
+.showcase .track-info .track-zh{font-size:13px;color:var(--text2);margin-top:4px}
+.showcase .features{list-style:none;margin-top:16px}
+.showcase .features li{padding:8px 0;color:var(--text2);font-size:13px;display:flex;align-items:center;gap:10px}
+.showcase .features li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--coral);flex-shrink:0}
+.showcase .features li:nth-child(even)::before{background:var(--cyan)}
+
+/* ===== PHONE FRAME ===== */
+.phone-container{position:relative;flex-shrink:0}
+.phone-glow{position:absolute;inset:-4px;border-radius:48px;background:linear-gradient(135deg,var(--coral),var(--cyan),var(--purple));opacity:.5;filter:blur(20px);z-index:0;animation:glowPulse 4s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{opacity:.4;filter:blur(20px)}50%{opacity:.65;filter:blur(28px)}}
+.phone-frame{position:relative;width:380px;height:780px;background:var(--bg);border-radius:44px;border:2px solid var(--bg4);overflow:hidden;z-index:1;display:flex;flex-direction:column}
+.phone-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:28px;background:var(--bg);border-radius:0 0 18px 18px;z-index:100;border-bottom:1px solid var(--bg4);border-left:1px solid var(--bg4);border-right:1px solid var(--bg4)}
+.phone-notch::after{content:'';position:absolute;top:10px;left:50%;transform:translateX(-50%);width:50px;height:6px;background:var(--bg3);border-radius:3px}
+
+/* ===== SPLASH ===== */
+.splash{position:absolute;inset:0;background:var(--bg);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s}
+.splash.hidden{opacity:0;pointer-events:none}
+.splash-logo{font-size:80px;margin-bottom:16px;animation:splashBounce 1s ease-in-out infinite alternate}
+@keyframes splashBounce{0%{transform:scale(1) rotate(-5deg)}100%{transform:scale(1.1) rotate(5deg)}}
+.splash-title{font-family:var(--font-display);font-size:32px;font-weight:700;background:linear-gradient(135deg,var(--coral),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.splash-sub{font-size:13px;color:var(--text2);margin-top:6px;font-family:var(--font-mono)}
+.splash-bar{width:160px;height:3px;background:var(--bg3);border-radius:2px;margin-top:24px;overflow:hidden}
+.splash-bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--coral),var(--cyan));border-radius:2px;transition:width .1s linear}
+
+/* ===== WALLET BAR ===== */
+.wallet-bar{padding:34px 16px 6px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.wallet-btn{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:16px;background:var(--bg3);border:1px solid var(--bg4);font-size:11px;color:var(--text2);cursor:pointer;font-family:var(--font-mono);transition:all .2s}
+.wallet-btn.connected{border-color:rgba(0,229,204,.3);color:var(--cyan)}
+.wallet-btn .dot{width:6px;height:6px;border-radius:50%;background:var(--text3)}
+.wallet-btn.connected .dot{background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
+.lang-toggle{padding:4px 10px;border-radius:16px;background:var(--bg3);border:1px solid var(--bg4);font-size:11px;color:var(--text2);cursor:pointer;font-family:var(--font-mono);transition:all .2s}
+.lang-toggle:hover,.wallet-btn:hover{border-color:var(--coral);color:var(--text)}
+
+/* ===== TICKER ===== */
+.ticker{overflow:hidden;height:22px;flex-shrink:0;background:var(--bg2);border-bottom:1px solid var(--bg4)}
+.ticker-inner{display:flex;gap:32px;animation:tickerScroll 20s linear infinite;white-space:nowrap;padding:4px 0}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{font-size:10px;color:var(--text3);font-family:var(--font-mono);display:flex;align-items:center;gap:6px}
+.ticker-item .green{color:#3fb950}.ticker-item .red{color:var(--coral)}
+
+/* ===== SCREEN CONTENT ===== */
+.screen-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px 16px 8px;scrollbar-width:none}
+.screen-content::-webkit-scrollbar{display:none}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav{display:flex;justify-content:space-around;padding:8px 0 20px;background:var(--bg2);border-top:1px solid var(--bg4);flex-shrink:0}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--text3);font-size:10px;font-family:var(--font-body);cursor:pointer;padding:4px 8px;transition:color .2s;min-width:50px}
+.nav-btn .nav-icon{font-size:18px}
+.nav-btn.active{color:var(--coral)}
+.nav-btn:hover{color:var(--text2)}
+
+/* ===== TAB 1: DEALS ===== */
+.deals-header h2{font-family:var(--font-display);font-size:24px;font-weight:700;background:linear-gradient(135deg,var(--coral),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.deals-header .deals-sub{font-size:12px;color:var(--text2);font-family:var(--font-mono);margin-top:2px}
+.stats-row{display:flex;gap:8px;margin:14px 0}
+.stat-card{flex:1;background:var(--bg2);border:1px solid var(--bg4);border-radius:12px;padding:10px;text-align:center}
+.stat-card .stat-val{font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--coral)}
+.stat-card .stat-val.cyan{color:var(--cyan)}
+.stat-card .stat-val.purple{color:var(--purple)}
+.stat-card .stat-label{font-size:10px;color:var(--text3);margin-top:2px}
+.deal-card{background:var(--bg2);border:1px solid var(--bg4);border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all .2s}
+.deal-card:hover{border-color:rgba(255,107,74,.3);transform:translateY(-1px)}
+.deal-card .deal-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.deal-card .deal-title{font-family:var(--font-display);font-size:14px;font-weight:600}
+.deal-status{font-size:10px;padding:3px 8px;border-radius:10px;font-weight:600;white-space:nowrap}
+.deal-status.negotiating{background:rgba(255,107,74,.15);color:var(--coral)}
+.deal-status.won{background:rgba(0,229,204,.15);color:var(--cyan)}
+.deal-status.pending{background:rgba(153,69,255,.15);color:var(--purple)}
+.deal-prices{display:flex;gap:16px;font-size:12px;color:var(--text2);margin-bottom:8px;font-family:var(--font-mono)}
+.deal-prices .budget{color:var(--text3)}.deal-prices .offer{color:var(--cyan)}
+.deal-progress{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;margin-bottom:6px}
+.deal-progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--coral),var(--cyan));transition:width .5s}
+.deal-agent{font-size:10px;color:var(--text3);font-family:var(--font-mono)}
+
+/* ===== TAB 2: NEGOTIATE ===== */
+.demo-btn{width:100%;padding:12px;border-radius:12px;background:linear-gradient(135deg,var(--coral),#ff8a6b);border:none;color:#fff;font-family:var(--font-display);font-size:15px;font-weight:700;cursor:pointer;margin-bottom:12px;transition:transform .15s,box-shadow .15s;letter-spacing:.5px}
+.demo-btn:hover{transform:scale(1.02);box-shadow:0 4px 20px rgba(255,107,74,.4)}
+.demo-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.strategy-panel{background:var(--bg2);border:1px solid var(--bg4);border-radius:12px;padding:12px;margin-bottom:12px}
+.strategy-panel .sp-title{font-family:var(--font-display);font-size:12px;font-weight:600;color:var(--coral);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.strategy-line{font-size:11px;color:var(--text2);margin-bottom:4px;font-family:var(--font-mono);padding-left:8px;border-left:2px solid var(--bg4)}
+.strategy-line.active{border-left-color:var(--cyan);color:var(--text)}
+.chat-area{min-height:200px;padding:4px 0}
+.chat-bubble{max-width:82%;padding:10px 14px;border-radius:14px;font-size:12px;line-height:1.6;margin-bottom:8px;opacity:0;transform:translateY(10px)}
+.chat-bubble.left{background:rgba(255,107,74,.12);border:1px solid rgba(255,107,74,.2);color:var(--text);margin-right:auto;border-bottom-left-radius:4px}
+.chat-bubble.right{background:rgba(0,229,204,.12);border:1px solid rgba(0,229,204,.2);color:var(--text);margin-left:auto;border-bottom-right-radius:4px}
+.chat-bubble .agent-label{font-size:9px;font-weight:600;margin-bottom:4px;font-family:var(--font-mono)}
+.chat-bubble.left .agent-label{color:var(--coral)}
+.chat-bubble.right .agent-label{color:var(--cyan)}
+.typing-indicator{display:flex;gap:4px;padding:10px 14px;max-width:80px;margin-bottom:8px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid var(--bg4)}
+.typing-indicator.right-typing{margin-left:auto}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);animation:typingBounce .6s infinite}
+.typing-dot:nth-child(2){animation-delay:.15s}
+.typing-dot:nth-child(3){animation-delay:.3s}
+@keyframes typingBounce{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}
+.deal-locked-card{background:linear-gradient(135deg,rgba(0,229,204,.1),rgba(153,69,255,.1));border:2px solid var(--cyan);border-radius:16px;padding:16px;text-align:center;margin-top:12px;opacity:0}
+.deal-locked-card h3{font-family:var(--font-display);font-size:18px;color:var(--cyan);margin-bottom:8px}
+.deal-locked-card .escrow-info{font-size:11px;color:var(--text2);font-family:var(--font-mono);line-height:1.8}
+.user-brief{background:var(--bg3);border:1px solid var(--bg4);border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:11px;color:var(--text2);font-family:var(--font-mono);line-height:1.6}
+.user-brief .brief-label{color:var(--purple);font-weight:600;margin-bottom:4px;font-size:10px}
+.round-divider{text-align:center;font-size:10px;color:var(--text3);margin:12px 0;font-family:var(--font-mono);display:flex;align-items:center;gap:8px}
+.round-divider::before,.round-divider::after{content:'';flex:1;height:1px;background:var(--bg4)}
+
+/* ===== TAB 3: STATS ===== */
+.stats-header{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:14px;color:var(--text)}
+.big-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.big-stat{background:var(--bg2);border:1px solid var(--bg4);border-radius:14px;padding:14px;text-align:center}
+.big-stat .bs-val{font-family:var(--font-display);font-size:28px;font-weight:700}
+.big-stat .bs-val.coral{color:var(--coral)}
+.big-stat .bs-val.cyan{color:var(--cyan)}
+.big-stat .bs-val.purple{color:var(--purple)}
+.big-stat .bs-label{font-size:11px;color:var(--text3);margin-top:4px}
+.chart-section{background:var(--bg2);border:1px solid var(--bg4);border-radius:14px;padding:14px;margin-bottom:14px}
+.chart-title{font-family:var(--font-display);font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text2)}
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:100px;padding-top:8px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{border-radius:4px 4px 0 0;width:100%;transition:height .5s;background:linear-gradient(180deg,var(--coral),var(--cyan))}
+.bar-label{font-size:9px;color:var(--text3);font-family:var(--font-mono)}
+.history-list{list-style:none}
+.history-item{padding:10px 0;border-bottom:1px solid var(--bg4);display:flex;justify-content:space-between;align-items:center}
+.history-item:last-child{border:none}
+.history-item .hi-name{font-size:12px;color:var(--text)}
+.history-item .hi-savings{font-size:12px;font-family:var(--font-mono);color:var(--cyan);font-weight:600}
+
+/* ===== TAB 4: x402 ===== */
+.x402-header{font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:14px;color:var(--text)}
+.flow-diagram{background:var(--bg2);border:1px solid var(--bg4);border-radius:14px;padding:16px;margin-bottom:14px}
+.flow-step{display:flex;align-items:center;gap:10px;padding:8px 0}
+.flow-step .fs-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.flow-step:nth-child(1) .fs-icon{background:rgba(153,69,255,.15);border:1px solid rgba(153,69,255,.3)}
+.flow-step:nth-child(2) .fs-icon{background:rgba(255,107,74,.15);border:1px solid rgba(255,107,74,.3)}
+.flow-step:nth-child(3) .fs-icon{background:rgba(0,229,204,.15);border:1px solid rgba(0,229,204,.3)}
+.flow-step:nth-child(4) .fs-icon{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3)}
+.flow-step .fs-text{font-size:12px;color:var(--text2);line-height:1.4}
+.flow-step .fs-text strong{color:var(--text);font-weight:600}
+.flow-arrow{text-align:center;color:var(--text3);font-size:16px;padding:2px 0 2px 14px}
+.payment-card{background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--bg4);border-radius:16px;padding:20px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden}
+.payment-card::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,107,74,.03),rgba(0,229,204,.03),transparent);animation:paymentShimmer 3s infinite}
+@keyframes paymentShimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.pc-agents{display:flex;justify-content:center;align-items:center;gap:16px;margin-bottom:12px}
+.pc-agent{text-align:center}
+.pc-agent .pc-icon{font-size:32px;margin-bottom:4px}
+.pc-agent .pc-name{font-size:10px;color:var(--text2);font-family:var(--font-mono)}
+.pc-flow{display:flex;align-items:center;gap:4px;color:var(--cyan);font-family:var(--font-mono);font-size:14px}
+.pc-flow .arrow{animation:flowArrow 1.5s infinite}
+@keyframes flowArrow{0%,100%{opacity:.3}50%{opacity:1}}
+.pc-flow .arrow:nth-child(2){animation-delay:.2s}
+.pc-flow .arrow:nth-child(3){animation-delay:.4s}
+.pc-amount{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--cyan);margin-bottom:4px}
+.pc-escrow{font-size:11px;color:var(--text2);font-family:var(--font-mono)}
+.x402-steps{background:var(--bg2);border:1px solid var(--bg4);border-radius:14px;padding:14px}
+.x402-steps h4{font-family:var(--font-display);font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text)}
+.x402-step{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--bg4)}
+.x402-step:last-child{border:none}
+.x402-step .xs-num{width:22px;height:22px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--coral);flex-shrink:0;font-family:var(--font-display)}
+.x402-step .xs-text{font-size:11px;color:var(--text2);line-height:1.5}
+
+/* ===== TAB 5: ABOUT ===== */
+.about-header{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:14px;color:var(--text)}
+.about-steps{margin-bottom:18px}
+.about-step{display:flex;gap:12px;margin-bottom:14px}
+.about-step .as-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:13px;font-weight:700;flex-shrink:0;color:#fff}
+.about-step:nth-child(1) .as-num{background:var(--coral)}
+.about-step:nth-child(2) .as-num{background:var(--purple)}
+.about-step:nth-child(3) .as-num{background:var(--cyan);color:var(--bg)}
+.about-step:nth-child(4) .as-num{background:var(--coral)}
+.about-step:nth-child(5) .as-num{background:var(--purple)}
+.about-step .as-content h4{font-family:var(--font-display);font-size:13px;font-weight:600;margin-bottom:3px}
+.about-step .as-content p{font-size:11px;color:var(--text2);line-height:1.5}
+.arch-diagram{background:var(--bg2);border:1px solid var(--bg4);border-radius:14px;padding:16px;margin-bottom:14px;font-family:var(--font-mono);font-size:12px;line-height:2.2;text-align:center}
+.arch-diagram .arch-line{color:var(--text2)}
+.arch-diagram .arch-arrow{color:var(--text3)}
+.arch-diagram .arch-highlight{font-weight:600}
+.tech-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tech-badge{padding:5px 12px;border-radius:20px;font-size:10px;font-family:var(--font-mono);font-weight:600;border:1px solid var(--bg4);color:var(--text2);background:var(--bg2)}
+
+/* ===== DEAL DETAIL MODAL ===== */
+.modal-overlay{position:absolute;inset:0;background:rgba(7,9,15,.85);z-index:150;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal-content{background:var(--bg2);border:1px solid var(--bg4);border-radius:18px;padding:20px;width:100%;max-width:340px;max-height:80%;overflow-y:auto}
+.modal-close{background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;float:right;padding:0 4px;line-height:1}
+.modal-close:hover{color:var(--text)}
+.modal-title{font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:12px;padding-right:24px}
+.modal-status{display:inline-block;font-size:11px;padding:3px 10px;border-radius:10px;font-weight:600;margin-bottom:12px}
+.modal-detail{font-size:12px;color:var(--text2);line-height:1.8;font-family:var(--font-mono)}
+.modal-detail .md-label{color:var(--text3);font-size:10px}
+.modal-detail .md-val{color:var(--text)}
+.modal-divider{height:1px;background:var(--bg4);margin:10px 0}
+.modal-rounds{margin-top:10px}
+.modal-round{font-size:11px;color:var(--text2);padding:4px 0;border-left:2px solid var(--bg4);padding-left:10px;margin-bottom:6px}
+
+/* ===== PARTICLES ===== */
+.particle-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:860px){
+.page-wrapper{flex-direction:column;align-items:center;gap:24px}
+.showcase{max-width:380px;text-align:center}
+.showcase .features li{justify-content:center}
+.showcase .badge-row{justify-content:center}
+}
+@media(max-width:420px){
+.phone-frame{width:100vw;height:100vh;border-radius:0;border:none}
+.phone-glow{display:none}
+.phone-notch{display:none}
+.wallet-bar{padding-top:12px}
+.showcase{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+<!-- ===== SHOWCASE PANEL ===== -->
+<div class="showcase" id="showcase">
+  <div class="logo-area">
+    <div class="logo-icon">&#x1F99E;</div>
+    <div>
+      <h1>DealClaw</h1>
+      <div class="subtitle" data-i18n="showcaseSub">AI Negotiation Agent</div>
+    </div>
+  </div>
+  <div class="tagline" data-i18n="showcaseTagline">Your AI shark that pinches the best deals on-chain.</div>
+  <div class="desc" data-i18n="showcaseDesc">DealClaw autonomously negotiates with counterparty agents across multiple rounds. You set the terms, the lobster does the haggling. Powered by Solana escrow for trustless settlement.</div>
+  <div class="track-info">
+    <div class="track-label">Solana Agent Economy Hackathon</div>
+    <div class="track-name">Track 4</div>
+    <div class="track-zh">赛博糊弄学与赛博抽鞭子</div>
+  </div>
+  <div class="badge-row">
+    <span class="badge coral">Solana</span>
+    <span class="badge cyan">x402</span>
+    <span class="badge purple">Escrow</span>
+    <span class="badge">Anchor</span>
+    <span class="badge">MCP</span>
+    <span class="badge">OpenClaw</span>
+  </div>
+  <ul class="features">
+    <li data-i18n="feat1">Multi-round autonomous negotiation</li>
+    <li data-i18n="feat2">Proven tactics: anchoring, BATNA, concession mapping</li>
+    <li data-i18n="feat3">Solana escrow for trustless settlement</li>
+    <li data-i18n="feat4">x402 agent-to-agent payment protocol</li>
+    <li data-i18n="feat5">Human approves only the final deal</li>
+  </ul>
+</div>
+
+<!-- ===== PHONE ===== -->
+<div class="phone-container">
+  <div class="phone-glow"></div>
+  <div class="phone-frame" id="phone">
+    <canvas class="particle-canvas" id="particleCanvas"></canvas>
+
+    <!-- Splash -->
+    <div class="splash" id="splash">
+      <div class="splash-logo">&#x1F99E;</div>
+      <div class="splash-title">DealClaw</div>
+      <div class="splash-sub">交易钳 · 龙虾谈判官</div>
+      <div class="splash-bar"><div class="splash-bar-fill" id="splashFill"></div></div>
+    </div>
+
+    <!-- Wallet Bar -->
+    <div class="wallet-bar">
+      <button class="wallet-btn" id="walletBtn" onclick="toggleWallet()">
+        <span class="dot"></span>
+        <span data-i18n="walletConnect">Connect Wallet</span>
+      </button>
+      <button class="lang-toggle" id="langBtn" onclick="toggleLang()">EN/中</button>
+    </div>
+
+    <!-- Ticker -->
+    <div class="ticker">
+      <div class="ticker-inner" id="ticker"></div>
+    </div>
+
+    <!-- Screen -->
+    <div class="screen-content" id="screenContent">
+      <!-- Tab 1: Deals -->
+      <div class="tab-panel active" id="tabDeals">
+        <div class="deals-header">
+          <h2>DealClaw</h2>
+          <div class="deals-sub" data-i18n="dealsSub">AI 谈判官 · Solana Escrow</div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-val">3</div><div class="stat-label" data-i18n="activeDeals">Active Deals</div></div>
+          <div class="stat-card"><div class="stat-val cyan">&#9678; 12.8</div><div class="stat-label" data-i18n="totalSaved">Total Saved</div></div>
+          <div class="stat-card"><div class="stat-val purple">94%</div><div class="stat-label" data-i18n="winRate">Win Rate</div></div>
+        </div>
+        <div id="dealCards"></div>
+      </div>
+
+      <!-- Tab 2: Negotiate -->
+      <div class="tab-panel" id="tabNegotiate">
+        <button class="demo-btn" id="demoBtn" onclick="startDemo()" data-i18n="startDemo">&#x1F99E; Start Negotiation Demo</button>
+        <div class="user-brief" id="userBrief" style="display:none">
+          <div class="brief-label" data-i18n="briefLabel">&#x1F4CB; User Brief</div>
+          <span data-i18n="briefText">Need a security audit for my DeFi protocol. Budget: max 8 SOL. Must include: full code review + report.</span>
+        </div>
+        <div class="strategy-panel" id="strategyPanel" style="display:none">
+          <div class="sp-title">&#x1F9E0; <span data-i18n="strategyTitle">DealClaw Strategy</span></div>
+          <div class="strategy-line" id="strat1" data-i18n="stratInit">Analyzing counterparty profile...</div>
+          <div class="strategy-line" id="strat2"></div>
+          <div class="strategy-line" id="strat3"></div>
+        </div>
+        <div class="chat-area" id="chatArea"></div>
+      </div>
+
+      <!-- Tab 3: Stats -->
+      <div class="tab-panel" id="tabStats">
+        <div class="stats-header" data-i18n="perfDash">Performance Dashboard</div>
+        <div class="big-stats">
+          <div class="big-stat"><div class="bs-val coral">47</div><div class="bs-label" data-i18n="dealsCompleted">Deals Completed</div></div>
+          <div class="big-stat"><div class="bs-val cyan">&#9678; 128.4</div><div class="bs-label" data-i18n="solSaved">SOL Saved</div></div>
+          <div class="big-stat"><div class="bs-val purple">38%</div><div class="bs-label" data-i18n="avgSavings">Avg Savings</div></div>
+          <div class="big-stat"><div class="bs-val" style="color:var(--cyan)">94%</div><div class="bs-label" data-i18n="winRateStat">Win Rate</div></div>
+        </div>
+        <div class="chart-section">
+          <div class="chart-title" data-i18n="weeklySavings">Weekly Savings (SOL)</div>
+          <div class="bar-chart" id="barChart"></div>
+        </div>
+        <div class="chart-section">
+          <div class="chart-title" data-i18n="recentDeals">Recent Deals</div>
+          <ul class="history-list" id="historyList"></ul>
+        </div>
+      </div>
+
+      <!-- Tab 4: x402 -->
+      <div class="tab-panel" id="tabX402">
+        <div class="x402-header" data-i18n="x402Header">x402 Agent Payment Protocol</div>
+        <div class="flow-diagram" id="flowDiagram"></div>
+        <div class="payment-card">
+          <div class="pc-agents">
+            <div class="pc-agent"><div class="pc-icon">&#x1F99E;</div><div class="pc-name">DealClaw</div></div>
+            <div class="pc-flow"><span class="arrow">&rarr;</span><span class="arrow">&rarr;</span><span class="arrow">&rarr;</span></div>
+            <div class="pc-agent"><div class="pc-icon">&#x1F916;</div><div class="pc-name" data-i18n="vendorAgent">Vendor Agent</div></div>
+          </div>
+          <div class="pc-amount">&#9678; 7.5 SOL</div>
+          <div class="pc-escrow" data-i18n="escrowLocked">Escrow: Locked &#10003;</div>
+        </div>
+        <div class="x402-steps" id="x402Steps"></div>
+      </div>
+
+      <!-- Tab 5: About -->
+      <div class="tab-panel" id="tabAbout">
+        <div class="about-header" data-i18n="howItWorks">How DealClaw Works</div>
+        <div class="about-steps" id="aboutSteps"></div>
+        <div class="arch-diagram" id="archDiagram"></div>
+        <div class="chart-section">
+          <div class="chart-title" data-i18n="techStack">Tech Stack</div>
+          <div class="tech-badges" id="techBadges"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+      <div class="modal-content" id="modalContent" onclick="event.stopPropagation()"></div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+      <button class="nav-btn active" onclick="switchTab('Deals',this)"><span class="nav-icon">&#x1F3E0;</span><span data-i18n="navDeals">Deals</span></button>
+      <button class="nav-btn" onclick="switchTab('Negotiate',this)"><span class="nav-icon">&#x1F4AC;</span><span data-i18n="navNego">Negotiate</span></button>
+      <button class="nav-btn" onclick="switchTab('Stats',this)"><span class="nav-icon">&#x1F4CA;</span><span data-i18n="navStats">Stats</span></button>
+      <button class="nav-btn" onclick="switchTab('X402',this)"><span class="nav-icon">&#x26A1;</span><span data-i18n="navX402">x402</span></button>
+      <button class="nav-btn" onclick="switchTab('About',this)"><span class="nav-icon">&#x1F99E;</span><span data-i18n="navAbout">About</span></button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+// ===================== i18n =====================
+const I18N = {
+  en: {
+    showcaseSub: "AI Negotiation Agent",
+    showcaseTagline: "Your AI shark that pinches the best deals on-chain.",
+    showcaseDesc: "DealClaw autonomously negotiates with counterparty agents across multiple rounds. You set the terms, the lobster does the haggling. Powered by Solana escrow for trustless settlement.",
+    feat1: "Multi-round autonomous negotiation",
+    feat2: "Proven tactics: anchoring, BATNA, concession mapping",
+    feat3: "Solana escrow for trustless settlement",
+    feat4: "x402 agent-to-agent payment protocol",
+    feat5: "Human approves only the final deal",
+    walletConnect: "Connect Wallet",
+    walletConnected: "7xK3...f9Qm",
+    dealsSub: "AI Negotiator \u00b7 Solana Escrow",
+    activeDeals: "Active Deals",
+    totalSaved: "Total Saved",
+    winRate: "Win Rate",
+    startDemo: "\uD83E\uDD9E Start Negotiation Demo",
+    briefLabel: "\uD83D\uDCCB User Brief",
+    briefText: "Need a security audit for my DeFi protocol. Budget: max 8 SOL. Must include: full code review + report.",
+    strategyTitle: "DealClaw Strategy",
+    stratInit: "Analyzing counterparty profile...",
+    perfDash: "Performance Dashboard",
+    dealsCompleted: "Deals Completed",
+    solSaved: "SOL Saved",
+    avgSavings: "Avg Savings",
+    winRateStat: "Win Rate",
+    weeklySavings: "Weekly Savings (SOL)",
+    recentDeals: "Recent Deals",
+    x402Header: "x402 Agent Payment Protocol",
+    vendorAgent: "Vendor Agent",
+    escrowLocked: "Escrow: Locked \u2713",
+    howItWorks: "How DealClaw Works",
+    techStack: "Tech Stack",
+    navDeals: "Deals",
+    navNego: "Negotiate",
+    navStats: "Stats",
+    navX402: "x402",
+    navAbout: "About",
+    // Deals
+    deal1Title: "Web3 Website Design",
+    deal2Title: "NFT Art Commission",
+    deal3Title: "Smart Contract Audit",
+    deal4Title: "Marketing Campaign",
+    deal5Title: "Token Launch Advisory",
+    statusNego: "Negotiating",
+    statusWon: "Won",
+    statusPending: "Pending Approval",
+    budget: "Budget",
+    offer: "Offer",
+    agent: "Agent",
+    // Negotiation chat
+    round: "Round",
+    r1Counter: "Hello. We offer premium Smart Contract Auditing. Our standard rate for a full DeFi protocol audit is 15 SOL, which includes comprehensive code review, vulnerability assessment, and detailed report.",
+    r1Deal: "Thanks for the quote. Based on our market analysis, similar audits range 4-8 SOL. We\u2019d like to start at 5 SOL for full scope. We have 3 competing offers in this range.",
+    r2Counter: "5 SOL is well below market rate for our tier. We can offer 12 SOL with expedited delivery. Our team has audited 200+ protocols with zero post-audit exploits.",
+    r2Deal: "Noted on track record. However, expedited delivery wasn\u2019t requested. We\u2019ll move to 6.5 SOL. Our BATNA includes AuditFirm_B at 7 SOL. This is a competitive offer.",
+    r3Counter: "Let\u2019s meet closer to middle. 9 SOL, but we\u2019ll scope it to core contracts only (3 files). Additional files at 2 SOL each.",
+    r3Deal: "\u26A0\uFE0F Tactic detected: scope reduction. We need FULL audit (all 8 contract files). Counter: 7.5 SOL for complete scope including report. Final offer.",
+    r4Counter: "7.5 SOL for full scope is acceptable. We have a deal. Sending confirmation to escrow.",
+    dealClosedTitle: "Deal Locked \uD83D\uDD12",
+    dealClosedLine1: "Service: Smart Contract Audit (Full Scope)",
+    dealClosedLine2: "Price: \u25CE 7.5 SOL",
+    dealClosedLine3: "Escrow: Bx7k...9fQm",
+    dealClosedLine4: "Savings: 7.5 SOL (50% off opening)",
+    dealClosedLine5: "Status: Awaiting human approval",
+    strat1_r1: "Tactic: Anchoring Low",
+    strat2_r1: "Opening with market data pressure",
+    strat3_r1: "Mentioning competing offers",
+    strat1_r2: "Tactic: BATNA Leverage",
+    strat2_r2: "Detected: counterparty using credentials",
+    strat3_r2: "Counter with specific alternative",
+    strat1_r3: "Tactic: Scope Defense",
+    strat2_r3: "\u26A0\uFE0F Detected: scope reduction attempt",
+    strat3_r3: "Hold firm on full scope, concede on price",
+    strat1_r4: "Status: DEAL CLOSING",
+    strat2_r4: "Final price within budget \u2713",
+    strat3_r4: "Initiating Solana escrow...",
+    // Stats history
+    hist1: "Smart Contract Audit: 15\u21927.5 SOL (-50%)",
+    hist2: "NFT Commission: 5\u21922.8 SOL (-44%)",
+    hist3: "Logo Design: 3\u21921.5 SOL (-50%)",
+    hist4: "Website Dev: 20\u219212 SOL (-40%)",
+    hist5: "Marketing: 8\u21925.2 SOL (-35%)",
+    // x402 flow
+    flow1Title: "User Sets Terms",
+    flow1Desc: "Define requirements, budget limits, and walk-away conditions",
+    flow2Title: "Agent Negotiates",
+    flow2Desc: "DealClaw conducts multi-round negotiation with counterparty agent",
+    flow3Title: "Escrow Created",
+    flow3Desc: "Agreed terms locked in Solana escrow smart contract",
+    flow4Title: "Settlement",
+    flow4Desc: "Service delivered, escrow released via x402 payment",
+    x402StepsTitle: "How x402 Works",
+    x402s1: "Agent authenticates via x402 HTTP header with Solana wallet signature",
+    x402s2: "Payment terms negotiated and encoded in x402-compatible format",
+    x402s3: "Escrow transaction submitted to Solana, funds released on delivery confirmation",
+    // About steps
+    about1Title: "Set Your Terms",
+    about1Desc: "Describe what you need and your budget/limits",
+    about2Title: "Agent Takes Over",
+    about2Desc: "DealClaw analyzes the market and starts negotiation",
+    about3Title: "Multi-Round Haggling",
+    about3Desc: "AI uses proven tactics: anchoring, concession mapping, BATNA analysis",
+    about4Title: "Deal or Walk",
+    about4Desc: "If terms aren\u2019t met, agent walks away. No bad deals.",
+    about5Title: "Escrow & Close",
+    about5Desc: "Agreed terms locked in Solana escrow. Human approves, done.",
+    // Modal
+    modalBudget: "Your Budget",
+    modalCurrent: "Current Offer",
+    modalRounds: "Negotiation Rounds",
+    modalCounterparty: "Counterparty",
+    modalProgress: "Progress",
+    // Ticker
+    tick1: "Audit deal closed: saved 50%",
+    tick2: "NFT commission: -44%",
+    tick3: "47 deals completed",
+    tick4: "Win rate: 94%",
+    tick5: "128.4 SOL saved total",
+    tick6: "New deal: Token Launch Advisory",
+    resetDemo: "\uD83D\uDD04 Reset & Run Again",
+  },
+  zh: {
+    showcaseSub: "AI 谈判代理",
+    showcaseTagline: "你的AI鲨鱼，在链上为你夹出最好的交易。",
+    showcaseDesc: "DealClaw 自主与对手代理进行多轮谈判。你设定条件，龙虾来讨价还价。由 Solana 托管实现无信任结算。",
+    feat1: "多轮自主谈判",
+    feat2: "成熟策略：锚定、BATNA、让步映射",
+    feat3: "Solana 托管无信任结算",
+    feat4: "x402 代理间支付协议",
+    feat5: "人类只需批准最终交易",
+    walletConnect: "连接钱包",
+    walletConnected: "7xK3...f9Qm",
+    dealsSub: "AI 谈判官 · Solana 托管",
+    activeDeals: "活跃交易",
+    totalSaved: "总节省",
+    winRate: "胜率",
+    startDemo: "\uD83E\uDD9E 开始谈判演示",
+    briefLabel: "\uD83D\uDCCB 用户需求",
+    briefText: "需要对我的DeFi协议进行安全审计。预算：最高8 SOL。必须包括：完整代码审查 + 报告。",
+    strategyTitle: "DealClaw 策略",
+    stratInit: "分析对手档案中...",
+    perfDash: "绩效仪表板",
+    dealsCompleted: "已完成交易",
+    solSaved: "节省SOL",
+    avgSavings: "平均节省",
+    winRateStat: "胜率",
+    weeklySavings: "每周节省 (SOL)",
+    recentDeals: "最近交易",
+    x402Header: "x402 代理支付协议",
+    vendorAgent: "供应商代理",
+    escrowLocked: "托管：已锁定 \u2713",
+    howItWorks: "DealClaw 工作原理",
+    techStack: "技术栈",
+    navDeals: "交易",
+    navNego: "谈判",
+    navStats: "统计",
+    navX402: "x402",
+    navAbout: "关于",
+    deal1Title: "Web3 网站设计",
+    deal2Title: "NFT 艺术委托",
+    deal3Title: "智能合约审计",
+    deal4Title: "营销推广",
+    deal5Title: "代币发行咨询",
+    statusNego: "谈判中",
+    statusWon: "已成交",
+    statusPending: "待审批",
+    budget: "预算",
+    offer: "报价",
+    agent: "代理",
+    round: "第{n}轮",
+    r1Counter: "你好。我们提供高端智能合约审计服务。完整DeFi协议审计标准价为15 SOL，包括全面代码审查、漏洞评估和详细报告。",
+    r1Deal: "感谢报价。根据我们的市场分析，类似审计价格在4-8 SOL之间。我们从5 SOL开始，全范围覆盖。我们有3个该价格区间的竞争报价。",
+    r2Counter: "5 SOL远低于我们级别的市场价。我们可以12 SOL加急交付。我们团队已审计200+协议，审计后零漏洞利用。",
+    r2Deal: "注意到您的履历。但我们未要求加急交付。我们提高到6.5 SOL。我们的BATNA包括AuditFirm_B报价7 SOL。这是有竞争力的报价。",
+    r3Counter: "让我们靠近中间价。9 SOL，但范围仅限核心合约（3个文件）。额外文件每个2 SOL。",
+    r3Deal: "\u26A0\uFE0F 检测到策略：范围缩减。我们需要完整审计（全部8个合约文件）。还价：7.5 SOL全范围包含报告。最终报价。",
+    r4Counter: "7.5 SOL全范围可以接受。成交。正在发送确认到托管。",
+    dealClosedTitle: "交易锁定 \uD83D\uDD12",
+    dealClosedLine1: "服务：智能合约审计（全范围）",
+    dealClosedLine2: "价格：\u25CE 7.5 SOL",
+    dealClosedLine3: "托管：Bx7k...9fQm",
+    dealClosedLine4: "节省：7.5 SOL（比开价低50%）",
+    dealClosedLine5: "状态：等待人工审批",
+    strat1_r1: "策略：低锚定",
+    strat2_r1: "用市场数据施压",
+    strat3_r1: "提及竞争报价",
+    strat1_r2: "策略：BATNA 杠杆",
+    strat2_r2: "检测到：对手使用资质论证",
+    strat3_r2: "用具体替代方案反击",
+    strat1_r3: "策略：范围防御",
+    strat2_r3: "\u26A0\uFE0F 检测到：范围缩减尝试",
+    strat3_r3: "坚守全范围，在价格上让步",
+    strat1_r4: "状态：交易即将达成",
+    strat2_r4: "最终价格在预算内 \u2713",
+    strat3_r4: "启动 Solana 托管...",
+    hist1: "智能合约审计：15\u21927.5 SOL (-50%)",
+    hist2: "NFT委托：5\u21922.8 SOL (-44%)",
+    hist3: "Logo设计：3\u21921.5 SOL (-50%)",
+    hist4: "网站开发：20\u219212 SOL (-40%)",
+    hist5: "营销推广：8\u21925.2 SOL (-35%)",
+    flow1Title: "用户设定条件",
+    flow1Desc: "定义需求、预算限制和退出条件",
+    flow2Title: "代理谈判",
+    flow2Desc: "DealClaw 与对手代理进行多轮谈判",
+    flow3Title: "创建托管",
+    flow3Desc: "协议条款锁定在 Solana 托管智能合约中",
+    flow4Title: "结算",
+    flow4Desc: "服务交付后通过 x402 支付释放托管资金",
+    x402StepsTitle: "x402 工作原理",
+    x402s1: "代理通过 x402 HTTP 头部和 Solana 钱包签名进行认证",
+    x402s2: "支付条款以 x402 兼容格式协商和编码",
+    x402s3: "托管交易提交到 Solana，交付确认后释放资金",
+    about1Title: "设定条件",
+    about1Desc: "描述你的需求和预算/限制",
+    about2Title: "代理接管",
+    about2Desc: "DealClaw 分析市场并开始谈判",
+    about3Title: "多轮讨价还价",
+    about3Desc: "AI使用成熟策略：锚定、让步映射、BATNA分析",
+    about4Title: "成交或放弃",
+    about4Desc: "如果条件不满足，代理直接离场。绝不做亏本交易。",
+    about5Title: "托管并结束",
+    about5Desc: "协议条款锁定在Solana托管中。人工审批后完成。",
+    modalBudget: "你的预算",
+    modalCurrent: "当前报价",
+    modalRounds: "谈判轮次",
+    modalCounterparty: "对手方",
+    modalProgress: "进度",
+    tick1: "审计交易结束：节省50%",
+    tick2: "NFT委托：-44%",
+    tick3: "47笔交易完成",
+    tick4: "胜率：94%",
+    tick5: "总共节省128.4 SOL",
+    tick6: "新交易：代币发行咨询",
+    resetDemo: "\uD83D\uDD04 重置并重新运行",
+  }
+};
+
+let currentLang = (navigator.language || '').startsWith('zh') ? 'zh' : 'en';
+
+function t(key) {
+  return (I18N[currentLang] && I18N[currentLang][key]) || (I18N.en[key]) || key;
+}
+
+function applyI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (I18N[currentLang][key]) el.textContent = I18N[currentLang][key];
+  });
+}
+
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'zh' : 'en';
+  applyI18n();
+  renderDeals();
+  renderHistory();
+  renderFlowDiagram();
+  renderX402Steps();
+  renderAbout();
+  renderTicker();
+  updateWalletUI();
+}
+
+// ===================== WALLET =====================
+let walletConnected = false;
+function toggleWallet() {
+  walletConnected = !walletConnected;
+  updateWalletUI();
+}
+function updateWalletUI() {
+  const btn = document.getElementById('walletBtn');
+  if (walletConnected) {
+    btn.classList.add('connected');
+    btn.querySelector('[data-i18n]').textContent = t('walletConnected');
+  } else {
+    btn.classList.remove('connected');
+    btn.querySelector('[data-i18n]').textContent = t('walletConnect');
+  }
+}
+
+// ===================== TABS =====================
+function switchTab(name, btnEl) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab' + name).classList.add('active');
+  if (btnEl) btnEl.classList.add('active');
+  document.getElementById('screenContent').scrollTop = 0;
+}
+
+// ===================== DEALS =====================
+const DEALS = [
+  { id:1, titleKey:'deal1Title', status:'negotiating', budget:10, offer:6.5, progress:65, agent:'Agent_0xF3a1' },
+  { id:2, titleKey:'deal2Title', status:'won', budget:5, offer:2.8, progress:100, agent:'Agent_0x91Bc' },
+  { id:3, titleKey:'deal3Title', status:'negotiating', budget:8, offer:7.5, progress:85, agent:'Agent_0xD4e7' },
+  { id:4, titleKey:'deal4Title', status:'pending', budget:12, offer:8, progress:90, agent:'Agent_0xA2f8' },
+  { id:5, titleKey:'deal5Title', status:'won', budget:6, offer:3.2, progress:100, agent:'Agent_0x7cE3' },
+];
+
+function renderDeals() {
+  const container = document.getElementById('dealCards');
+  container.innerHTML = DEALS.map(d => {
+    const statusClass = d.status === 'won' ? 'won' : d.status === 'pending' ? 'pending' : 'negotiating';
+    const statusText = d.status === 'won' ? t('statusWon') : d.status === 'pending' ? t('statusPending') : t('statusNego');
+    return `<div class="deal-card" onclick="openDealModal(${d.id})">
+      <div class="deal-top">
+        <div class="deal-title">${t(d.titleKey)}</div>
+        <span class="deal-status ${statusClass}">${statusText}</span>
+      </div>
+      <div class="deal-prices">
+        <span class="budget">${t('budget')}: \u25CE ${d.budget}</span>
+        <span class="offer">${t('offer')}: \u25CE ${d.offer}</span>
+      </div>
+      <div class="deal-progress"><div class="deal-progress-fill" style="width:${d.progress}%"></div></div>
+      <div class="deal-agent">${t('agent')}: ${d.agent}</div>
+    </div>`;
+  }).join('');
+}
+
+function openDealModal(id) {
+  const d = DEALS.find(x => x.id === id);
+  if (!d) return;
+  const statusClass = d.status === 'won' ? 'won' : d.status === 'pending' ? 'pending' : 'negotiating';
+  const statusText = d.status === 'won' ? t('statusWon') : d.status === 'pending' ? t('statusPending') : t('statusNego');
+  const rounds = d.status === 'won' ? 4 : d.status === 'pending' ? 3 : 2;
+  let roundsHtml = '';
+  for (let i = 1; i <= rounds; i++) {
+    const prices = [d.budget * 1.8, d.budget * 1.4, d.budget * 1.1, d.offer];
+    roundsHtml += `<div class="modal-round">R${i}: \u25CE ${prices[i-1].toFixed(1)} \u2192 \u25CE ${(d.offer + (rounds - i) * 0.5).toFixed(1)}</div>`;
+  }
+  document.getElementById('modalContent').innerHTML = `
+    <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">&times;</button>
+    <div class="modal-title">${t(d.titleKey)}</div>
+    <span class="modal-status deal-status ${statusClass}">${statusText}</span>
+    <div class="modal-detail">
+      <div class="modal-divider"></div>
+      <div><span class="md-label">${t('modalBudget')}:</span> <span class="md-val">\u25CE ${d.budget} SOL</span></div>
+      <div><span class="md-label">${t('modalCurrent')}:</span> <span class="md-val">\u25CE ${d.offer} SOL</span></div>
+      <div><span class="md-label">${t('modalCounterparty')}:</span> <span class="md-val">${d.agent}</span></div>
+      <div><span class="md-label">${t('modalProgress')}:</span> <span class="md-val">${d.progress}%</span></div>
+      <div class="modal-divider"></div>
+      <div class="md-label">${t('modalRounds')}:</div>
+      <div class="modal-rounds">${roundsHtml}</div>
+    </div>`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+}
+
+// ===================== NEGOTIATION DEMO =====================
+let demoRunning = false;
+
+function startDemo() {
+  if (demoRunning) return;
+  demoRunning = true;
+  const btn = document.getElementById('demoBtn');
+  btn.disabled = true;
+  btn.textContent = '...';
+
+  const chatArea = document.getElementById('chatArea');
+  chatArea.innerHTML = '';
+
+  document.getElementById('userBrief').style.display = 'block';
+  document.getElementById('strategyPanel').style.display = 'block';
+
+  const s1 = document.getElementById('strat1');
+  const s2 = document.getElementById('strat2');
+  const s3 = document.getElementById('strat3');
+  s1.textContent = t('stratInit');
+  s1.className = 'strategy-line active';
+  s2.textContent = '';
+  s2.className = 'strategy-line';
+  s3.textContent = '';
+  s3.className = 'strategy-line';
+
+  // Animation sequence
+  const sequence = [
+    // Round 1
+    { type:'round', round:1, delay:800 },
+    { type:'strategy', s1:'strat1_r1', s2:'strat2_r1', s3:'strat3_r1', delay:600 },
+    { type:'typing', side:'left', delay:400 },
+    { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'r1Counter', delay:1200 },
+    { type:'typing', side:'right', delay:600 },
+    { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'r1Deal', delay:1400 },
+    // Round 2
+    { type:'round', round:2, delay:800 },
+    { type:'strategy', s1:'strat1_r2', s2:'strat2_r2', s3:'strat3_r2', delay:500 },
+    { type:'typing', side:'left', delay:400 },
+    { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'r2Counter', delay:1200 },
+    { type:'typing', side:'right', delay:600 },
+    { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'r2Deal', delay:1400 },
+    // Round 3
+    { type:'round', round:3, delay:800 },
+    { type:'strategy', s1:'strat1_r3', s2:'strat2_r3', s3:'strat3_r3', delay:500 },
+    { type:'typing', side:'left', delay:400 },
+    { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'r3Counter', delay:1200 },
+    { type:'typing', side:'right', delay:600 },
+    { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'r3Deal', delay:1400 },
+    // Round 4 - close
+    { type:'round', round:4, delay:800 },
+    { type:'strategy', s1:'strat1_r4', s2:'strat2_r4', s3:'strat3_r4', delay:500 },
+    { type:'typing', side:'left', delay:400 },
+    { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'r4Counter', delay:1000 },
+    { type:'closed', delay:1200 },
+  ];
+
+  let totalDelay = 0;
+  sequence.forEach(step => {
+    totalDelay += step.delay;
+    setTimeout(() => executeStep(step), totalDelay);
+  });
+
+  // Reset button after sequence
+  setTimeout(() => {
+    demoRunning = false;
+    btn.disabled = false;
+    btn.textContent = t('resetDemo');
+  }, totalDelay + 500);
+}
+
+function executeStep(step) {
+  const chatArea = document.getElementById('chatArea');
+  const sc = document.getElementById('screenContent');
+
+  if (step.type === 'round') {
+    const roundText = currentLang === 'zh' ? `\u2501\u2501 \u7B2C${step.round}\u8F6E \u2501\u2501` : `\u2501\u2501 Round ${step.round} \u2501\u2501`;
+    const div = document.createElement('div');
+    div.className = 'round-divider';
+    div.textContent = roundText;
+    chatArea.appendChild(div);
+    gsap.from(div, { opacity: 0, duration: 0.3 });
+  }
+  else if (step.type === 'strategy') {
+    const s1 = document.getElementById('strat1');
+    const s2 = document.getElementById('strat2');
+    const s3 = document.getElementById('strat3');
+    s1.textContent = t(step.s1); s1.className = 'strategy-line active';
+    s2.textContent = t(step.s2); s2.className = 'strategy-line active';
+    s3.textContent = t(step.s3); s3.className = 'strategy-line active';
+    gsap.from([s1,s2,s3], { opacity:0, x:-10, duration:0.3, stagger:0.1 });
+  }
+  else if (step.type === 'typing') {
+    const ind = document.createElement('div');
+    ind.className = 'typing-indicator' + (step.side === 'right' ? ' right-typing' : '');
+    ind.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+    ind.id = 'currentTyping';
+    chatArea.appendChild(ind);
+    sc.scrollTop = sc.scrollHeight;
+  }
+  else if (step.type === 'msg') {
+    const existing = document.getElementById('currentTyping');
+    if (existing) existing.remove();
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble ' + step.side;
+    bubble.innerHTML = `<div class="agent-label">${step.label}</div>${t(step.key)}`;
+    chatArea.appendChild(bubble);
+    gsap.to(bubble, { opacity:1, y:0, duration:0.4, ease:'back.out(1.2)' });
+    sc.scrollTop = sc.scrollHeight;
+  }
+  else if (step.type === 'closed') {
+    const card = document.createElement('div');
+    card.className = 'deal-locked-card';
+    card.innerHTML = `
+      <h3>${t('dealClosedTitle')}</h3>
+      <div class="escrow-info">
+        ${t('dealClosedLine1')}<br>
+        ${t('dealClosedLine2')}<br>
+        ${t('dealClosedLine3')}<br>
+        <strong style="color:var(--cyan)">${t('dealClosedLine4')}</strong><br>
+        ${t('dealClosedLine5')}
+      </div>`;
+    chatArea.appendChild(card);
+    gsap.to(card, { opacity:1, duration:0.6, delay:0.2, ease:'power2.out' });
+    gsap.from(card, { scale:0.9, duration:0.6, delay:0.2, ease:'back.out(1.5)' });
+    sc.scrollTop = sc.scrollHeight;
+    // Confetti
+    setTimeout(() => {
+      const phoneRect = document.getElementById('phone').getBoundingClientRect();
+      const x = (phoneRect.left + phoneRect.width / 2) / window.innerWidth;
+      const y = (phoneRect.top + phoneRect.height * 0.5) / window.innerHeight;
+      confetti({ particleCount:80, spread:60, origin:{x, y}, colors:['#FF6B4A','#00E5CC','#9945FF'] });
+      setTimeout(() => confetti({ particleCount:40, spread:80, origin:{x:x-0.05, y:y+0.05}, colors:['#FF6B4A','#00E5CC'] }), 300);
+    }, 400);
+  }
+}
+
+// ===================== STATS =====================
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  const items = ['hist1','hist2','hist3','hist4','hist5'];
+  const savings = ['-50%','-44%','-50%','-40%','-35%'];
+  list.innerHTML = items.map((k,i) => {
+    const text = t(k);
+    return `<li class="history-item"><span class="hi-name">${text.split('(')[0]}</span><span class="hi-savings">${savings[i]}</span></li>`;
+  }).join('');
+}
+
+function renderBarChart() {
+  const chart = document.getElementById('barChart');
+  const values = [18, 12, 24, 15, 22, 19, 28];
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const max = Math.max(...values);
+  chart.innerHTML = values.map((v,i) => `
+    <div class="bar-col">
+      <div class="bar" style="height:${(v/max)*80}px" data-val="${v}"></div>
+      <div class="bar-label">${days[i]}</div>
+    </div>`).join('');
+}
+
+// ===================== x402 FLOW =====================
+function renderFlowDiagram() {
+  const icons = ['\uD83D\uDC64','\uD83E\uDD9E','\u2705','\uD83D\uDCB0'];
+  const keys = [
+    {t:'flow1Title',d:'flow1Desc'},{t:'flow2Title',d:'flow2Desc'},
+    {t:'flow3Title',d:'flow3Desc'},{t:'flow4Title',d:'flow4Desc'}
+  ];
+  document.getElementById('flowDiagram').innerHTML = keys.map((k,i) => {
+    const arrow = i < 3 ? '<div class="flow-arrow">\u2193</div>' : '';
+    return `<div class="flow-step"><div class="fs-icon">${icons[i]}</div><div class="fs-text"><strong>${t(k.t)}</strong><br>${t(k.d)}</div></div>${arrow}`;
+  }).join('');
+}
+
+function renderX402Steps() {
+  const container = document.getElementById('x402Steps');
+  container.innerHTML = `<h4>${t('x402StepsTitle')}</h4>
+    <div class="x402-step"><div class="xs-num">1</div><div class="xs-text">${t('x402s1')}</div></div>
+    <div class="x402-step"><div class="xs-num">2</div><div class="xs-text">${t('x402s2')}</div></div>
+    <div class="x402-step"><div class="xs-num">3</div><div class="xs-text">${t('x402s3')}</div></div>`;
+}
+
+// ===================== ABOUT =====================
+function renderAbout() {
+  const steps = [
+    {t:'about1Title',d:'about1Desc'},{t:'about2Title',d:'about2Desc'},
+    {t:'about3Title',d:'about3Desc'},{t:'about4Title',d:'about4Desc'},
+    {t:'about5Title',d:'about5Desc'}
+  ];
+  document.getElementById('aboutSteps').innerHTML = steps.map((s,i) =>
+    `<div class="about-step"><div class="as-num">${i+1}</div><div class="as-content"><h4>${t(s.t)}</h4><p>${t(s.d)}</p></div></div>`
+  ).join('');
+
+  document.getElementById('archDiagram').innerHTML = `
+    <div class="arch-line"><span class="arch-highlight">\uD83D\uDC64 Human</span> \u2014 Sets Terms</div>
+    <div class="arch-arrow">\u2195</div>
+    <div class="arch-line"><span class="arch-highlight">\uD83E\uDD9E DealClaw Agent</span> \u2014 Negotiation Engine</div>
+    <div class="arch-arrow">\u2195</div>
+    <div class="arch-line"><span class="arch-highlight">\uD83E\uDD16 Counterparty Agent</span> \u2014 Vendor/Seller</div>
+    <div class="arch-arrow">\u2195</div>
+    <div class="arch-line"><span class="arch-highlight">\u25CE Solana Escrow</span> \u2014 Trustless Settlement</div>`;
+
+  const techBadgesArr = ['Solana','x402','OpenClaw','Anchor','MCP','Escrow Protocol','Rust','TypeScript'];
+  document.getElementById('techBadges').innerHTML = techBadgesArr.map(b => `<span class="tech-badge">${b}</span>`).join('');
+}
+
+// ===================== TICKER =====================
+function renderTicker() {
+  const keys = ['tick1','tick2','tick3','tick4','tick5','tick6'];
+  const colors = ['green','red','green','green','green','green'];
+  const items = keys.map((k,i) => `<span class="ticker-item"><span class="${colors[i]}">\u25CF</span> ${t(k)}</span>`).join('');
+  document.getElementById('ticker').innerHTML = items + items; // duplicate for seamless loop
+}
+
+// ===================== PARTICLES =====================
+function initParticles() {
+  const canvas = document.getElementById('particleCanvas');
+  const ctx = canvas.getContext('2d');
+  const phone = document.getElementById('phone');
+  let particles = [];
+
+  function resize() {
+    canvas.width = phone.clientWidth;
+    canvas.height = phone.clientHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (let i = 0; i < 30; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 2 + 0.5,
+      color: Math.random() > 0.5 ? 'rgba(255,107,74,' : 'rgba(0,229,204,',
+      alpha: Math.random() * 0.3 + 0.05
+    });
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + p.alpha + ')';
+      ctx.fill();
+    });
+    // Draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 100) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(255,107,74,${0.03 * (1 - dist/100)})`;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+// ===================== SPLASH =====================
+function runSplash() {
+  const fill = document.getElementById('splashFill');
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += 2;
+    fill.style.width = progress + '%';
+    if (progress >= 100) {
+      clearInterval(interval);
+      setTimeout(() => {
+        document.getElementById('splash').classList.add('hidden');
+        animateEntrance();
+      }, 300);
+    }
+  }, 25);
+}
+
+function animateEntrance() {
+  gsap.from('.wallet-bar', { opacity:0, y:-10, duration:0.4, delay:0.1 });
+  gsap.from('.ticker', { opacity:0, duration:0.3, delay:0.2 });
+  gsap.from('.deals-header', { opacity:0, y:10, duration:0.4, delay:0.3 });
+  gsap.from('.stats-row .stat-card', { opacity:0, y:15, duration:0.4, stagger:0.1, delay:0.4 });
+  gsap.from('.deal-card', { opacity:0, x:-15, duration:0.3, stagger:0.08, delay:0.6 });
+  // Showcase
+  gsap.from('.showcase .logo-area', { opacity:0, x:-20, duration:0.5, delay:0.2 });
+  gsap.from('.showcase .tagline', { opacity:0, y:15, duration:0.4, delay:0.4 });
+  gsap.from('.showcase .desc', { opacity:0, y:15, duration:0.4, delay:0.5 });
+  gsap.from('.showcase .track-info', { opacity:0, y:15, duration:0.4, delay:0.6 });
+  gsap.from('.showcase .badge-row .badge', { opacity:0, scale:0.8, duration:0.3, stagger:0.05, delay:0.7 });
+  gsap.from('.showcase .features li', { opacity:0, x:-10, duration:0.3, stagger:0.06, delay:0.8 });
+}
+
+// ===================== INIT =====================
+document.addEventListener('DOMContentLoaded', () => {
+  applyI18n();
+  renderDeals();
+  renderBarChart();
+  renderHistory();
+  renderFlowDiagram();
+  renderX402Steps();
+  renderAbout();
+  renderTicker();
+  initParticles();
+  runSplash();
+});
+</script>
+</body>
+</html>
