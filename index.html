@@ -231,12 +231,43 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 .modal-round{font-size:11px;color:var(--text2);padding:4px 0;border-left:2px solid var(--bg4);padding-left:10px;margin-bottom:6px}
 
 /* ===== SCENARIO SELECTOR ===== */
-.scenario-selector{display:flex;gap:8px;margin-bottom:12px}
-.scenario-btn{flex:1;padding:10px 8px;border-radius:10px;background:var(--bg2);border:1px solid var(--bg4);color:var(--text2);font-family:var(--font-display);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center}
+.scenario-selector{display:flex;gap:6px;margin-bottom:10px}
+.scenario-btn{flex:1;padding:8px 6px;border-radius:10px;background:var(--bg2);border:1px solid var(--bg4);color:var(--text2);font-family:var(--font-display);font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center}
 .scenario-btn.active{border-color:var(--coral);color:var(--coral);background:rgba(255,107,74,.08)}
 .scenario-btn.walkaway.active{border-color:#f85149;color:#f85149;background:rgba(248,81,73,.08)}
+.scenario-btn.custom.active{border-color:var(--purple);color:var(--purple);background:rgba(153,69,255,.08)}
 .scenario-btn:hover{border-color:var(--text3)}
-.scenario-btn .sc-icon{font-size:18px;display:block;margin-bottom:4px}
+.scenario-btn .sc-icon{font-size:16px;display:block;margin-bottom:3px}
+
+/* ===== STYLE SELECTOR ===== */
+.style-selector{display:flex;gap:6px;margin-bottom:10px}
+.style-btn{flex:1;padding:6px 4px;border-radius:8px;background:var(--bg2);border:1px solid var(--bg4);color:var(--text3);font-family:var(--font-mono);font-size:9px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center}
+.style-btn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,204,.06)}
+.style-btn .style-icon{font-size:14px;display:block;margin-bottom:2px}
+
+/* ===== CUSTOM DEAL FORM ===== */
+.custom-form{background:var(--bg2);border:1px solid var(--bg4);border-radius:12px;padding:14px;margin-bottom:10px;display:none}
+.custom-form.visible{display:block}
+.custom-form .cf-title{font-family:var(--font-display);font-size:12px;font-weight:600;color:var(--purple);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.cf-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.cf-row label{font-size:10px;color:var(--text2);min-width:55px;flex-shrink:0}
+.cf-row select,.cf-row input[type=range]{flex:1;background:var(--bg3);border:1px solid var(--bg4);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:10px;padding:4px 6px;outline:none}
+.cf-row select{cursor:pointer;-webkit-appearance:none}
+.cf-row input[type=range]{-webkit-appearance:none;height:4px;border:none;border-radius:2px;background:var(--bg4)}
+.cf-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));cursor:pointer;border:2px solid var(--bg)}
+.cf-val{font-family:var(--font-mono);font-size:11px;color:var(--purple);font-weight:600;min-width:32px;text-align:right}
+
+/* ===== CONVERGENCE CHART ===== */
+.convergence-chart{background:var(--bg2);border:1px solid var(--bg4);border-radius:12px;padding:12px;margin-bottom:10px;display:none}
+.convergence-chart.visible{display:block}
+.cc-title{font-family:var(--font-display);font-size:11px;font-weight:600;color:var(--text2);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.cc-legend{display:flex;gap:10px;font-size:9px;font-family:var(--font-mono)}
+.cc-legend span{display:flex;align-items:center;gap:4px}
+.cc-legend .dot-vendor{width:6px;height:6px;border-radius:50%;background:var(--coral)}
+.cc-legend .dot-deal{width:6px;height:6px;border-radius:50%;background:var(--cyan)}
+.cc-canvas-wrap{position:relative;height:100px;width:100%}
+.cc-canvas-wrap canvas{width:100%;height:100%}
+.cc-markers{display:flex;justify-content:space-between;font-size:8px;color:var(--text3);font-family:var(--font-mono);margin-top:4px;padding:0 2px}
 
 /* ===== WALK-AWAY RESULT ===== */
 .walkaway-card{background:linear-gradient(135deg,rgba(248,81,73,.1),rgba(255,107,74,.05));border:2px solid #f85149;border-radius:16px;padding:16px;text-align:center;margin-top:12px;opacity:0}
@@ -412,6 +443,22 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 
       <!-- Tab 2: Negotiate -->
       <div class="tab-panel" id="tabNegotiate">
+        <!-- Style Selector -->
+        <div class="style-selector">
+          <button class="style-btn" id="styleAggressive" onclick="selectStyle('aggressive')">
+            <span class="style-icon">&#x1F525;</span>
+            <span data-i18n="styleAggressive">Aggressive</span>
+          </button>
+          <button class="style-btn active" id="styleBalanced" onclick="selectStyle('balanced')">
+            <span class="style-icon">&#x2696;&#xFE0F;</span>
+            <span data-i18n="styleBalanced">Balanced</span>
+          </button>
+          <button class="style-btn" id="styleConservative" onclick="selectStyle('conservative')">
+            <span class="style-icon">&#x1F6E1;&#xFE0F;</span>
+            <span data-i18n="styleConservative">Conservative</span>
+          </button>
+        </div>
+        <!-- Scenario Selector -->
         <div class="scenario-selector">
           <button class="scenario-btn active" id="scenarioSuccess" onclick="selectScenario('success')">
             <span class="sc-icon">&#x2705;</span>
@@ -421,8 +468,51 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
             <span class="sc-icon">&#x1F6AB;</span>
             <span data-i18n="scenarioWalkaway">Walk-Away</span>
           </button>
+          <button class="scenario-btn custom" id="scenarioCustom" onclick="selectScenario('custom')">
+            <span class="sc-icon">&#x270F;&#xFE0F;</span>
+            <span data-i18n="scenarioCustom">Custom</span>
+          </button>
+        </div>
+        <!-- Custom Deal Form -->
+        <div class="custom-form" id="customForm">
+          <div class="cf-title">&#x270F;&#xFE0F; <span data-i18n="customTitle">Custom Deal Parameters</span></div>
+          <div class="cf-row">
+            <label data-i18n="cfService">Service</label>
+            <select id="cfService">
+              <option value="audit">Smart Contract Audit</option>
+              <option value="design">Web3 UI Design</option>
+              <option value="nft">NFT Art Commission</option>
+              <option value="marketing">Marketing Campaign</option>
+              <option value="dev">Full-Stack Development</option>
+              <option value="consulting">Token Launch Advisory</option>
+            </select>
+          </div>
+          <div class="cf-row">
+            <label data-i18n="cfBudget">Budget</label>
+            <input type="range" id="cfBudget" min="1" max="50" value="10" oninput="document.getElementById('cfBudgetVal').textContent=this.value">
+            <span class="cf-val" id="cfBudgetVal">10</span>
+            <span style="font-size:9px;color:var(--text3)">SOL</span>
+          </div>
+          <div class="cf-row">
+            <label data-i18n="cfWalkaway">Walk-away</label>
+            <input type="range" id="cfWalkaway" min="1" max="50" value="8" oninput="document.getElementById('cfWalkawayVal').textContent=this.value">
+            <span class="cf-val" id="cfWalkawayVal">8</span>
+            <span style="font-size:9px;color:var(--text3)">SOL</span>
+          </div>
         </div>
         <button class="demo-btn" id="demoBtn" onclick="startDemo()" data-i18n="startDemo">&#x1F99E; Start Negotiation Demo</button>
+        <!-- Convergence Chart -->
+        <div class="convergence-chart" id="convergenceChart">
+          <div class="cc-title">
+            <span data-i18n="ccTitle">Price Convergence</span>
+            <div class="cc-legend">
+              <span><span class="dot-vendor"></span> <span data-i18n="ccVendor">Vendor</span></span>
+              <span><span class="dot-deal"></span> DealClaw</span>
+            </div>
+          </div>
+          <div class="cc-canvas-wrap"><canvas id="ccCanvas"></canvas></div>
+          <div class="cc-markers"><span>R1</span><span>R2</span><span>R3</span><span>R4</span></div>
+        </div>
         <div class="user-brief" id="userBrief" style="display:none">
           <div class="brief-label" data-i18n="briefLabel">&#x1F4CB; User Brief</div>
           <span data-i18n="briefText">Need a security audit for my DeFi protocol. Budget: max 8 SOL. Must include: full code review + report.</span>
@@ -664,10 +754,42 @@ const I18N = {
     tick5: "128.4 SOL saved total",
     tick6: "New deal: Token Launch Advisory",
     resetDemo: "\uD83D\uDD04 Reset & Run Again",
+    // Style selector
+    styleAggressive: "Aggressive",
+    styleBalanced: "Balanced",
+    styleConservative: "Conservative",
     // Scenario selector
     scenarioSuccess: "Deal Closed",
     scenarioWalkaway: "Walk-Away",
+    scenarioCustom: "Custom",
     startWalkaway: "\uD83D\uDEAB Start Walk-Away Demo",
+    startCustom: "\u270F\uFE0F Start Custom Negotiation",
+    // Custom form
+    customTitle: "Custom Deal Parameters",
+    cfService: "Service",
+    cfBudget: "Budget",
+    cfWalkaway: "Walk-away",
+    // Convergence chart
+    ccTitle: "Price Convergence",
+    ccVendor: "Vendor",
+    // Custom negotiation templates
+    customBrief: "Need {service}. Budget: max {budget} SOL. Walk-away at {walkaway} SOL.",
+    customR1Vendor: "Hello! Our standard rate for {service} is {vendorOpen} SOL. This includes full scope and deliverables.",
+    customR1Deal: "Market analysis shows {service} ranges {marketLow}-{marketHigh} SOL. We offer {dealOpen} SOL for full scope. We have competing quotes.",
+    customR2Vendor: "{vendorR2} SOL is our best offer. We have extensive experience and premium quality.",
+    customR2Deal: "Noted. We move to {dealR2} SOL. Our BATNA: Vendor_B at {batna} SOL. Competitive offer.",
+    customR3Vendor: "{vendorR3} SOL. We\u2019ll adjust scope to core deliverables only. Extras charged separately.",
+    customR3Deal: "\u26A0\uFE0F Scope reduction detected. Full scope required. Counter: {dealR3} SOL. {finalOrNot}",
+    customR4VendorAccept: "{finalPrice} SOL for full scope. Deal. Sending to escrow.",
+    customR4VendorReject: "{vendorR4} SOL. Absolutely final. We cannot go lower.",
+    customR4DealWalk: "\uD83D\uDEAB Walk-Away. {vendorR4} SOL exceeds budget ({budget} SOL). Engaging BATNA.",
+    customClosedLine1: "Service: {service} (Full Scope)",
+    customClosedLine2: "Price: \u25CE {price} SOL",
+    customClosedLine3: "Savings: {savings} SOL ({pct}% off opening)",
+    customWalkLine1: "Service: {service}",
+    customWalkLine2: "Last offer: \u25CE {lastOffer} SOL (exceeds budget)",
+    customWalkLine3: "Your budget: \u25CE {budget} SOL",
+    customWalkLine4: "Action: Engaging BATNA at \u25CE {batna} SOL",
     // Walk-away chat
     waBriefText: "Need logo design for DAO. Budget: max 3 SOL. Must include: 3 concepts + source files.",
     waR1Counter: "Hi there! Our premium logo packages start at 8 SOL. That includes 3 initial concepts, unlimited revisions, and source files.",
@@ -876,10 +998,42 @@ const I18N = {
     tick5: "总共节省128.4 SOL",
     tick6: "新交易：代币发行咨询",
     resetDemo: "\uD83D\uDD04 重置并重新运行",
+    // Style selector
+    styleAggressive: "激进",
+    styleBalanced: "平衡",
+    styleConservative: "保守",
     // Scenario selector
     scenarioSuccess: "成功成交",
     scenarioWalkaway: "退出谈判",
+    scenarioCustom: "自定义",
     startWalkaway: "\uD83D\uDEAB 开始退出演示",
+    startCustom: "\u270F\uFE0F 开始自定义谈判",
+    // Custom form
+    customTitle: "自定义谈判参数",
+    cfService: "服务",
+    cfBudget: "预算",
+    cfWalkaway: "底线",
+    // Convergence chart
+    ccTitle: "价格收敛图",
+    ccVendor: "卖方",
+    // Custom negotiation templates
+    customBrief: "需要{service}。预算：最高 {budget} SOL。底线：{walkaway} SOL。",
+    customR1Vendor: "你好！{service}的标准价格为 {vendorOpen} SOL。包含完整范围和交付物。",
+    customR1Deal: "市场分析显示{service}价格在 {marketLow}-{marketHigh} SOL。我们出 {dealOpen} SOL 全范围。有竞争报价。",
+    customR2Vendor: "{vendorR2} SOL 是我们的最佳报价。我们有丰富经验和高端品质。",
+    customR2Deal: "了解。提高到 {dealR2} SOL。BATNA：Vendor_B 报价 {batna} SOL。竞争性报价。",
+    customR3Vendor: "{vendorR3} SOL。范围调整为核心交付物。额外项另计。",
+    customR3Deal: "\u26A0\uFE0F 检测到范围缩减。需要全范围。还价：{dealR3} SOL。{finalOrNot}",
+    customR4VendorAccept: "{finalPrice} SOL 全范围可以接受。成交。发送到托管。",
+    customR4VendorReject: "{vendorR4} SOL。绝对最终价。不能再降。",
+    customR4DealWalk: "\uD83D\uDEAB 退出。{vendorR4} SOL 超出预算（{budget} SOL）。启动 BATNA。",
+    customClosedLine1: "服务：{service}（全范围）",
+    customClosedLine2: "价格：\u25CE {price} SOL",
+    customClosedLine3: "节省：{savings} SOL（比开价低{pct}%）",
+    customWalkLine1: "服务：{service}",
+    customWalkLine2: "最后报价：\u25CE {lastOffer} SOL（超出预算）",
+    customWalkLine3: "你的预算：\u25CE {budget} SOL",
+    customWalkLine4: "行动：启动 BATNA \u25CE {batna} SOL",
     // Walk-away chat
     waBriefText: "需要为 DAO 设计 Logo。预算：最高 3 SOL。必须包含：3 个设计方案 + 源文件。",
     waR1Counter: "你好！我们的高端 Logo 套餐起价 8 SOL。包含 3 个初始方案、无限修改和源文件。",
@@ -988,6 +1142,15 @@ function applyI18n() {
     const key = el.getAttribute('data-i18n');
     if (I18N[currentLang][key]) el.textContent = I18N[currentLang][key];
   });
+  // Update service dropdown options
+  const sel = document.getElementById('cfService');
+  if (sel) {
+    const lang = currentLang === 'zh' ? 'zh' : 'en';
+    sel.querySelectorAll('option').forEach(opt => {
+      const sn = typeof SERVICE_NAMES !== 'undefined' && SERVICE_NAMES[opt.value];
+      if (sn) opt.textContent = sn[lang];
+    });
+  }
 }
 
 function toggleLang() {
@@ -1110,6 +1273,7 @@ let demoRunning = false;
 
 function startDemo() {
   if (currentScenario === 'walkaway') { startWalkawayDemo(); return; }
+  if (currentScenario === 'custom') { startCustomDemo(); return; }
   if (demoRunning) return;
   demoRunning = true;
   const btn = document.getElementById('demoBtn');
@@ -1132,6 +1296,10 @@ function startDemo() {
   s3.textContent = '';
   s3.className = 'strategy-line';
 
+  // Init convergence chart
+  chartData = { vendor: [], deal: [], budget: 8 };
+  initChart();
+
   // Animation sequence
   const sequence = [
     // Round 1
@@ -1139,6 +1307,7 @@ function startDemo() {
     { type:'strategy', s1:'strat1_r1', s2:'strat2_r1', s3:'strat3_r1', delay:600 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'r1Counter', delay:1200 },
+    { type:'chartPt', round:1, vp:15, dp:5, delay:200 },
     { type:'typing', side:'right', delay:600 },
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'r1Deal', delay:1400 },
     // Round 2
@@ -1146,6 +1315,7 @@ function startDemo() {
     { type:'strategy', s1:'strat1_r2', s2:'strat2_r2', s3:'strat3_r2', delay:500 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'r2Counter', delay:1200 },
+    { type:'chartPt', round:2, vp:12, dp:6.5, delay:200 },
     { type:'typing', side:'right', delay:600 },
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'r2Deal', delay:1400 },
     // Round 3
@@ -1153,6 +1323,7 @@ function startDemo() {
     { type:'strategy', s1:'strat1_r3', s2:'strat2_r3', s3:'strat3_r3', delay:500 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'r3Counter', delay:1200 },
+    { type:'chartPt', round:3, vp:9, dp:7.5, delay:200 },
     { type:'typing', side:'right', delay:600 },
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'r3Deal', delay:1400 },
     // Round 4 - close
@@ -1160,6 +1331,7 @@ function startDemo() {
     { type:'strategy', s1:'strat1_r4', s2:'strat2_r4', s3:'strat3_r4', delay:500 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'r4Counter', delay:1000 },
+    { type:'chartPt', round:4, vp:7.5, dp:7.5, delay:200 },
     { type:'closed', delay:1200 },
   ];
 
@@ -1240,6 +1412,9 @@ function executeStep(step) {
       confetti({ particleCount:80, spread:60, origin:{x, y}, colors:['#FF6B4A','#00E5CC','#9945FF'] });
       setTimeout(() => confetti({ particleCount:40, spread:80, origin:{x:x-0.05, y:y+0.05}, colors:['#FF6B4A','#00E5CC'] }), 300);
     }, 400);
+  }
+  else if (step.type === 'chartPt') {
+    addChartPoint(step.round, step.vp, step.dp);
   }
   else if (step.type === 'walkaway') {
     const card = document.createElement('div');
@@ -1426,6 +1601,20 @@ function animateEntrance() {
   gsap.from('.showcase .features li', { opacity:0, x:-10, duration:0.3, stagger:0.06, delay:0.8 });
 }
 
+// ===================== STYLE SELECTOR =====================
+let currentStyle = 'balanced';
+const STYLE_PARAMS = {
+  aggressive:    { openFactor: 0.25, concessionRate: 0.08, walkawayBuffer: 0.95 },
+  balanced:      { openFactor: 0.35, concessionRate: 0.12, walkawayBuffer: 0.85 },
+  conservative:  { openFactor: 0.45, concessionRate: 0.18, walkawayBuffer: 0.75 },
+};
+
+function selectStyle(s) {
+  currentStyle = s;
+  document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('style' + s.charAt(0).toUpperCase() + s.slice(1)).classList.add('active');
+}
+
 // ===================== SCENARIO SELECTOR =====================
 let currentScenario = 'success';
 
@@ -1433,11 +1622,16 @@ function selectScenario(s) {
   currentScenario = s;
   document.getElementById('scenarioSuccess').classList.toggle('active', s === 'success');
   document.getElementById('scenarioWalkaway').classList.toggle('active', s === 'walkaway');
+  document.getElementById('scenarioCustom').classList.toggle('active', s === 'custom');
+  document.getElementById('customForm').classList.toggle('visible', s === 'custom');
+  document.getElementById('convergenceChart').classList.remove('visible');
   const btn = document.getElementById('demoBtn');
   btn.disabled = false;
   demoRunning = false;
   if (s === 'walkaway') {
     btn.textContent = t('startWalkaway');
+  } else if (s === 'custom') {
+    btn.textContent = t('startCustom');
   } else {
     btn.textContent = t('startDemo');
   }
@@ -1466,29 +1660,37 @@ function startWalkawayDemo() {
   s2.textContent = ''; s2.className = 'strategy-line';
   s3.textContent = ''; s3.className = 'strategy-line';
 
+  // Init convergence chart for walkaway
+  chartData = { vendor: [], deal: [], budget: 3 };
+  initChart();
+
   const sequence = [
     { type:'round', round:1, delay:800 },
     { type:'strategy', s1:'waStrat1_r1', s2:'waStrat2_r1', s3:'waStrat3_r1', delay:600 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'waR1Counter', delay:1200 },
+    { type:'chartPt', round:1, vp:8, dp:2, delay:200 },
     { type:'typing', side:'right', delay:600 },
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'waR1Deal', delay:1400 },
     { type:'round', round:2, delay:800 },
     { type:'strategy', s1:'waStrat1_r2', s2:'waStrat2_r2', s3:'waStrat3_r2', delay:500 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'waR2Counter', delay:1200 },
+    { type:'chartPt', round:2, vp:7, dp:2.8, delay:200 },
     { type:'typing', side:'right', delay:600 },
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'waR2Deal', delay:1400 },
     { type:'round', round:3, delay:800 },
     { type:'strategy', s1:'waStrat1_r3', s2:'waStrat2_r3', s3:'waStrat3_r3', delay:500 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'waR3Counter', delay:1200 },
+    { type:'chartPt', round:3, vp:6, dp:3, delay:200 },
     { type:'typing', side:'right', delay:600 },
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'waR3Deal', delay:1400 },
     { type:'round', round:4, delay:800 },
     { type:'strategy', s1:'waStrat1_r4', s2:'waStrat2_r4', s3:'waStrat3_r4', delay:500 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'waR4Counter', delay:1000 },
+    { type:'chartPt', round:4, vp:5.5, dp:3, delay:200 },
     { type:'typing', side:'right', delay:600 },
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'waR4Deal', delay:1200 },
     { type:'walkaway', delay:1000 },
@@ -1497,6 +1699,308 @@ function startWalkawayDemo() {
   let totalDelay = 0;
   sequence.forEach(step => { totalDelay += step.delay; setTimeout(() => executeStep(step), totalDelay); });
   setTimeout(() => { demoRunning = false; btn.disabled = false; btn.textContent = t('resetDemo'); }, totalDelay + 500);
+}
+
+// ===================== CONVERGENCE CHART =====================
+let chartData = { vendor: [], deal: [], budget: 0 };
+
+function initChart() {
+  const prevBudget = chartData.budget || 0;
+  chartData = { vendor: [], deal: [], budget: prevBudget };
+  const chart = document.getElementById('convergenceChart');
+  chart.classList.add('visible');
+  drawChart();
+}
+
+function addChartPoint(round, vendorPrice, dealPrice) {
+  chartData.vendor.push({ round, price: vendorPrice });
+  chartData.deal.push({ round, price: dealPrice });
+  drawChart();
+}
+
+function drawChart() {
+  const canvas = document.getElementById('ccCanvas');
+  const wrap = canvas.parentElement;
+  canvas.width = wrap.clientWidth * 2;
+  canvas.height = wrap.clientHeight * 2;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(2, 2);
+  const w = wrap.clientWidth;
+  const h = wrap.clientHeight;
+  ctx.clearRect(0, 0, w, h);
+
+  if (chartData.vendor.length === 0) return;
+  const allPrices = [...chartData.vendor.map(p=>p.price), ...chartData.deal.map(p=>p.price)];
+  const maxP = Math.max(...allPrices) * 1.1;
+  const minP = 0;
+  const padL = 2, padR = 2, padT = 4, padB = 4;
+  const cw = w - padL - padR;
+  const ch = h - padT - padB;
+  function x(round) { return padL + ((round - 1) / 3) * cw; }
+  function y(price) { return padT + ch - ((price - minP) / (maxP - minP)) * ch; }
+
+  // Budget line
+  if (chartData.budget > 0) {
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = 'rgba(153,69,255,0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, y(chartData.budget));
+    ctx.lineTo(w - padR, y(chartData.budget));
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(153,69,255,0.5)';
+    ctx.font = '8px monospace';
+    ctx.fillText('budget', w - padR - 30, y(chartData.budget) - 3);
+  }
+
+  // Vendor line
+  if (chartData.vendor.length > 1) {
+    ctx.strokeStyle = '#FF6B4A';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    chartData.vendor.forEach((p, i) => { i === 0 ? ctx.moveTo(x(p.round), y(p.price)) : ctx.lineTo(x(p.round), y(p.price)); });
+    ctx.stroke();
+  }
+  chartData.vendor.forEach(p => {
+    ctx.fillStyle = '#FF6B4A';
+    ctx.beginPath();
+    ctx.arc(x(p.round), y(p.price), 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#FF6B4A';
+    ctx.font = '8px monospace';
+    ctx.fillText(p.price.toFixed(1), x(p.round) - 8, y(p.price) - 6);
+  });
+
+  // Deal line
+  if (chartData.deal.length > 1) {
+    ctx.strokeStyle = '#00E5CC';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    chartData.deal.forEach((p, i) => { i === 0 ? ctx.moveTo(x(p.round), y(p.price)) : ctx.lineTo(x(p.round), y(p.price)); });
+    ctx.stroke();
+  }
+  chartData.deal.forEach(p => {
+    ctx.fillStyle = '#00E5CC';
+    ctx.beginPath();
+    ctx.arc(x(p.round), y(p.price), 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#00E5CC';
+    ctx.font = '8px monospace';
+    ctx.fillText(p.price.toFixed(1), x(p.round) - 8, y(p.price) + 12);
+  });
+
+  // Deal point marker
+  if (chartData.vendor.length >= 4 && chartData.deal.length >= 3) {
+    const lastV = chartData.vendor[chartData.vendor.length - 1];
+    const lastD = chartData.deal[chartData.deal.length - 1];
+    if (Math.abs(lastV.price - lastD.price) < 1) {
+      ctx.fillStyle = 'rgba(0,229,204,0.15)';
+      ctx.beginPath();
+      ctx.arc(x(lastV.round), y(lastV.price), 10, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+}
+
+// ===================== CUSTOM DEAL DEMO =====================
+const SERVICE_NAMES = {
+  audit: { en: 'Smart Contract Audit', zh: '智能合约审计' },
+  design: { en: 'Web3 UI Design', zh: 'Web3 界面设计' },
+  nft: { en: 'NFT Art Commission', zh: 'NFT 艺术委托' },
+  marketing: { en: 'Marketing Campaign', zh: '营销推广' },
+  dev: { en: 'Full-Stack Development', zh: '全栈开发' },
+  consulting: { en: 'Token Launch Advisory', zh: '代币发行咨询' },
+};
+
+function tpl(template, vars) {
+  let s = template;
+  for (const [k, v] of Object.entries(vars)) s = s.replace(new RegExp('\\{' + k + '\\}', 'g'), v);
+  return s;
+}
+
+function startCustomDemo() {
+  if (demoRunning) return;
+  demoRunning = true;
+  const btn = document.getElementById('demoBtn');
+  btn.disabled = true;
+  btn.textContent = '...';
+  const chatArea = document.getElementById('chatArea');
+  chatArea.innerHTML = '';
+
+  const serviceKey = document.getElementById('cfService').value;
+  const serviceName = SERVICE_NAMES[serviceKey][currentLang === 'zh' ? 'zh' : 'en'];
+  const budget = parseInt(document.getElementById('cfBudget').value);
+  const walkaway = parseInt(document.getElementById('cfWalkaway').value);
+  const sp = STYLE_PARAMS[currentStyle];
+
+  // Generate dynamic prices
+  const vendorOpen = +(budget * (1.5 + Math.random() * 0.3)).toFixed(1);
+  const dealOpen = +(budget * sp.openFactor).toFixed(1);
+  const marketLow = +(budget * 0.4).toFixed(1);
+  const marketHigh = +(budget * 0.7).toFixed(1);
+  const batna = +(walkaway * (0.75 + Math.random() * 0.15)).toFixed(1);
+
+  const vendorR2 = +(vendorOpen * (0.7 + Math.random() * 0.05)).toFixed(1);
+  const dealR2 = +(dealOpen + (walkaway - dealOpen) * sp.concessionRate * 3).toFixed(1);
+  const vendorR3 = +(vendorR2 * (0.65 + Math.random() * 0.08)).toFixed(1);
+  const dealR3 = +(dealR2 + (walkaway - dealR2) * sp.concessionRate * 4).toFixed(1);
+
+  // Determine outcome: will the deal close?
+  // Deal closes when vendor can reasonably meet near or below walkaway
+  const midPrice = (vendorR3 + dealR3) / 2;
+  const willClose = vendorR3 * 0.82 <= walkaway;
+  const finalPrice = willClose ? +Math.min(midPrice, walkaway * 0.96).toFixed(1) : 0;
+  const vendorR4 = willClose ? finalPrice : +(walkaway * (1.2 + Math.random() * 0.3)).toFixed(1);
+
+  const vars = { service: serviceName, budget, walkaway, vendorOpen, dealOpen, marketLow, marketHigh, batna, vendorR2, dealR2, vendorR3, dealR3, vendorR4, finalPrice, finalOrNot: willClose ? (currentLang === 'zh' ? '最终报价。' : 'Final offer.') : (currentLang === 'zh' ? '接近底线。' : 'Near limit.') };
+
+  // Show brief and strategy
+  document.getElementById('userBrief').style.display = 'block';
+  document.querySelector('#userBrief [data-i18n="briefText"]').textContent = tpl(t('customBrief'), vars);
+  document.getElementById('strategyPanel').style.display = 'block';
+  const s1 = document.getElementById('strat1');
+  const s2 = document.getElementById('strat2');
+  const s3 = document.getElementById('strat3');
+  s1.textContent = t('stratInit'); s1.className = 'strategy-line active';
+  s2.textContent = ''; s2.className = 'strategy-line';
+  s3.textContent = ''; s3.className = 'strategy-line';
+
+  // Init convergence chart
+  chartData = { vendor: [], deal: [], budget: walkaway };
+  initChart();
+
+  const styleLabel = currentLang === 'zh' ? t('style' + currentStyle.charAt(0).toUpperCase() + currentStyle.slice(1)) : currentStyle.charAt(0).toUpperCase() + currentStyle.slice(1);
+
+  const sequence = [
+    { type:'round', round:1, delay:800 },
+    { type:'strategy', texts: [currentLang === 'zh' ? '策略：低锚定' : 'Tactic: Anchoring Low', currentLang === 'zh' ? '风格：' + styleLabel : 'Style: ' + styleLabel, currentLang === 'zh' ? '市场数据施压' : 'Market data pressure'], delay:500 },
+    { type:'typing', side:'left', delay:400 },
+    { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', text: tpl(t('customR1Vendor'), vars), delay:1200 },
+    { type:'chart', round:1, vp: vendorOpen, dp: dealOpen, delay:200 },
+    { type:'typing', side:'right', delay:600 },
+    { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', text: tpl(t('customR1Deal'), vars), delay:1400 },
+    { type:'round', round:2, delay:800 },
+    { type:'strategy', texts: [currentLang === 'zh' ? '策略：BATNA 杠杆' : 'Tactic: BATNA Leverage', currentLang === 'zh' ? '检测到：资质论证' : 'Detected: credential justification', currentLang === 'zh' ? '引入替代方案' : 'Presenting alternative'], delay:500 },
+    { type:'typing', side:'left', delay:400 },
+    { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', text: tpl(t('customR2Vendor'), vars), delay:1200 },
+    { type:'chart', round:2, vp: vendorR2, dp: dealR2, delay:200 },
+    { type:'typing', side:'right', delay:600 },
+    { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', text: tpl(t('customR2Deal'), vars), delay:1400 },
+    { type:'round', round:3, delay:800 },
+    { type:'strategy', texts: [currentLang === 'zh' ? '策略：范围防御' : 'Tactic: Scope Defense', '\u26A0\uFE0F ' + (currentLang === 'zh' ? '检测到：范围缩减' : 'Detected: scope reduction'), currentLang === 'zh' ? '坚守全范围' : 'Hold full scope'], delay:500 },
+    { type:'typing', side:'left', delay:400 },
+    { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', text: tpl(t('customR3Vendor'), vars), delay:1200 },
+    { type:'chart', round:3, vp: vendorR3, dp: dealR3, delay:200 },
+    { type:'typing', side:'right', delay:600 },
+    { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', text: tpl(t('customR3Deal'), vars), delay:1400 },
+    { type:'round', round:4, delay:800 },
+  ];
+
+  if (willClose) {
+    sequence.push(
+      { type:'strategy', texts: [currentLang === 'zh' ? '状态：交易达成' : 'Status: DEAL CLOSING', currentLang === 'zh' ? '最终价格在预算内 \u2713' : 'Final price within budget \u2713', currentLang === 'zh' ? '启动 Solana 托管...' : 'Initiating Solana escrow...'], delay:500 },
+      { type:'typing', side:'left', delay:400 },
+      { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', text: tpl(t('customR4VendorAccept'), vars), delay:1000 },
+      { type:'chart', round:4, vp: finalPrice, dp: finalPrice, delay:200 },
+      { type:'customClosed', vars, delay:1200 },
+    );
+  } else {
+    sequence.push(
+      { type:'strategy', texts: [currentLang === 'zh' ? '状态：退出协议' : 'Status: WALK-AWAY', '\u26A0\uFE0F ' + (currentLang === 'zh' ? '超出预算' : 'Exceeds budget'), currentLang === 'zh' ? '启动 BATNA...' : 'Engaging BATNA...'], delay:500 },
+      { type:'typing', side:'left', delay:400 },
+      { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', text: tpl(t('customR4VendorReject'), vars), delay:1000 },
+      { type:'chart', round:4, vp: vendorR4, dp: dealR3, delay:200 },
+      { type:'typing', side:'right', delay:600 },
+      { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', text: tpl(t('customR4DealWalk'), vars), delay:1200 },
+      { type:'customWalkaway', vars, delay:1000 },
+    );
+  }
+
+  let totalDelay = 0;
+  sequence.forEach(step => { totalDelay += step.delay; setTimeout(() => executeCustomStep(step), totalDelay); });
+  setTimeout(() => { demoRunning = false; btn.disabled = false; btn.textContent = t('resetDemo'); }, totalDelay + 500);
+}
+
+function executeCustomStep(step) {
+  const chatArea = document.getElementById('chatArea');
+  const sc = document.getElementById('screenContent');
+
+  if (step.type === 'round') {
+    const roundText = currentLang === 'zh' ? '\u2501\u2501 \u7B2C' + step.round + '\u8F6E \u2501\u2501' : '\u2501\u2501 Round ' + step.round + ' \u2501\u2501';
+    const div = document.createElement('div');
+    div.className = 'round-divider';
+    div.textContent = roundText;
+    chatArea.appendChild(div);
+    gsap.from(div, { opacity: 0, duration: 0.3 });
+  }
+  else if (step.type === 'strategy') {
+    const s1 = document.getElementById('strat1');
+    const s2 = document.getElementById('strat2');
+    const s3 = document.getElementById('strat3');
+    s1.textContent = step.texts[0]; s1.className = 'strategy-line active';
+    s2.textContent = step.texts[1]; s2.className = 'strategy-line active';
+    s3.textContent = step.texts[2]; s3.className = 'strategy-line active';
+    gsap.from([s1,s2,s3], { opacity:0, x:-10, duration:0.3, stagger:0.1 });
+  }
+  else if (step.type === 'typing') {
+    const ind = document.createElement('div');
+    ind.className = 'typing-indicator' + (step.side === 'right' ? ' right-typing' : '');
+    ind.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+    ind.id = 'currentTyping';
+    chatArea.appendChild(ind);
+    sc.scrollTop = sc.scrollHeight;
+  }
+  else if (step.type === 'msg') {
+    const existing = document.getElementById('currentTyping');
+    if (existing) existing.remove();
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble ' + step.side;
+    bubble.innerHTML = '<div class="agent-label">' + step.label + '</div>' + step.text;
+    chatArea.appendChild(bubble);
+    gsap.to(bubble, { opacity:1, y:0, duration:0.4, ease:'back.out(1.2)' });
+    sc.scrollTop = sc.scrollHeight;
+  }
+  else if (step.type === 'chart') {
+    addChartPoint(step.round, step.vp, step.dp);
+  }
+  else if (step.type === 'customClosed') {
+    const v = step.vars;
+    const savings = (v.vendorOpen - v.finalPrice).toFixed(1);
+    const pct = Math.round((1 - v.finalPrice / v.vendorOpen) * 100);
+    const card = document.createElement('div');
+    card.className = 'deal-locked-card';
+    card.innerHTML = '<h3>' + t('dealClosedTitle') + '</h3><div class="escrow-info">' +
+      tpl(t('customClosedLine1'), v) + '<br>' +
+      tpl(t('customClosedLine2'), { price: v.finalPrice }) + '<br>' +
+      tpl(t('customClosedLine3'), { savings, pct }) + '<br>' +
+      '<strong style="color:var(--cyan)">' + (currentLang === 'zh' ? '状态：等待人工审批' : 'Status: Awaiting approval') + '</strong></div>';
+    chatArea.appendChild(card);
+    gsap.to(card, { opacity:1, duration:0.6, delay:0.2 });
+    gsap.from(card, { scale:0.9, duration:0.6, delay:0.2, ease:'back.out(1.5)' });
+    sc.scrollTop = sc.scrollHeight;
+    setTimeout(() => {
+      const phoneRect = document.getElementById('phone').getBoundingClientRect();
+      const cx = (phoneRect.left + phoneRect.width / 2) / window.innerWidth;
+      const cy = (phoneRect.top + phoneRect.height * 0.5) / window.innerHeight;
+      confetti({ particleCount:80, spread:60, origin:{x:cx, y:cy}, colors:['#FF6B4A','#00E5CC','#9945FF'] });
+    }, 400);
+  }
+  else if (step.type === 'customWalkaway') {
+    const v = step.vars;
+    const card = document.createElement('div');
+    card.className = 'walkaway-card';
+    card.innerHTML = '<h3>' + t('walkawayTitle') + '</h3><div class="wa-info">' +
+      tpl(t('customWalkLine1'), v) + '<br>' +
+      tpl(t('customWalkLine2'), { lastOffer: v.vendorR4 }) + '<br>' +
+      tpl(t('customWalkLine3'), v) + '<br>' +
+      '<strong style="color:var(--cyan)">' + tpl(t('customWalkLine4'), v) + '</strong><br>' +
+      '<strong style="color:#3fb950">' + (currentLang === 'zh' ? '坏交易已拒绝 \u2713' : 'Bad deal rejected \u2713') + '</strong></div>';
+    chatArea.appendChild(card);
+    gsap.to(card, { opacity:1, duration:0.6, delay:0.2 });
+    gsap.from(card, { scale:0.9, duration:0.6, delay:0.2, ease:'back.out(1.5)' });
+    sc.scrollTop = sc.scrollHeight;
+  }
 }
 
 // ===================== ENHANCED DEAL MODAL WITH ESCROW =====================

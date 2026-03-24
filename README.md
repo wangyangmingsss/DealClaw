@@ -4,7 +4,7 @@
 
 **DealClaw** is an autonomous AI negotiation agent. It conducts multi-round negotiations with counterparty agents on your behalf — anchoring, counter-offering, detecting tactics, and closing deals — while you do nothing. Powered by Solana escrow for trustless settlement and x402 for agent-to-agent payments.
 
-🔗 **[Live Demo](https://0xcaptain888.github.io/DealClaw/)**
+🔗 **[Live Demo](https://bergrupert249.github.io/DealClaw/)**
 
 Built for the **Solana Agent Economy Hackathon: Agent Talent Show** — Track 4: 赛博糊弄学与赛博抽鞭子 (Cyber-Slacking & Cyber-Whipping)
 
@@ -59,6 +59,42 @@ DealClaw uses the x402 protocol for agent-to-agent authentication and payment:
 2. Payment terms negotiated and encoded in x402-compatible format
 3. Escrow transaction submitted to Solana, funds released on delivery confirmation
 
+### 🚫 Walk-Away Protocol Demo
+The second scenario demonstrates DealClaw's refusal to accept bad deals:
+- Logo design negotiation, budget 3 SOL
+- Vendor refuses to go below 5.5 SOL after 4 rounds
+- DealClaw triggers Walk-Away Protocol and activates BATNA (Designer_B at 2.5 SOL)
+- **Bad deal rejected. Savings by walking away.**
+
+### ✏️ Custom Deal Input
+Build your own negotiation scenario:
+- Choose from 6 service types (audit, design, NFT, marketing, dev, consulting)
+- Set your budget and walk-away price with sliders
+- Choose agent style: 🔥 Aggressive / ⚖️ Balanced / 🛡️ Conservative
+- Dynamic negotiation generated from your parameters — outcome depends on feasibility
+
+### 📈 Price Convergence Chart
+Real-time canvas chart showing both price lines converging (or not):
+- Coral line: Vendor offers descending
+- Cyan line: DealClaw counter-offers ascending
+- Dashed purple line: Budget/walk-away limit
+- Updates live during every negotiation round
+
+### 📡 Live Activity Feed
+- 5 parallel negotiations running simultaneously with progress bars
+- 6 tactic detection cards with expandable details
+- Real-time activity log with category filters (deals/tactics/escrow)
+
+### 🔗 On-Chain Escrow Details
+Click any deal to see full Solana escrow data:
+- Transaction hash, block height, escrow address
+- Locked amount, status, release conditions
+
+### 💰 Savings Calculator
+Interactive ROI calculator:
+- Slider inputs: deals/month, average deal size
+- Calculates: monthly SOL saved, hours saved, yearly total, ROI vs manual negotiation
+
 ### 📊 Performance Dashboard
 - Total deals completed, SOL saved, average savings percentage, win rate
 - Weekly savings chart
@@ -100,7 +136,7 @@ DealClaw answers this literally. The agent handles ALL negotiation — the tedio
 ## Local Development
 
 ```bash
-git clone https://github.com/0xCaptain888/DealClaw.git
+git clone https://github.com/bergrupert249/DealClaw.git
 cd DealClaw
 python3 -m http.server 8080
 # Open http://localhost:8080
