@@ -320,6 +320,47 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 .commentary-note{background:linear-gradient(135deg,rgba(153,69,255,.08),rgba(0,229,204,.04));border-left:3px solid var(--purple);border-radius:0 10px 10px 0;padding:8px 12px;margin:6px 0;font-size:10px;color:var(--text2);line-height:1.6;opacity:0}
 .commentary-note .cn-title{font-family:var(--font-display);font-size:11px;color:var(--purple);font-weight:600;margin-bottom:3px}
 
+/* ===== AI CONFIDENCE METER ===== */
+.confidence-meter{display:none;background:var(--bg2);border:1px solid var(--bg4);border-radius:12px;padding:10px 12px;margin-bottom:10px;align-items:center;gap:12px}
+.confidence-meter.visible{display:flex}
+.cm-gauge{position:relative;width:64px;height:36px;flex-shrink:0;overflow:hidden}
+.cm-gauge svg{width:64px;height:36px}
+.cm-arc-bg{fill:none;stroke:var(--bg4);stroke-width:5;stroke-linecap:round}
+.cm-arc-fill{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset .8s cubic-bezier(.4,0,.2,1),stroke .5s}
+.cm-pct{position:absolute;bottom:0;left:50%;transform:translateX(-50%);font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--cyan)}
+.cm-info{flex:1;min-width:0}
+.cm-label{font-family:var(--font-display);font-size:11px;font-weight:600;color:var(--text2);margin-bottom:2px}
+.cm-status{font-size:9px;color:var(--text3);font-family:var(--font-mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cm-factors{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
+.cm-factor{font-size:8px;padding:2px 5px;border-radius:4px;font-family:var(--font-mono);font-weight:500}
+.cm-factor.pos{background:rgba(0,229,204,.1);color:var(--cyan);border:1px solid rgba(0,229,204,.15)}
+.cm-factor.neg{background:rgba(248,81,73,.1);color:#f85149;border:1px solid rgba(248,81,73,.15)}
+.cm-factor.neu{background:rgba(153,69,255,.08);color:var(--purple);border:1px solid rgba(153,69,255,.12)}
+
+/* ===== ESCROW CONFIRMATION ANIMATION ===== */
+.escrow-confirm{background:var(--bg2);border:1px solid rgba(0,229,204,.2);border-radius:12px;padding:12px;margin-top:10px;overflow:hidden}
+.ec-header{display:flex;align-items:center;gap:6px;margin-bottom:10px;font-family:var(--font-display);font-size:11px;font-weight:600;color:var(--cyan)}
+.ec-header .ec-chain-icon{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#9945FF,#14F195);display:flex;align-items:center;justify-content:center;font-size:10px}
+.ec-steps{position:relative;padding-left:14px}
+.ec-steps::before{content:'';position:absolute;left:5px;top:4px;bottom:4px;width:1px;background:var(--bg4)}
+.ec-step{position:relative;padding:6px 0 6px 12px;opacity:0;transform:translateX(-8px)}
+.ec-step .ec-dot{position:absolute;left:-14px;top:10px;width:9px;height:9px;border-radius:50%;background:var(--bg4);border:2px solid var(--bg3);z-index:1;transition:background .3s,border-color .3s,box-shadow .3s}
+.ec-step.confirmed .ec-dot{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 6px rgba(0,229,204,.5)}
+.ec-step.finalized .ec-dot{background:#14F195;border-color:#14F195;box-shadow:0 0 8px rgba(20,241,149,.6)}
+.ec-step .ec-row{display:flex;justify-content:space-between;align-items:center}
+.ec-step .ec-label{font-size:10px;color:var(--text2);font-family:var(--font-mono)}
+.ec-step .ec-val{font-size:10px;font-family:var(--font-mono);color:var(--text3)}
+.ec-step.confirmed .ec-label{color:var(--text)}
+.ec-step.confirmed .ec-val{color:var(--cyan)}
+.ec-step.finalized .ec-label{color:var(--text);font-weight:600}
+.ec-step.finalized .ec-val{color:#14F195;font-weight:600}
+.ec-block-anim{display:flex;gap:3px;justify-content:center;margin-top:8px;padding-top:8px;border-top:1px solid var(--bg4)}
+.ec-block{width:20px;height:20px;border-radius:4px;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:7px;font-family:var(--font-mono);color:var(--text3);transition:all .4s;position:relative}
+.ec-block.confirmed{background:rgba(0,229,204,.15);border:1px solid rgba(0,229,204,.3);color:var(--cyan)}
+.ec-block.finalized{background:rgba(20,241,149,.15);border:1px solid rgba(20,241,149,.3);color:#14F195}
+.ec-block-link{width:12px;height:1px;background:var(--bg4);align-self:center;transition:background .4s}
+.ec-block-link.confirmed{background:var(--cyan)}
+
 /* ===== TACTIC DETECTION PANEL ===== */
 .tactics-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
 .tactic-card{background:var(--bg2);border:1px solid var(--bg4);border-radius:12px;padding:12px;cursor:pointer;transition:all .2s}
@@ -580,6 +621,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
           <button class="speed-btn" onclick="setSpeed(3,this)">3x</button>
         </div>
         <button class="demo-btn" id="demoBtn" onclick="startDemo()" data-i18n="startDemo">&#x1F99E; Start Negotiation Demo</button>
+        <!-- AI Confidence Meter -->
+        <div class="confidence-meter" id="confidenceMeter">
+          <div class="cm-gauge">
+            <svg viewBox="0 0 64 36">
+              <path class="cm-arc-bg" d="M6,34 A26,26 0 0,1 58,34"/>
+              <path class="cm-arc-fill" id="cmArcFill" d="M6,34 A26,26 0 0,1 58,34" stroke-dasharray="81.68" stroke-dashoffset="81.68"/>
+            </svg>
+            <div class="cm-pct" id="cmPct">0%</div>
+          </div>
+          <div class="cm-info">
+            <div class="cm-label" id="cmLabel">AI Confidence</div>
+            <div class="cm-status" id="cmStatus">Initializing...</div>
+            <div class="cm-factors" id="cmFactors"></div>
+          </div>
+        </div>
         <!-- Convergence Chart -->
         <div class="convergence-chart" id="convergenceChart">
           <div class="cc-title">
@@ -968,6 +1024,32 @@ const I18N = {
     wmReject: "Reject",
     wmApprove: "Approve",
     wmTrust: "Only connect to sites you trust",
+    // Confidence Meter
+    cmLabel: "AI Confidence",
+    cmInit: "Initializing...",
+    cmAnalyzing: "Analyzing counterparty...",
+    cmAnchoring: "Anchor set. Gauging reaction.",
+    cmLeverage: "BATNA leverage active.",
+    cmTacticFound: "Tactic detected! Countering.",
+    cmClosing: "High confidence. Closing deal.",
+    cmWalkReady: "Below threshold. Walk-away ready.",
+    cmFactorAnchor: "Anchor",
+    cmFactorBATNA: "BATNA",
+    cmFactorScope: "Scope",
+    cmFactorPrice: "Price",
+    cmFactorTactic: "Tactic",
+    cmFactorRisk: "Risk",
+    // Escrow Confirmation
+    ecHeader: "Solana On-Chain Confirmation",
+    ecSubmitted: "Tx Submitted",
+    ecProcessing: "Processing",
+    ecConfirm1: "Confirmation 1/3",
+    ecConfirm2: "Confirmation 2/3",
+    ecConfirm3: "Confirmation 3/3",
+    ecFinalized: "Finalized",
+    ecBlock: "Block",
+    ecEscrowLocked: "Escrow Locked",
+    ecStatus: "Status: Confirmed on Solana",
   },
   zh: {
     showcaseSub: "AI 谈判代理",
@@ -1217,6 +1299,32 @@ const I18N = {
     wmReject: "拒绝",
     wmApprove: "批准",
     wmTrust: "请只连接你信任的站点",
+    // Confidence Meter
+    cmLabel: "AI 置信度",
+    cmInit: "初始化中...",
+    cmAnalyzing: "分析对手中...",
+    cmAnchoring: "锚点已设。观察反应。",
+    cmLeverage: "BATNA 杠杆激活。",
+    cmTacticFound: "检测到战术！反击中。",
+    cmClosing: "高置信度。正在成交。",
+    cmWalkReady: "低于阈值。准备退出。",
+    cmFactorAnchor: "锚定",
+    cmFactorBATNA: "BATNA",
+    cmFactorScope: "范围",
+    cmFactorPrice: "价格",
+    cmFactorTactic: "战术",
+    cmFactorRisk: "风险",
+    // Escrow Confirmation
+    ecHeader: "Solana 链上确认",
+    ecSubmitted: "交易已提交",
+    ecProcessing: "处理中",
+    ecConfirm1: "确认 1/3",
+    ecConfirm2: "确认 2/3",
+    ecConfirm3: "确认 3/3",
+    ecFinalized: "已最终确认",
+    ecBlock: "区块",
+    ecEscrowLocked: "托管已锁定",
+    ecStatus: "状态：已在 Solana 上确认",
   }
 };
 
@@ -1411,11 +1519,17 @@ function startDemo() {
   chartData = { vendor: [], deal: [], budget: 8 };
   initChart();
 
+  // Show confidence meter
+  showConfidenceMeter();
+  const c0 = getConfidenceStep('success', 0);
+  updateConfidence(c0.pct, c0.status, c0.factors);
+
   // Animation sequence
   const sequence = [
     // Round 1
     { type:'round', round:1, delay:800 },
-    { type:'strategy', s1:'strat1_r1', s2:'strat2_r1', s3:'strat3_r1', delay:600 },
+    { type:'confidence', scenario:'success', index:1, delay:300 },
+    { type:'strategy', s1:'strat1_r1', s2:'strat2_r1', s3:'strat3_r1', delay:300 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'r1Counter', delay:1200 },
     { type:'chartPt', round:1, vp:15, dp:5, delay:200 },
@@ -1423,7 +1537,8 @@ function startDemo() {
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'r1Deal', delay:1400 },
     // Round 2
     { type:'round', round:2, delay:800 },
-    { type:'strategy', s1:'strat1_r2', s2:'strat2_r2', s3:'strat3_r2', delay:500 },
+    { type:'confidence', scenario:'success', index:2, delay:300 },
+    { type:'strategy', s1:'strat1_r2', s2:'strat2_r2', s3:'strat3_r2', delay:200 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'r2Counter', delay:1200 },
     { type:'chartPt', round:2, vp:12, dp:6.5, delay:200 },
@@ -1431,7 +1546,8 @@ function startDemo() {
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'r2Deal', delay:1400 },
     // Round 3
     { type:'round', round:3, delay:800 },
-    { type:'strategy', s1:'strat1_r3', s2:'strat2_r3', s3:'strat3_r3', delay:500 },
+    { type:'confidence', scenario:'success', index:3, delay:300 },
+    { type:'strategy', s1:'strat1_r3', s2:'strat2_r3', s3:'strat3_r3', delay:200 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'r3Counter', delay:1200 },
     { type:'chartPt', round:3, vp:9, dp:7.5, delay:200 },
@@ -1439,7 +1555,8 @@ function startDemo() {
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'r3Deal', delay:1400 },
     // Round 4 - close
     { type:'round', round:4, delay:800 },
-    { type:'strategy', s1:'strat1_r4', s2:'strat2_r4', s3:'strat3_r4', delay:500 },
+    { type:'confidence', scenario:'success', index:4, delay:300 },
+    { type:'strategy', s1:'strat1_r4', s2:'strat2_r4', s3:'strat3_r4', delay:200 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'r4Counter', delay:1000 },
     { type:'chartPt', round:4, vp:7.5, dp:7.5, delay:200 },
@@ -1464,7 +1581,11 @@ function executeStep(step) {
   const chatArea = document.getElementById('chatArea');
   const sc = document.getElementById('screenContent');
 
-  if (step.type === 'round') {
+  if (step.type === 'confidence') {
+    const c = getConfidenceStep(step.scenario, step.index);
+    updateConfidence(c.pct, c.status, c.factors);
+  }
+  else if (step.type === 'round') {
     const roundText = currentLang === 'zh' ? `\u2501\u2501 \u7B2C${step.round}\u8F6E \u2501\u2501` : `\u2501\u2501 Round ${step.round} \u2501\u2501`;
     const div = document.createElement('div');
     div.className = 'round-divider';
@@ -1525,6 +1646,10 @@ function executeStep(step) {
       confetti({ particleCount:80, spread:60, origin:{x, y}, colors:['#FF6B4A','#00E5CC','#9945FF'] });
       setTimeout(() => confetti({ particleCount:40, spread:80, origin:{x:x-0.05, y:y+0.05}, colors:['#FF6B4A','#00E5CC'] }), 300);
     }, 400);
+    // Escrow on-chain confirmation
+    setTimeout(() => {
+      showEscrowConfirmation(chatArea, '7.5 SOL', 'Bx7k...9fQm');
+    }, 800 / demoSpeed);
   }
   else if (step.type === 'chartPt') {
     addChartPoint(step.round, step.vp, step.dp);
@@ -1740,6 +1865,7 @@ function selectScenario(s) {
   document.getElementById('scenarioCustom').classList.toggle('active', s === 'custom');
   document.getElementById('customForm').classList.toggle('visible', s === 'custom');
   document.getElementById('convergenceChart').classList.remove('visible');
+  hideConfidenceMeter();
   const btn = document.getElementById('demoBtn');
   btn.disabled = false;
   demoRunning = false;
@@ -1779,30 +1905,39 @@ function startWalkawayDemo() {
   chartData = { vendor: [], deal: [], budget: 3 };
   initChart();
 
+  // Show confidence meter
+  showConfidenceMeter();
+  const c0 = getConfidenceStep('walkaway', 0);
+  updateConfidence(c0.pct, c0.status, c0.factors);
+
   const sequence = [
     { type:'round', round:1, delay:800 },
-    { type:'strategy', s1:'waStrat1_r1', s2:'waStrat2_r1', s3:'waStrat3_r1', delay:600 },
+    { type:'confidence', scenario:'walkaway', index:1, delay:300 },
+    { type:'strategy', s1:'waStrat1_r1', s2:'waStrat2_r1', s3:'waStrat3_r1', delay:300 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'waR1Counter', delay:1200 },
     { type:'chartPt', round:1, vp:8, dp:2, delay:200 },
     { type:'typing', side:'right', delay:600 },
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'waR1Deal', delay:1400 },
     { type:'round', round:2, delay:800 },
-    { type:'strategy', s1:'waStrat1_r2', s2:'waStrat2_r2', s3:'waStrat3_r2', delay:500 },
+    { type:'confidence', scenario:'walkaway', index:2, delay:300 },
+    { type:'strategy', s1:'waStrat1_r2', s2:'waStrat2_r2', s3:'waStrat3_r2', delay:200 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'waR2Counter', delay:1200 },
     { type:'chartPt', round:2, vp:7, dp:2.8, delay:200 },
     { type:'typing', side:'right', delay:600 },
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'waR2Deal', delay:1400 },
     { type:'round', round:3, delay:800 },
-    { type:'strategy', s1:'waStrat1_r3', s2:'waStrat2_r3', s3:'waStrat3_r3', delay:500 },
+    { type:'confidence', scenario:'walkaway', index:3, delay:300 },
+    { type:'strategy', s1:'waStrat1_r3', s2:'waStrat2_r3', s3:'waStrat3_r3', delay:200 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'waR3Counter', delay:1200 },
     { type:'chartPt', round:3, vp:6, dp:3, delay:200 },
     { type:'typing', side:'right', delay:600 },
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', key:'waR3Deal', delay:1400 },
     { type:'round', round:4, delay:800 },
-    { type:'strategy', s1:'waStrat1_r4', s2:'waStrat2_r4', s3:'waStrat3_r4', delay:500 },
+    { type:'confidence', scenario:'walkaway', index:4, delay:300 },
+    { type:'strategy', s1:'waStrat1_r4', s2:'waStrat2_r4', s3:'waStrat3_r4', delay:200 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', key:'waR4Counter', delay:1000 },
     { type:'chartPt', round:4, vp:5.5, dp:3, delay:200 },
@@ -1985,31 +2120,41 @@ function startCustomDemo() {
   chartData = { vendor: [], deal: [], budget: walkaway };
   initChart();
 
+  // Show confidence meter
+  showConfidenceMeter();
+  const scenarioType = willClose ? 'success' : 'walkaway';
+  const c0 = getConfidenceStep(scenarioType, 0);
+  updateConfidence(c0.pct, c0.status, c0.factors);
+
   const styleLabel = currentLang === 'zh' ? t('style' + currentStyle.charAt(0).toUpperCase() + currentStyle.slice(1)) : currentStyle.charAt(0).toUpperCase() + currentStyle.slice(1);
 
   const sequence = [
     { type:'round', round:1, delay:800 },
-    { type:'strategy', texts: [currentLang === 'zh' ? '策略：低锚定' : 'Tactic: Anchoring Low', currentLang === 'zh' ? '风格：' + styleLabel : 'Style: ' + styleLabel, currentLang === 'zh' ? '市场数据施压' : 'Market data pressure'], delay:500 },
+    { type:'confidence', scenario: scenarioType, index:1, delay:300 },
+    { type:'strategy', texts: [currentLang === 'zh' ? '策略：低锚定' : 'Tactic: Anchoring Low', currentLang === 'zh' ? '风格：' + styleLabel : 'Style: ' + styleLabel, currentLang === 'zh' ? '市场数据施压' : 'Market data pressure'], delay:200 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', text: tpl(t('customR1Vendor'), vars), delay:1200 },
     { type:'chart', round:1, vp: vendorOpen, dp: dealOpen, delay:200 },
     { type:'typing', side:'right', delay:600 },
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', text: tpl(t('customR1Deal'), vars), delay:1400 },
     { type:'round', round:2, delay:800 },
-    { type:'strategy', texts: [currentLang === 'zh' ? '策略：BATNA 杠杆' : 'Tactic: BATNA Leverage', currentLang === 'zh' ? '检测到：资质论证' : 'Detected: credential justification', currentLang === 'zh' ? '引入替代方案' : 'Presenting alternative'], delay:500 },
+    { type:'confidence', scenario: scenarioType, index:2, delay:300 },
+    { type:'strategy', texts: [currentLang === 'zh' ? '策略：BATNA 杠杆' : 'Tactic: BATNA Leverage', currentLang === 'zh' ? '检测到：资质论证' : 'Detected: credential justification', currentLang === 'zh' ? '引入替代方案' : 'Presenting alternative'], delay:200 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', text: tpl(t('customR2Vendor'), vars), delay:1200 },
     { type:'chart', round:2, vp: vendorR2, dp: dealR2, delay:200 },
     { type:'typing', side:'right', delay:600 },
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', text: tpl(t('customR2Deal'), vars), delay:1400 },
     { type:'round', round:3, delay:800 },
-    { type:'strategy', texts: [currentLang === 'zh' ? '策略：范围防御' : 'Tactic: Scope Defense', '\u26A0\uFE0F ' + (currentLang === 'zh' ? '检测到：范围缩减' : 'Detected: scope reduction'), currentLang === 'zh' ? '坚守全范围' : 'Hold full scope'], delay:500 },
+    { type:'confidence', scenario: scenarioType, index:3, delay:300 },
+    { type:'strategy', texts: [currentLang === 'zh' ? '策略：范围防御' : 'Tactic: Scope Defense', '\u26A0\uFE0F ' + (currentLang === 'zh' ? '检测到：范围缩减' : 'Detected: scope reduction'), currentLang === 'zh' ? '坚守全范围' : 'Hold full scope'], delay:200 },
     { type:'typing', side:'left', delay:400 },
     { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', text: tpl(t('customR3Vendor'), vars), delay:1200 },
     { type:'chart', round:3, vp: vendorR3, dp: dealR3, delay:200 },
     { type:'typing', side:'right', delay:600 },
     { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', text: tpl(t('customR3Deal'), vars), delay:1400 },
     { type:'round', round:4, delay:800 },
+    { type:'confidence', scenario: scenarioType, index:4, delay:300 },
   ];
 
   if (willClose) {
@@ -2041,7 +2186,11 @@ function executeCustomStep(step) {
   const chatArea = document.getElementById('chatArea');
   const sc = document.getElementById('screenContent');
 
-  if (step.type === 'round') {
+  if (step.type === 'confidence') {
+    const c = getConfidenceStep(step.scenario, step.index);
+    updateConfidence(c.pct, c.status, c.factors);
+  }
+  else if (step.type === 'round') {
     const roundText = currentLang === 'zh' ? '\u2501\u2501 \u7B2C' + step.round + '\u8F6E \u2501\u2501' : '\u2501\u2501 Round ' + step.round + ' \u2501\u2501';
     const div = document.createElement('div');
     div.className = 'round-divider';
@@ -2101,6 +2250,11 @@ function executeCustomStep(step) {
       const cy = (phoneRect.top + phoneRect.height * 0.5) / window.innerHeight;
       confetti({ particleCount:80, spread:60, origin:{x:cx, y:cy}, colors:['#FF6B4A','#00E5CC','#9945FF'] });
     }, 400);
+    // Escrow on-chain confirmation
+    setTimeout(() => {
+      const txHash = 'Cx' + Math.random().toString(36).substring(2,5) + '...' + Math.random().toString(36).substring(2,6);
+      showEscrowConfirmation(chatArea, v.finalPrice + ' SOL', txHash);
+    }, 800 / demoSpeed);
   }
   else if (step.type === 'customWalkaway') {
     const v = step.vars;
@@ -2302,6 +2456,172 @@ function showCommentary() {
   if (first) {
     document.getElementById('screenContent').scrollTo({top: first.offsetTop - 100, behavior:'smooth'});
   }
+}
+
+// ===================== AI CONFIDENCE METER =====================
+const ARC_LENGTH = 81.68; // path length of the semicircle
+
+function showConfidenceMeter() {
+  document.getElementById('confidenceMeter').classList.add('visible');
+  updateConfidence(0, t('cmInit'), []);
+}
+
+function hideConfidenceMeter() {
+  document.getElementById('confidenceMeter').classList.remove('visible');
+}
+
+function updateConfidence(pct, statusText, factors) {
+  const arc = document.getElementById('cmArcFill');
+  const pctEl = document.getElementById('cmPct');
+  const statusEl = document.getElementById('cmStatus');
+  const factorsEl = document.getElementById('cmFactors');
+
+  // Arc offset: 81.68 = empty, 0 = full
+  const offset = ARC_LENGTH * (1 - pct / 100);
+  arc.style.strokeDashoffset = offset;
+
+  // Color based on confidence
+  let color;
+  if (pct < 30) { color = '#f85149'; }
+  else if (pct < 60) { color = '#FF6B4A'; }
+  else if (pct < 80) { color = '#00E5CC'; }
+  else { color = '#14F195'; }
+  arc.style.stroke = color;
+  pctEl.style.color = color;
+  pctEl.textContent = pct + '%';
+
+  statusEl.textContent = statusText;
+  document.getElementById('cmLabel').textContent = t('cmLabel');
+
+  if (factors && factors.length) {
+    factorsEl.innerHTML = factors.map(f =>
+      `<span class="cm-factor ${f.type}">${f.label}</span>`
+    ).join('');
+  }
+}
+
+// Confidence data for each demo scenario
+const CONFIDENCE_STEPS = {
+  success: [
+    { pct: 15, status: 'cmAnalyzing', factors: [{label:'cmFactorAnchor',type:'neu'},{label:'cmFactorBATNA',type:'neu'}] },
+    { pct: 42, status: 'cmAnchoring', factors: [{label:'cmFactorAnchor',type:'pos'},{label:'cmFactorPrice',type:'pos'},{label:'cmFactorBATNA',type:'neu'}] },
+    { pct: 58, status: 'cmLeverage', factors: [{label:'cmFactorAnchor',type:'pos'},{label:'cmFactorBATNA',type:'pos'},{label:'cmFactorTactic',type:'neg'}] },
+    { pct: 76, status: 'cmTacticFound', factors: [{label:'cmFactorScope',type:'pos'},{label:'cmFactorBATNA',type:'pos'},{label:'cmFactorTactic',type:'pos'}] },
+    { pct: 95, status: 'cmClosing', factors: [{label:'cmFactorPrice',type:'pos'},{label:'cmFactorScope',type:'pos'},{label:'cmFactorBATNA',type:'pos'}] },
+  ],
+  walkaway: [
+    { pct: 15, status: 'cmAnalyzing', factors: [{label:'cmFactorAnchor',type:'neu'},{label:'cmFactorBATNA',type:'neu'}] },
+    { pct: 38, status: 'cmAnchoring', factors: [{label:'cmFactorAnchor',type:'pos'},{label:'cmFactorPrice',type:'neg'},{label:'cmFactorRisk',type:'neg'}] },
+    { pct: 45, status: 'cmLeverage', factors: [{label:'cmFactorBATNA',type:'pos'},{label:'cmFactorTactic',type:'neg'},{label:'cmFactorRisk',type:'neg'}] },
+    { pct: 32, status: 'cmTacticFound', factors: [{label:'cmFactorScope',type:'neg'},{label:'cmFactorTactic',type:'neg'},{label:'cmFactorRisk',type:'neg'}] },
+    { pct: 18, status: 'cmWalkReady', factors: [{label:'cmFactorPrice',type:'neg'},{label:'cmFactorRisk',type:'neg'},{label:'cmFactorBATNA',type:'pos'}] },
+  ],
+};
+
+function getConfidenceStep(scenario, index) {
+  const steps = CONFIDENCE_STEPS[scenario] || CONFIDENCE_STEPS.success;
+  if (index >= steps.length) index = steps.length - 1;
+  const step = steps[index];
+  return {
+    pct: step.pct,
+    status: t(step.status),
+    factors: step.factors.map(f => ({label: t(f.label), type: f.type}))
+  };
+}
+
+// ===================== ESCROW ON-CHAIN CONFIRMATION =====================
+function showEscrowConfirmation(parentEl, amount, txHash) {
+  amount = amount || '7.5 SOL';
+  txHash = txHash || 'Bx7k...9fQm';
+  const baseBlock = 284929458 + Math.floor(Math.random() * 1000);
+
+  const container = document.createElement('div');
+  container.className = 'escrow-confirm';
+  container.innerHTML = `
+    <div class="ec-header">
+      <div class="ec-chain-icon">◎</div>
+      <span>${t('ecHeader')}</span>
+    </div>
+    <div class="ec-steps">
+      <div class="ec-step" id="ecStep0">
+        <div class="ec-dot"></div>
+        <div class="ec-row"><span class="ec-label">${t('ecSubmitted')}</span><span class="ec-val">tx: ${txHash}</span></div>
+      </div>
+      <div class="ec-step" id="ecStep1">
+        <div class="ec-dot"></div>
+        <div class="ec-row"><span class="ec-label">${t('ecConfirm1')}</span><span class="ec-val">${t('ecBlock')} #${(baseBlock).toLocaleString()}</span></div>
+      </div>
+      <div class="ec-step" id="ecStep2">
+        <div class="ec-dot"></div>
+        <div class="ec-row"><span class="ec-label">${t('ecConfirm2')}</span><span class="ec-val">${t('ecBlock')} #${(baseBlock+1).toLocaleString()}</span></div>
+      </div>
+      <div class="ec-step" id="ecStep3">
+        <div class="ec-dot"></div>
+        <div class="ec-row"><span class="ec-label">${t('ecConfirm3')}</span><span class="ec-val">${t('ecBlock')} #${(baseBlock+2).toLocaleString()}</span></div>
+      </div>
+      <div class="ec-step" id="ecStep4">
+        <div class="ec-dot"></div>
+        <div class="ec-row"><span class="ec-label">${t('ecFinalized')}</span><span class="ec-val">◎ ${amount}</span></div>
+      </div>
+    </div>
+    <div class="ec-block-anim" id="ecBlocks">
+      <div class="ec-block" id="ecB0">□</div>
+      <div class="ec-block-link" id="ecL0"></div>
+      <div class="ec-block" id="ecB1">□</div>
+      <div class="ec-block-link" id="ecL1"></div>
+      <div class="ec-block" id="ecB2">□</div>
+      <div class="ec-block-link" id="ecL2"></div>
+      <div class="ec-block" id="ecB3">□</div>
+    </div>
+  `;
+  parentEl.appendChild(container);
+
+  const sc = document.getElementById('screenContent');
+  const spd = demoSpeed || 1;
+
+  // Animate each step sequentially
+  const stepTimings = [200, 600, 1100, 1600, 2200];
+  const blockIcons = ['◎','◎','◎','✓'];
+
+  stepTimings.forEach((time, i) => {
+    setTimeout(() => {
+      const step = container.querySelector('#ecStep' + i);
+      if (step) {
+        step.style.opacity = '1';
+        step.style.transform = 'translateX(0)';
+        gsap.from(step, {opacity:0, x:-8, duration:0.3});
+        if (i < 4) {
+          step.classList.add('confirmed');
+        }
+        if (i === 4) {
+          step.classList.add('finalized');
+        }
+      }
+      // Animate blocks
+      if (i < 4) {
+        const block = container.querySelector('#ecB' + i);
+        if (block) {
+          block.classList.add(i === 3 ? 'finalized' : 'confirmed');
+          block.textContent = blockIcons[i];
+        }
+        if (i > 0) {
+          const link = container.querySelector('#ecL' + (i-1));
+          if (link) link.classList.add('confirmed');
+        }
+      }
+      sc.scrollTop = sc.scrollHeight;
+    }, time / spd);
+  });
+
+  // Final status line
+  setTimeout(() => {
+    const statusLine = document.createElement('div');
+    statusLine.style.cssText = 'text-align:center;font-family:var(--font-mono);font-size:10px;color:#14F195;margin-top:8px;padding-top:6px;border-top:1px solid var(--bg4);opacity:0';
+    statusLine.textContent = '✓ ' + t('ecStatus');
+    container.appendChild(statusLine);
+    gsap.to(statusLine, {opacity:1, duration:0.4});
+    sc.scrollTop = sc.scrollHeight;
+  }, 2800 / spd);
 }
 
 // ===================== INIT =====================
