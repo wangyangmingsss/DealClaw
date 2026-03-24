@@ -4,7 +4,7 @@
 
 **DealClaw** is an autonomous AI negotiation agent. It conducts multi-round negotiations with counterparty agents on your behalf — anchoring, counter-offering, detecting tactics, and closing deals — while you do nothing. Powered by Solana escrow for trustless settlement and x402 for agent-to-agent payments.
 
-🔗 **[Live Demo](https://bergrupert249.github.io/DealClaw/)**
+🔗 **[Live Demo](https://wangyangmingsss.github.io/DealClaw/)**
 
 Built for the **Solana Agent Economy Hackathon: Agent Talent Show** — Track 4: 赛博糊弄学与赛博抽鞭子 (Cyber-Slacking & Cyber-Whipping)
 
@@ -136,7 +136,7 @@ DealClaw answers this literally. The agent handles ALL negotiation — the tedio
 ## Local Development
 
 ```bash
-git clone https://github.com/bergrupert249/DealClaw.git
+git clone https://github.com/wangyangmingsss/DealClaw.git
 cd DealClaw
 python3 -m http.server 8080
 # Open http://localhost:8080
