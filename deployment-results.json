@@ -97,6 +97,51 @@
       "label": "Memo: Certificate #2 Metadata (walk-away record on-chain)",
       "signature": "3dRZLE3BdR3MCbb4DULav8fn7CVnkdAMrXYFMxWimK4gSMa2wNc2SpwtTCuzCEZtZcYKWrb4Gqk59bQfCfXLUNXT",
       "explorer": "https://explorer.solana.com/tx/3dRZLE3BdR3MCbb4DULav8fn7CVnkdAMrXYFMxWimK4gSMa2wNc2SpwtTCuzCEZtZcYKWrb4Gqk59bQfCfXLUNXT?cluster=devnet"
+    },
+    {
+      "label": "AI Memo: Advisory R1 -- ANCHORING (V:0.6, DC:0.16)",
+      "signature": "3vWabzyYFFz9oCgD8ksHMjEyfDsd5p2zfZNFGBkUGetjYtJ1V4KKEFS5FJQdE71EZUuP63Wn5v7JQAPmcUmk9Rge",
+      "explorer": "https://explorer.solana.com/tx/3vWabzyYFFz9oCgD8ksHMjEyfDsd5p2zfZNFGBkUGetjYtJ1V4KKEFS5FJQdE71EZUuP63Wn5v7JQAPmcUmk9Rge?cluster=devnet"
+    },
+    {
+      "label": "AI Memo: Advisory R2 -- BATNA_LEVERAGE (V:0.307, DC:0.18)",
+      "signature": "i1x3ZEZnDoDimutNoc5RrhA3x3v9CwGT373RTs6qb9Zo4GLbCXoEbWokeToSc1J9bkcE1d5AZmdMoWEQp1ssvsC",
+      "explorer": "https://explorer.solana.com/tx/i1x3ZEZnDoDimutNoc5RrhA3x3v9CwGT373RTs6qb9Zo4GLbCXoEbWokeToSc1J9bkcE1d5AZmdMoWEQp1ssvsC?cluster=devnet"
+    },
+    {
+      "label": "AI Memo: Advisory R3 -- CONCESSION_MAPPING (V:0.25, DC:0.1872)",
+      "signature": "uiQ3qjmvvjoHmT5eucbEoGpfm1uFTeCVgrs94kpEPZimkGMznaURepoyKFFuTBPK2Bq1xnWyHvsGPFx9iDoujZc",
+      "explorer": "https://explorer.solana.com/tx/uiQ3qjmvvjoHmT5eucbEoGpfm1uFTeCVgrs94kpEPZimkGMznaURepoyKFFuTBPK2Bq1xnWyHvsGPFx9iDoujZc?cluster=devnet"
+    },
+    {
+      "label": "AI Memo: Advisory R4 -- DEAL_CLOSED (V:0.203, DC:0.203)",
+      "signature": "6RVk6EeMTDQshcxvttpzGJFYLwCDTnbyGu4SJnMqVyEAd62C1diN9fFRr8FHat3jxxoXyzqz6eNkgaJ8HsNq26p",
+      "explorer": "https://explorer.solana.com/tx/6RVk6EeMTDQshcxvttpzGJFYLwCDTnbyGu4SJnMqVyEAd62C1diN9fFRr8FHat3jxxoXyzqz6eNkgaJ8HsNq26p?cluster=devnet"
+    },
+    {
+      "label": "Escrow Lock: Buyer -> Escrow (0.203 SOL)",
+      "signature": "34ngAYhHKmXuCbAvtrs69cifUKGtWqspVKGrvceqFLYdgchRd9dD7tKgB2kJYo2o7WNcTAvCoEtfyRREBtPNYWdW",
+      "explorer": "https://explorer.solana.com/tx/34ngAYhHKmXuCbAvtrs69cifUKGtWqspVKGrvceqFLYdgchRd9dD7tKgB2kJYo2o7WNcTAvCoEtfyRREBtPNYWdW?cluster=devnet"
+    },
+    {
+      "label": "Escrow Release: Escrow -> Seller (0.203 SOL)",
+      "signature": "5h27FrVKGgiuwaxuoPjiF2hLt4jdzAQMLpfZNEAnAMGqGGtHrXUaLxdapUZJv8scP8x8L9u8TurP2uFinU49fwkY",
+      "explorer": "https://explorer.solana.com/tx/5h27FrVKGgiuwaxuoPjiF2hLt4jdzAQMLpfZNEAnAMGqGGtHrXUaLxdapUZJv8scP8x8L9u8TurP2uFinU49fwkY?cluster=devnet"
+    },
+    {
+      "label": "Mint Certificate #3: Token Launch Advisory -- DEAL_CLOSED",
+      "signature": "4PURqtSdcDQueqmAvVXDtaGFKgpvo83Xsoh5imkjcrYPxrLzn4uTBZopDnpJRvii6uPDToBm6gZswseKDzD2WUSs",
+      "explorer": "https://explorer.solana.com/tx/4PURqtSdcDQueqmAvVXDtaGFKgpvo83Xsoh5imkjcrYPxrLzn4uTBZopDnpJRvii6uPDToBm6gZswseKDzD2WUSs?cluster=devnet"
+    },
+    {
+      "label": "Revoke Certificate #3 Mint Authority (immutable)",
+      "signature": "Poz6fKjFjEDR7tNSrBrQ8Bzm9Lhsn6YZWtGCBzgXbQB6wKdEtXphsqFEPMuKSjRPgKeJypCWkuhwaAUZtRdjwDd",
+      "explorer": "https://explorer.solana.com/tx/Poz6fKjFjEDR7tNSrBrQ8Bzm9Lhsn6YZWtGCBzgXbQB6wKdEtXphsqFEPMuKSjRPgKeJypCWkuhwaAUZtRdjwDd?cluster=devnet"
+    },
+    {
+      "label": "Memo: Certificate #3 Metadata (AI deal, reasoning Merkle root)",
+      "signature": "5nsrSYLo2qybbTubkNseTaP872reMbe8wpSWcocx5uaFr458efrGtWzt3CpSTrqGVifNpLhrpwaHVpRjuvtFBaSj",
+      "explorer": "https://explorer.solana.com/tx/5nsrSYLo2qybbTubkNseTaP872reMbe8wpSWcocx5uaFr458efrGtWzt3CpSTrqGVifNpLhrpwaHVpRjuvtFBaSj?cluster=devnet"
     }
   ],
   "negotiations": [
@@ -145,6 +190,47 @@
         }
       ],
       "reason": "Vendor final offer 0.3 SOL exceeds budget 0.15 SOL. BATNA activated."
+    },
+    {
+      "service": "Token Launch Advisory",
+      "outcome": "DEAL_CLOSED",
+      "engine": "DealClawEngine/1.0",
+      "rounds": [
+        {
+          "round": 1,
+          "vendor": 0.6,
+          "dealclaw": 0.16,
+          "tactic": "ANCHORING",
+          "confidence": 0.85,
+          "reasoningHash": "8b738ca39ff527bdf4ffc81def47e972ba64c9ce0a589e27fdee834e547662e5"
+        },
+        {
+          "round": 2,
+          "vendor": 0.307,
+          "dealclaw": 0.18,
+          "tactic": "BATNA_LEVERAGE",
+          "confidence": 0.8,
+          "reasoningHash": "b094735543d906795599197dab92baadf4864c3c2370bc19945c7504353233dd"
+        },
+        {
+          "round": 3,
+          "vendor": 0.25,
+          "dealclaw": 0.1872,
+          "tactic": "CONCESSION_MAPPING",
+          "confidence": 0.6,
+          "reasoningHash": "e8208610bc565204987c1496cdb861143fcdcd2b24d3865e88e67aaea1def539"
+        },
+        {
+          "round": 4,
+          "vendor": 0.203,
+          "dealclaw": 0.203,
+          "tactic": "DEAL_CLOSED",
+          "confidence": 0.99,
+          "reasoningHash": "c256165eb829eb164f78d822ffaf533e156f7ac83dc31cc01c4e84b27875fd55"
+        }
+      ],
+      "finalPrice": 0.203,
+      "savings": "66%"
     }
   ],
   "escrowOps": [
@@ -183,6 +269,24 @@
       "to": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
       "signature": "5VkDakES6vmHeviME3FPJZCvqna13Y8PqiMvcgB8uQefVmyabrda8cz38ErUstuAPvRCdSDsS11XYTyUCQ2K1GDv",
       "explorer": "https://explorer.solana.com/tx/5VkDakES6vmHeviME3FPJZCvqna13Y8PqiMvcgB8uQefVmyabrda8cz38ErUstuAPvRCdSDsS11XYTyUCQ2K1GDv?cluster=devnet"
+    },
+    {
+      "type": "lock",
+      "deal": "advisory-003",
+      "amount": 0.203,
+      "from": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
+      "to": "8fzHM3zW1ZpqSAK9jN7Lhwb8k4SxBm2YKozSsKU78Q2S",
+      "signature": "34ngAYhHKmXuCbAvtrs69cifUKGtWqspVKGrvceqFLYdgchRd9dD7tKgB2kJYo2o7WNcTAvCoEtfyRREBtPNYWdW",
+      "explorer": "https://explorer.solana.com/tx/34ngAYhHKmXuCbAvtrs69cifUKGtWqspVKGrvceqFLYdgchRd9dD7tKgB2kJYo2o7WNcTAvCoEtfyRREBtPNYWdW?cluster=devnet"
+    },
+    {
+      "type": "release",
+      "deal": "advisory-003",
+      "amount": 0.203,
+      "from": "8fzHM3zW1ZpqSAK9jN7Lhwb8k4SxBm2YKozSsKU78Q2S",
+      "to": "GteXijiHQTw98kB9zMknxv6tjvkSEGHyBU358exnKaAL",
+      "signature": "5h27FrVKGgiuwaxuoPjiF2hLt4jdzAQMLpfZNEAnAMGqGGtHrXUaLxdapUZJv8scP8x8L9u8TurP2uFinU49fwkY",
+      "explorer": "https://explorer.solana.com/tx/5h27FrVKGgiuwaxuoPjiF2hLt4jdzAQMLpfZNEAnAMGqGGtHrXUaLxdapUZJv8scP8x8L9u8TurP2uFinU49fwkY?cluster=devnet"
     }
   ],
   "x402Payments": [
@@ -197,9 +301,9 @@
     }
   ],
   "finalBalances": {
-    "buyer": "0.9500",
-    "seller": "0.9000",
-    "escrow": "1.4894"
+    "buyer": "0.7469",
+    "seller": "1.1030",
+    "escrow": "1.4859"
   },
   "collection": {
     "mint": "CWAm9apVFxRnBUyGcb2NJ96csa9JaFUrDEzgRLq9A2YM",
@@ -223,6 +327,16 @@
       "holder": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
       "explorer": "https://explorer.solana.com/address/Dowvv3fXdUuM9b3chjDqwSLFwx868MdWJAB75jZqK4yk?cluster=devnet",
       "metadataMemo": "3dRZLE3BdR3MCbb4DULav8fn7CVnkdAMrXYFMxWimK4gSMa2wNc2SpwtTCuzCEZtZcYKWrb4Gqk59bQfCfXLUNXT"
+    },
+    {
+      "name": "Deal Certificate: Token Launch Advisory",
+      "deal": "advisory-003",
+      "outcome": "DEAL_CLOSED",
+      "mint": "5jpQL5BgiFjn6UZfhfmv5f87H2bsckdyYGSjBsiRzZXB",
+      "holder": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
+      "explorer": "https://explorer.solana.com/address/5jpQL5BgiFjn6UZfhfmv5f87H2bsckdyYGSjBsiRzZXB?cluster=devnet",
+      "metadataMemo": "5nsrSYLo2qybbTubkNseTaP872reMbe8wpSWcocx5uaFr458efrGtWzt3CpSTrqGVifNpLhrpwaHVpRjuvtFBaSj",
+      "reasoningMerkleRoot": "6516ca39a2c335d0d1a48f7d05d0773d1ff9122309e49076564a5def2702543c"
     }
   ]
 }

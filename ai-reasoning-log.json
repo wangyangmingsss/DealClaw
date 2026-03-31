@@ -1,0 +1,212 @@
+{
+  "engine": "DealClawEngine/1.0",
+  "deal": {
+    "dealId": "advisory-003",
+    "service": "Token Launch Advisory",
+    "state": "DEAL_CLOSED",
+    "totalRounds": 4,
+    "budget": 0.2,
+    "walkAwayPrice": 0.25,
+    "bestAlternative": 0.22,
+    "rounds": [
+      {
+        "round": 1,
+        "tactic": "ANCHORING",
+        "counterOffer": 0.16,
+        "confidence": 0.85,
+        "reasoning": [
+          "Vendor opened at 0.6 SOL, 71% above market avg (0.35)",
+          "Setting anchor at 65% of market avg: 0.2275 SOL",
+          "Capped to [0.1000, 0.1600]: 0.16 SOL",
+          "Confidence: high (0.85) - 2 BATNA alternatives"
+        ],
+        "reasoningHash": "8b738ca39ff527bdf4ffc81def47e972ba64c9ce0a589e27fdee834e547662e5",
+        "metrics": {
+          "vendorConcessionRate": 1,
+          "gapToTarget": 0.4,
+          "roundsRemaining": 5,
+          "walkAwayRisk": 1
+        }
+      },
+      {
+        "round": 2,
+        "tactic": "BATNA_LEVERAGE",
+        "counterOffer": 0.18,
+        "confidence": 0.8,
+        "reasoning": [
+          "BATNA score: 0.0570 (avg savings vs alternatives)",
+          "Best alternative: 0.22 SOL",
+          "Counter: min(0.1840, 0.1800) = 0.18 SOL",
+          "Confidence: 0.8 - BATNA supports our position"
+        ],
+        "reasoningHash": "b094735543d906795599197dab92baadf4864c3c2370bc19945c7504353233dd",
+        "metrics": {
+          "vendorConcessionRate": 0.4883,
+          "gapToTarget": 0.107,
+          "roundsRemaining": 4,
+          "walkAwayRisk": 0.43
+        }
+      },
+      {
+        "round": 3,
+        "tactic": "CONCESSION_MAPPING",
+        "counterOffer": 0.1872,
+        "confidence": 0.6,
+        "reasoning": [
+          "Diminishing concession: 0.0200 * 0.6^2 = 0.0072 SOL",
+          "Counter: 0.1800 + 0.0072 = 0.1872 SOL",
+          "Predicted vendor floor: -0.1 SOL (extrapolated from avg drop 0.1750)",
+          "Gap to close: 0.0628 SOL, confidence: 0.6"
+        ],
+        "reasoningHash": "e8208610bc565204987c1496cdb861143fcdcd2b24d3865e88e67aaea1def539",
+        "metrics": {
+          "vendorConcessionRate": 0.1857,
+          "gapToTarget": 0.05,
+          "roundsRemaining": 3,
+          "walkAwayRisk": 0.3
+        }
+      },
+      {
+        "round": 4,
+        "tactic": "DEAL_CLOSED",
+        "counterOffer": 0.203,
+        "confidence": 0.99,
+        "reasoning": [
+          "Vendor offer 0.203 SOL meets acceptance criteria",
+          "Deal closed on round 4"
+        ],
+        "reasoningHash": "c256165eb829eb164f78d822ffaf533e156f7ac83dc31cc01c4e84b27875fd55",
+        "metrics": {
+          "vendorConcessionRate": 0.188,
+          "gapToTarget": 0.003,
+          "roundsRemaining": 2,
+          "walkAwayRisk": 0.21
+        }
+      }
+    ]
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "vendorOffer": 0.6,
+      "tactic": "ANCHORING",
+      "counterOffer": 0.16,
+      "confidence": 0.85,
+      "reasoning": [
+        "Vendor opened at 0.6 SOL, 71% above market avg (0.35)",
+        "Setting anchor at 65% of market avg: 0.2275 SOL",
+        "Capped to [0.1000, 0.1600]: 0.16 SOL",
+        "Confidence: high (0.85) - 2 BATNA alternatives"
+      ],
+      "reasoningHash": "8b738ca39ff527bdf4ffc81def47e972ba64c9ce0a589e27fdee834e547662e5",
+      "metrics": {
+        "vendorConcessionRate": 1,
+        "gapToTarget": 0.4,
+        "roundsRemaining": 5,
+        "walkAwayRisk": 1
+      }
+    },
+    {
+      "round": 2,
+      "vendorOffer": 0.307,
+      "tactic": "BATNA_LEVERAGE",
+      "counterOffer": 0.18,
+      "confidence": 0.8,
+      "reasoning": [
+        "BATNA score: 0.0570 (avg savings vs alternatives)",
+        "Best alternative: 0.22 SOL",
+        "Counter: min(0.1840, 0.1800) = 0.18 SOL",
+        "Confidence: 0.8 - BATNA supports our position"
+      ],
+      "reasoningHash": "b094735543d906795599197dab92baadf4864c3c2370bc19945c7504353233dd",
+      "metrics": {
+        "vendorConcessionRate": 0.4883,
+        "gapToTarget": 0.107,
+        "roundsRemaining": 4,
+        "walkAwayRisk": 0.43
+      }
+    },
+    {
+      "round": 3,
+      "vendorOffer": 0.25,
+      "tactic": "CONCESSION_MAPPING",
+      "counterOffer": 0.1872,
+      "confidence": 0.6,
+      "reasoning": [
+        "Diminishing concession: 0.0200 * 0.6^2 = 0.0072 SOL",
+        "Counter: 0.1800 + 0.0072 = 0.1872 SOL",
+        "Predicted vendor floor: -0.1 SOL (extrapolated from avg drop 0.1750)",
+        "Gap to close: 0.0628 SOL, confidence: 0.6"
+      ],
+      "reasoningHash": "e8208610bc565204987c1496cdb861143fcdcd2b24d3865e88e67aaea1def539",
+      "metrics": {
+        "vendorConcessionRate": 0.1857,
+        "gapToTarget": 0.05,
+        "roundsRemaining": 3,
+        "walkAwayRisk": 0.3
+      }
+    },
+    {
+      "round": 4,
+      "vendorOffer": 0.203,
+      "tactic": "DEAL_CLOSED",
+      "counterOffer": 0.203,
+      "confidence": 0.99,
+      "reasoning": [
+        "Vendor offer 0.203 SOL meets acceptance criteria",
+        "Deal closed on round 4"
+      ],
+      "reasoningHash": "c256165eb829eb164f78d822ffaf533e156f7ac83dc31cc01c4e84b27875fd55",
+      "metrics": {
+        "vendorConcessionRate": 0.188,
+        "gapToTarget": 0.003,
+        "roundsRemaining": 2,
+        "walkAwayRisk": 0.21
+      }
+    }
+  ],
+  "merkleRoot": "6516ca39a2c335d0d1a48f7d05d0773d1ff9122309e49076564a5def2702543c",
+  "verifiable": {
+    "note": "Each round reasoning_hash is on-chain in individual memo txns. Merkle root of all hashes is in certificate memo. Verify: SHA-256(JSON.stringify(reasoning)) === reasoning_hash for each round.",
+    "reasoningChains": [
+      {
+        "round": 1,
+        "reasoning": [
+          "Vendor opened at 0.6 SOL, 71% above market avg (0.35)",
+          "Setting anchor at 65% of market avg: 0.2275 SOL",
+          "Capped to [0.1000, 0.1600]: 0.16 SOL",
+          "Confidence: high (0.85) - 2 BATNA alternatives"
+        ],
+        "hash": "8b738ca39ff527bdf4ffc81def47e972ba64c9ce0a589e27fdee834e547662e5"
+      },
+      {
+        "round": 2,
+        "reasoning": [
+          "BATNA score: 0.0570 (avg savings vs alternatives)",
+          "Best alternative: 0.22 SOL",
+          "Counter: min(0.1840, 0.1800) = 0.18 SOL",
+          "Confidence: 0.8 - BATNA supports our position"
+        ],
+        "hash": "b094735543d906795599197dab92baadf4864c3c2370bc19945c7504353233dd"
+      },
+      {
+        "round": 3,
+        "reasoning": [
+          "Diminishing concession: 0.0200 * 0.6^2 = 0.0072 SOL",
+          "Counter: 0.1800 + 0.0072 = 0.1872 SOL",
+          "Predicted vendor floor: -0.1 SOL (extrapolated from avg drop 0.1750)",
+          "Gap to close: 0.0628 SOL, confidence: 0.6"
+        ],
+        "hash": "e8208610bc565204987c1496cdb861143fcdcd2b24d3865e88e67aaea1def539"
+      },
+      {
+        "round": 4,
+        "reasoning": [
+          "Vendor offer 0.203 SOL meets acceptance criteria",
+          "Deal closed on round 4"
+        ],
+        "hash": "c256165eb829eb164f78d822ffaf533e156f7ac83dc31cc01c4e84b27875fd55"
+      }
+    ]
+  }
+}
