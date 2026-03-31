@@ -240,6 +240,8 @@ Agent 间自主结算，0.15 SOL: [Explorer](https://explorer.solana.com/tx/3ZNz
 | **SPL Token Program** | Deal Certificate NFT 铸造 + Authority 管理 | 3 Certificates + 1 Collection |
 | **SystemProgram (Transfer)** | Escrow Lock / Release / Refund | 6 笔 Escrow 交易 |
 | **x402 Protocol** | Agent-to-Agent 自主支付 | 1 笔 x402 Payment |
+| **Jupiter Price API** | 实时 SOL/USD 定价，谈判结果以 USD 计价显示 | Live Demo 集成 |
+| **Phantom Wallet Adapter** | 真实 Solana 钱包连接，获取签名者公钥 | Live Demo 集成 |
 | **Solana Agent Kit** | DealClawEngine `processRound()` 可直接封装为 Agent Tool | 兼容设计 |
 
 **为什么是 Solana？** 27 笔交易在数秒内完成，总 gas < 0.001 SOL。以太坊上同样流程需要数分钟和数十美元 Gas。Solana 的亚秒出块 + 极低成本是 Agent 高频谈判的唯一可行 L1。

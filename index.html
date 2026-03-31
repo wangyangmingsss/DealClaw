@@ -64,7 +64,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 /* ===== WALLET BAR ===== */
 .wallet-bar{padding:34px 16px 6px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 .wallet-btn{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:16px;background:var(--bg3);border:1px solid var(--bg4);font-size:11px;color:var(--text2);cursor:pointer;font-family:var(--font-mono);transition:all .2s}
-.wallet-btn.connected{border-color:rgba(0,229,204,.3);color:var(--cyan)}
+.wallet-btn.connected{border-color:rgba(0,229,204,.3);color:var(--cyan);background:rgba(0,229,204,0.05)}
 .wallet-btn .dot{width:6px;height:6px;border-radius:50%;background:var(--text3)}
 .wallet-btn.connected .dot{background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
 .lang-toggle{padding:4px 10px;border-radius:16px;background:var(--bg3);border:1px solid var(--bg4);font-size:11px;color:var(--text2);cursor:pointer;font-family:var(--font-mono);transition:all .2s}
@@ -535,13 +535,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
       <div class="wallet-modal">
         <div class="wm-logo">&#x1F47B;</div>
         <div class="wm-title" data-i18n="wmTitle">Connect to DealClaw</div>
-        <div class="wm-sub" data-i18n="wmSub">DealClaw wants to connect to your wallet</div>
-        <div class="wm-addr">7xK3...f9Qm</div>
+        <div class="wm-sub" id="wmSubText" data-i18n="wmSub">DealClaw wants to connect to your wallet</div>
+        <div class="wm-addr">DzgR...Sdsv (Buyer Agent)</div>
         <div class="wm-btns">
           <button class="wm-btn reject" onclick="closeWalletModal()" data-i18n="wmReject">Reject</button>
           <button class="wm-btn approve" onclick="approveWallet()" data-i18n="wmApprove">Approve</button>
         </div>
         <div class="wm-trust" data-i18n="wmTrust">Only connect to sites you trust</div>
+        <div style="margin-top:8px;font-size:10px;color:var(--text3);font-family:var(--font-mono);text-align:center">Demo mode &middot; Install <a href="https://phantom.app" target="_blank" style="color:var(--purple)">Phantom</a> for real connection</div>
       </div>
     </div>
 
@@ -1589,24 +1590,60 @@ function toggleLang() {
   updateWalletUI();
 }
 
-// ===================== WALLET =====================
+// ===================== WALLET (Phantom Integration) =====================
 let walletConnected = false;
-function toggleWallet() {
+let walletPublicKey = null;
+
+function getPhantomProvider() {
+  if ('phantom' in window) {
+    const provider = window.phantom?.solana;
+    if (provider?.isPhantom) return provider;
+  }
+  return null;
+}
+
+async function toggleWallet() {
   if (walletConnected) {
+    // Disconnect
+    try {
+      const provider = getPhantomProvider();
+      if (provider) await provider.disconnect();
+    } catch(e) {}
     walletConnected = false;
+    walletPublicKey = null;
     updateWalletUI();
+    return;
+  }
+
+  const provider = getPhantomProvider();
+  if (provider) {
+    // Real Phantom wallet detected
+    try {
+      const resp = await provider.connect();
+      walletPublicKey = resp.publicKey.toString();
+      walletConnected = true;
+      updateWalletUI();
+      // Flash green
+      const btn = document.getElementById('walletBtn');
+      btn.style.borderColor = 'var(--cyan)';
+      setTimeout(() => btn.style.borderColor = '', 1500);
+    } catch (err) {
+      console.log('Phantom connect rejected:', err);
+    }
   } else {
+    // Fallback: show mock modal (for demo without Phantom)
     document.getElementById('walletModal').classList.add('open');
   }
 }
+
 function closeWalletModal() {
   document.getElementById('walletModal').classList.remove('open');
 }
 function approveWallet() {
   document.getElementById('walletModal').classList.remove('open');
   walletConnected = true;
+  walletPublicKey = 'DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv'; // Demo buyer agent
   updateWalletUI();
-  // Flash green on wallet button
   const btn = document.getElementById('walletBtn');
   btn.style.borderColor = 'var(--cyan)';
   setTimeout(() => btn.style.borderColor = '', 1500);
@@ -1615,12 +1652,33 @@ function updateWalletUI() {
   const btn = document.getElementById('walletBtn');
   if (walletConnected) {
     btn.classList.add('connected');
-    btn.querySelector('[data-i18n]').textContent = t('walletConnected');
+    const addr = walletPublicKey || '7xK3...f9Qm';
+    const short = addr.length > 10 ? addr.slice(0,4) + '...' + addr.slice(-4) : addr;
+    btn.querySelector('[data-i18n]').textContent = short;
   } else {
     btn.classList.remove('connected');
     btn.querySelector('[data-i18n]').textContent = t('walletConnect');
   }
 }
+
+// Listen for Phantom account changes
+(function() {
+  try {
+    const provider = getPhantomProvider();
+    if (provider) {
+      provider.on('accountChanged', (publicKey) => {
+        if (publicKey) {
+          walletPublicKey = publicKey.toString();
+          updateWalletUI();
+        } else {
+          walletConnected = false;
+          walletPublicKey = null;
+          updateWalletUI();
+        }
+      });
+    }
+  } catch(e) {}
+})();
 
 // ===================== TABS =====================
 function switchTab(name, btnEl) {
@@ -1967,13 +2025,47 @@ function renderAbout() {
   document.getElementById('techBadges').innerHTML = techBadgesArr.map(b => `<span class="tech-badge">${b}</span>`).join('');
 }
 
-// ===================== TICKER =====================
+// ===================== TICKER (with Jupiter Price API) =====================
+let solUsdPrice = null;
+let solPriceChange = null;
+
+async function fetchSolPrice() {
+  try {
+    const resp = await fetch('https://api.jup.ag/price/v2?ids=So11111111111111111111111111111111111111112');
+    const data = await resp.json();
+    const sol = data?.data?.['So11111111111111111111111111111111111111112'];
+    if (sol && sol.price) {
+      solUsdPrice = parseFloat(sol.price).toFixed(2);
+      renderTicker();
+    }
+  } catch(e) {
+    try {
+      const resp2 = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd&include_24hr_change=true');
+      const data2 = await resp2.json();
+      if (data2?.solana) {
+        solUsdPrice = data2.solana.usd.toFixed(2);
+        solPriceChange = data2.solana.usd_24h_change ? data2.solana.usd_24h_change.toFixed(1) : null;
+        renderTicker();
+      }
+    } catch(e2) {}
+  }
+}
+
 function renderTicker() {
   const keys = ['tick1','tick2','tick3','tick4','tick5','tick6'];
   const colors = ['green','red','green','green','green','green'];
-  const items = keys.map((k,i) => `<span class="ticker-item"><span class="${colors[i]}">\u25CF</span> ${t(k)}</span>`).join('');
-  document.getElementById('ticker').innerHTML = items + items; // duplicate for seamless loop
+  let items = keys.map((k,i) => `<span class="ticker-item"><span class="${colors[i]}">\u25CF</span> ${t(k)}</span>`).join('');
+  if (solUsdPrice) {
+    const changeHtml = solPriceChange
+      ? `<span class="${parseFloat(solPriceChange) >= 0 ? 'green' : 'red'}">${parseFloat(solPriceChange) >= 0 ? '+' : ''}${solPriceChange}%</span>`
+      : '<span class="green">LIVE</span>';
+    items = `<span class="ticker-item"><span class="green">\u25CE</span> SOL $${solUsdPrice} ${changeHtml}</span>` + items;
+  }
+  document.getElementById('ticker').innerHTML = items + items;
 }
+
+fetchSolPrice();
+setInterval(fetchSolPrice, 30000);
 
 // ===================== PARTICLES =====================
 function initParticles() {
@@ -2783,7 +2875,15 @@ function executeCustomStep(step) {
     cHtml += '<strong style="color:var(--cyan)">' + (currentLang === 'zh' ? '状态：等待人工审批' : 'Status: Awaiting approval') + '</strong><br>';
     cHtml += '<span style="font-size:10px;color:var(--text3);font-family:var(--font-mono)">Rounds: ' + summary.totalRounds + ' | Deal ID: ' + summary.dealId + '</span>';
     cHtml += '</div>';
-    cHtml += '<div class="engine-badge"><span class="eb-dot"></span>Verified by DealClawEngine/1.0</div>';
+    cHtml += '<div class="engine-badge"><span class="eb-dot"></span>DealClawEngine/1.0 &middot; Verifiable AI &middot; SHA-256 on Solana</div>';
+    // Wallet address if connected
+    if (walletPublicKey) {
+      cHtml += '<div style="font-size:9px;color:var(--text3);font-family:var(--font-mono);margin-top:4px">Signer: ' + walletPublicKey.slice(0,8) + '...' + walletPublicKey.slice(-6) + '</div>';
+    }
+    // SOL/USD price context
+    if (solUsdPrice) {
+      cHtml += '<div style="font-size:9px;color:var(--text3);font-family:var(--font-mono);margin-top:2px">SOL Price: $' + solUsdPrice + ' (Jupiter API) &middot; Value: ~$' + (finalPrice * parseFloat(solUsdPrice)).toFixed(2) + ' USD</div>';
+    }
     // Reasoning chain for final round
     cHtml += '<div class="reasoning-chain" style="margin-top:8px">';
     res.reasoning.forEach(function(line) { cHtml += '<div class="reasoning-step">' + line + '</div>'; });
@@ -2830,7 +2930,13 @@ function executeCustomStep(step) {
     wHtml += '<strong style="color:#3fb950">' + (currentLang === 'zh' ? '坏交易已拒绝 \u2713' : 'Bad deal rejected \u2713') + '</strong><br>';
     wHtml += '<span style="font-size:10px;color:var(--text3);font-family:var(--font-mono)">Rounds: ' + summary2.totalRounds + ' | Deal ID: ' + summary2.dealId + '</span>';
     wHtml += '</div>';
-    wHtml += '<div class="engine-badge"><span class="eb-dot"></span>Verified by DealClawEngine/1.0</div>';
+    wHtml += '<div class="engine-badge"><span class="eb-dot"></span>DealClawEngine/1.0 &middot; Verifiable AI &middot; SHA-256 on Solana</div>';
+    if (walletPublicKey) {
+      wHtml += '<div style="font-size:9px;color:var(--text3);font-family:var(--font-mono);margin-top:4px">Signer: ' + walletPublicKey.slice(0,8) + '...' + walletPublicKey.slice(-6) + '</div>';
+    }
+    if (solUsdPrice) {
+      wHtml += '<div style="font-size:9px;color:var(--text3);font-family:var(--font-mono);margin-top:2px">SOL Price: $' + solUsdPrice + ' (Jupiter API)</div>';
+    }
     wHtml += '<div class="reasoning-chain" style="margin-top:8px">';
     res2.reasoning.forEach(function(line) { wHtml += '<div class="reasoning-step">' + line + '</div>'; });
     wHtml += '</div>';
