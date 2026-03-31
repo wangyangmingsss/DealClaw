@@ -1,0 +1,164 @@
+{
+  "timestamp": "2026-03-31T07:42:39.390Z",
+  "network": "solana-devnet",
+  "protocol": "DealClaw Negotiation Protocol (DNP)",
+  "wallets": {
+    "escrow": "8fzHM3zW1ZpqSAK9jN7Lhwb8k4SxBm2YKozSsKU78Q2S",
+    "buyer": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
+    "seller": "GteXijiHQTw98kB9zMknxv6tjvkSEGHyBU358exnKaAL"
+  },
+  "transactions": [
+    {
+      "label": "Memo: Audit Round 1 — Anchoring (Vendor: 0.5, DC: 0.15)",
+      "signature": "LywkBo7bTazdKiNeVTYHTTdLNGVnWBKTRbgHqVTPwVnowrU67BTeuiMFHkXz7XTx7QW2TZzN4Yv1xVbn4H2hSqN",
+      "explorer": "https://explorer.solana.com/tx/LywkBo7bTazdKiNeVTYHTTdLNGVnWBKTRbgHqVTPwVnowrU67BTeuiMFHkXz7XTx7QW2TZzN4Yv1xVbn4H2hSqN?cluster=devnet"
+    },
+    {
+      "label": "Memo: Audit Round 2 — BATNA Leverage (Vendor: 0.4, DC: 0.18)",
+      "signature": "586QGxVEB5Eggs6QLEF3bT7h8JocenEFnfDiYdjVRLL8vx37w2yozEYuxu8sHkyL6HXEacvcUMntYDJEpbNbfvFv",
+      "explorer": "https://explorer.solana.com/tx/586QGxVEB5Eggs6QLEF3bT7h8JocenEFnfDiYdjVRLL8vx37w2yozEYuxu8sHkyL6HXEacvcUMntYDJEpbNbfvFv?cluster=devnet"
+    },
+    {
+      "label": "Memo: Audit Round 3 — Tactic Detection (Vendor: 0.32, DC: 0.22)",
+      "signature": "5y2Z5ZX8mNPgRm11HfMnhP1v9U5fZzAqfUTDc8Fjz856sk4kSbehxjT4VMjimXSq5LghtcH25VBFVPTSLWpm2pBR",
+      "explorer": "https://explorer.solana.com/tx/5y2Z5ZX8mNPgRm11HfMnhP1v9U5fZzAqfUTDc8Fjz856sk4kSbehxjT4VMjimXSq5LghtcH25VBFVPTSLWpm2pBR?cluster=devnet"
+    },
+    {
+      "label": "Memo: Audit Round 4 — Deal Closed at 0.25 SOL (50% savings)",
+      "signature": "1VSwaUnk5H8H5LymRR7ZmgPaZjitSEJRsKxqCXEonLeHZJTZq3hFJqheRPPfhbYZEsTJNAKo45ajiqgF9dnAX1H",
+      "explorer": "https://explorer.solana.com/tx/1VSwaUnk5H8H5LymRR7ZmgPaZjitSEJRsKxqCXEonLeHZJTZq3hFJqheRPPfhbYZEsTJNAKo45ajiqgF9dnAX1H?cluster=devnet"
+    },
+    {
+      "label": "Escrow Lock: Buyer → Escrow (0.25 SOL)",
+      "signature": "3Qb8Y7GUZFqryNifN3p2Xh6rFpm36dzg7cY3EWXZznrEj7FVdyZdoYiHvoXfcZZwAs4UH9xY2L3zjAMrFfSjauNK",
+      "explorer": "https://explorer.solana.com/tx/3Qb8Y7GUZFqryNifN3p2Xh6rFpm36dzg7cY3EWXZznrEj7FVdyZdoYiHvoXfcZZwAs4UH9xY2L3zjAMrFfSjauNK?cluster=devnet"
+    },
+    {
+      "label": "Escrow Release: Escrow → Seller (0.25 SOL)",
+      "signature": "217Us6RtfcPvUmM82LGngaJrBaqY8c15jQUHwuSLtFuwfc1J6F5bhqQTwwVYoAFGQd15aehr2Mzz3MyhfUKxkxYY",
+      "explorer": "https://explorer.solana.com/tx/217Us6RtfcPvUmM82LGngaJrBaqY8c15jQUHwuSLtFuwfc1J6F5bhqQTwwVYoAFGQd15aehr2Mzz3MyhfUKxkxYY?cluster=devnet"
+    },
+    {
+      "label": "x402 Payment: Buyer Agent → Seller Agent (0.15 SOL)",
+      "signature": "3ZNzs7UKLi8hqVHv1dYTHWakamKwsuc3cSn9axJkjsx8sP4XyvPwTU4ehEKs9LMsLffyJwqtAN5Nh5yaU6uMmLup",
+      "explorer": "https://explorer.solana.com/tx/3ZNzs7UKLi8hqVHv1dYTHWakamKwsuc3cSn9axJkjsx8sP4XyvPwTU4ehEKs9LMsLffyJwqtAN5Nh5yaU6uMmLup?cluster=devnet"
+    },
+    {
+      "label": "Memo: Logo Deal — Walk-Away Protocol Activated",
+      "signature": "4Z1bd78A33FYS7MtXbrzWL1fJXTQ8XhY2EXWsMApJ4QAtCN45gyfB3tgjkJsVvxUgJhvr9R5ZBA8pjv2pCXwduMq",
+      "explorer": "https://explorer.solana.com/tx/4Z1bd78A33FYS7MtXbrzWL1fJXTQ8XhY2EXWsMApJ4QAtCN45gyfB3tgjkJsVvxUgJhvr9R5ZBA8pjv2pCXwduMq?cluster=devnet"
+    },
+    {
+      "label": "Escrow Lock: Buyer → Escrow (0.1 SOL pre-auth)",
+      "signature": "4ZeSJxJYGgGru6C96FW1gd7BVEhU1EtU6VcyHXL1FGnSFGd6FctCHqLeCbmXn8nLb6nfZrnPVGgH3op9YbDVhtQa",
+      "explorer": "https://explorer.solana.com/tx/4ZeSJxJYGgGru6C96FW1gd7BVEhU1EtU6VcyHXL1FGnSFGd6FctCHqLeCbmXn8nLb6nfZrnPVGgH3op9YbDVhtQa?cluster=devnet"
+    },
+    {
+      "label": "Escrow Refund: Escrow → Buyer (0.1 SOL walk-away refund)",
+      "signature": "5VkDakES6vmHeviME3FPJZCvqna13Y8PqiMvcgB8uQefVmyabrda8cz38ErUstuAPvRCdSDsS11XYTyUCQ2K1GDv",
+      "explorer": "https://explorer.solana.com/tx/5VkDakES6vmHeviME3FPJZCvqna13Y8PqiMvcgB8uQefVmyabrda8cz38ErUstuAPvRCdSDsS11XYTyUCQ2K1GDv?cluster=devnet"
+    }
+  ],
+  "negotiations": [
+    {
+      "service": "Smart Contract Audit",
+      "rounds": [
+        {
+          "round": 1,
+          "vendor": 0.5,
+          "dealclaw": 0.15,
+          "tactic": "ANCHORING",
+          "memo": "LywkBo7bTazdKiNeVTYHTTdLNGVnWBKTRbgHqVTPwVnowrU67BTeuiMFHkXz7XTx7QW2TZzN4Yv1xVbn4H2hSqN"
+        },
+        {
+          "round": 2,
+          "vendor": 0.4,
+          "dealclaw": 0.18,
+          "tactic": "BATNA_LEVERAGE",
+          "memo": "586QGxVEB5Eggs6QLEF3bT7h8JocenEFnfDiYdjVRLL8vx37w2yozEYuxu8sHkyL6HXEacvcUMntYDJEpbNbfvFv"
+        },
+        {
+          "round": 3,
+          "vendor": 0.32,
+          "dealclaw": 0.22,
+          "tactic": "TACTIC_DETECTION:scope_reduction",
+          "memo": "5y2Z5ZX8mNPgRm11HfMnhP1v9U5fZzAqfUTDc8Fjz856sk4kSbehxjT4VMjimXSq5LghtcH25VBFVPTSLWpm2pBR"
+        },
+        {
+          "round": 4,
+          "vendor": 0.25,
+          "dealclaw": 0.25,
+          "tactic": "DEAL_CLOSED",
+          "memo": "1VSwaUnk5H8H5LymRR7ZmgPaZjitSEJRsKxqCXEonLeHZJTZq3hFJqheRPPfhbYZEsTJNAKo45ajiqgF9dnAX1H"
+        }
+      ],
+      "finalPrice": 0.25,
+      "savings": "50%"
+    },
+    {
+      "service": "Logo Design",
+      "outcome": "WALK_AWAY",
+      "rounds": [
+        {
+          "round": 4,
+          "memo": "4Z1bd78A33FYS7MtXbrzWL1fJXTQ8XhY2EXWsMApJ4QAtCN45gyfB3tgjkJsVvxUgJhvr9R5ZBA8pjv2pCXwduMq"
+        }
+      ],
+      "reason": "Vendor final offer 0.3 SOL exceeds budget 0.15 SOL. BATNA activated."
+    }
+  ],
+  "escrowOps": [
+    {
+      "type": "lock",
+      "deal": "audit-001",
+      "amount": 0.25,
+      "from": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
+      "to": "8fzHM3zW1ZpqSAK9jN7Lhwb8k4SxBm2YKozSsKU78Q2S",
+      "signature": "3Qb8Y7GUZFqryNifN3p2Xh6rFpm36dzg7cY3EWXZznrEj7FVdyZdoYiHvoXfcZZwAs4UH9xY2L3zjAMrFfSjauNK",
+      "explorer": "https://explorer.solana.com/tx/3Qb8Y7GUZFqryNifN3p2Xh6rFpm36dzg7cY3EWXZznrEj7FVdyZdoYiHvoXfcZZwAs4UH9xY2L3zjAMrFfSjauNK?cluster=devnet"
+    },
+    {
+      "type": "release",
+      "deal": "audit-001",
+      "amount": 0.25,
+      "from": "8fzHM3zW1ZpqSAK9jN7Lhwb8k4SxBm2YKozSsKU78Q2S",
+      "to": "GteXijiHQTw98kB9zMknxv6tjvkSEGHyBU358exnKaAL",
+      "signature": "217Us6RtfcPvUmM82LGngaJrBaqY8c15jQUHwuSLtFuwfc1J6F5bhqQTwwVYoAFGQd15aehr2Mzz3MyhfUKxkxYY",
+      "explorer": "https://explorer.solana.com/tx/217Us6RtfcPvUmM82LGngaJrBaqY8c15jQUHwuSLtFuwfc1J6F5bhqQTwwVYoAFGQd15aehr2Mzz3MyhfUKxkxYY?cluster=devnet"
+    },
+    {
+      "type": "lock",
+      "deal": "logo-002",
+      "amount": 0.1,
+      "from": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
+      "to": "8fzHM3zW1ZpqSAK9jN7Lhwb8k4SxBm2YKozSsKU78Q2S",
+      "signature": "4ZeSJxJYGgGru6C96FW1gd7BVEhU1EtU6VcyHXL1FGnSFGd6FctCHqLeCbmXn8nLb6nfZrnPVGgH3op9YbDVhtQa",
+      "explorer": "https://explorer.solana.com/tx/4ZeSJxJYGgGru6C96FW1gd7BVEhU1EtU6VcyHXL1FGnSFGd6FctCHqLeCbmXn8nLb6nfZrnPVGgH3op9YbDVhtQa?cluster=devnet"
+    },
+    {
+      "type": "refund",
+      "deal": "logo-002",
+      "amount": 0.1,
+      "from": "8fzHM3zW1ZpqSAK9jN7Lhwb8k4SxBm2YKozSsKU78Q2S",
+      "to": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
+      "signature": "5VkDakES6vmHeviME3FPJZCvqna13Y8PqiMvcgB8uQefVmyabrda8cz38ErUstuAPvRCdSDsS11XYTyUCQ2K1GDv",
+      "explorer": "https://explorer.solana.com/tx/5VkDakES6vmHeviME3FPJZCvqna13Y8PqiMvcgB8uQefVmyabrda8cz38ErUstuAPvRCdSDsS11XYTyUCQ2K1GDv?cluster=devnet"
+    }
+  ],
+  "x402Payments": [
+    {
+      "type": "agent_to_agent",
+      "amount": 0.15,
+      "skill": "NFT Commission (quick deal)",
+      "from": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
+      "to": "GteXijiHQTw98kB9zMknxv6tjvkSEGHyBU358exnKaAL",
+      "signature": "3ZNzs7UKLi8hqVHv1dYTHWakamKwsuc3cSn9axJkjsx8sP4XyvPwTU4ehEKs9LMsLffyJwqtAN5Nh5yaU6uMmLup",
+      "explorer": "https://explorer.solana.com/tx/3ZNzs7UKLi8hqVHv1dYTHWakamKwsuc3cSn9axJkjsx8sP4XyvPwTU4ehEKs9LMsLffyJwqtAN5Nh5yaU6uMmLup?cluster=devnet"
+    }
+  ],
+  "finalBalances": {
+    "buyer": "0.9500",
+    "seller": "0.9000",
+    "escrow": "1.5000"
+  }
+}

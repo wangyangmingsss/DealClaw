@@ -85,7 +85,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 
 /* ===== BOTTOM NAV ===== */
 .bottom-nav{display:flex;justify-content:space-around;padding:8px 0 20px;background:var(--bg2);border-top:1px solid var(--bg4);flex-shrink:0}
-.nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--text3);font-size:9px;font-family:var(--font-body);cursor:pointer;padding:4px 4px;transition:color .2s;min-width:42px}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--text3);font-size:8px;font-family:var(--font-body);cursor:pointer;padding:4px 2px;transition:color .2s;min-width:36px}
 .nav-btn .nav-icon{font-size:18px}
 .nav-btn.active{color:var(--coral)}
 .nav-btn:hover{color:var(--text2)}
@@ -446,6 +446,26 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 .wallet-bar{padding-top:12px}
 .showcase{display:none}
 }
+
+/* ===== TAB: ON-CHAIN PROOF ===== */
+.proof-header{font-family:var(--font-display);font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--coral),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+.proof-sub{font-size:11px;color:var(--text3);font-family:var(--font-mono);margin-bottom:14px}
+.proof-group-title{font-family:var(--font-display);font-size:13px;font-weight:600;color:var(--cyan);margin:14px 0 8px;display:flex;align-items:center;gap:6px}
+.proof-group-title .pg-icon{font-size:14px}
+.proof-card{background:var(--bg2);border:1px solid var(--bg4);border-radius:10px;padding:10px 12px;margin-bottom:8px;transition:border-color .2s}
+.proof-card:hover{border-color:rgba(255,107,74,.3)}
+.proof-card .pc-label{font-size:11px;color:var(--text);font-weight:500;margin-bottom:4px;line-height:1.4}
+.proof-card .pc-sig{font-size:9px;color:var(--text3);font-family:var(--font-mono);word-break:break-all;margin-bottom:6px}
+.proof-card .pc-link{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-family:var(--font-mono);font-weight:600;color:var(--coral);text-decoration:none;padding:3px 8px;border-radius:6px;background:rgba(255,107,74,.08);border:1px solid rgba(255,107,74,.15);transition:all .2s}
+.proof-card .pc-link:hover{background:rgba(255,107,74,.18);border-color:rgba(255,107,74,.3)}
+.proof-wallets{background:var(--bg2);border:1px solid var(--bg4);border-radius:10px;padding:10px 12px;margin-top:14px}
+.proof-wallets .pw-title{font-family:var(--font-display);font-size:12px;font-weight:600;color:var(--purple);margin-bottom:8px}
+.pw-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bg4);font-size:10px}
+.pw-row:last-child{border-bottom:none}
+.pw-role{color:var(--text2);font-weight:600;font-family:var(--font-display)}
+.pw-addr{color:var(--text3);font-family:var(--font-mono);word-break:break-all;text-align:right;max-width:65%}
+.proof-network{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:9px;font-family:var(--font-mono);font-weight:600;background:rgba(153,69,255,.08);border:1px solid rgba(153,69,255,.12);color:var(--purple);margin-bottom:12px}
+.proof-network .pn-dot{width:5px;height:5px;border-radius:50%;background:var(--purple);box-shadow:0 0 4px var(--purple)}
 </style>
 </head>
 <body>
@@ -746,6 +766,77 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
           <div class="tech-badges" id="techBadges"></div>
         </div>
       </div>
+
+      <div class="tab-panel" id="tabProof">
+        <div class="proof-header" data-i18n="proofTitle">On-Chain Proof</div>
+        <div class="proof-sub" data-i18n="proofSub">Verified on Solana Devnet</div>
+        <div class="proof-network"><span class="pn-dot"></span>Solana Devnet</div>
+
+        <div class="proof-group-title"><span class="pg-icon">&#x1F4DD;</span><span data-i18n="proofMemoGroup">Negotiation Memos</span></div>
+        <div class="proof-card">
+          <div class="pc-label" data-i18n="proofR1">Round 1 — Anchoring (Vendor: 0.5, DC: 0.15)</div>
+          <div class="pc-sig">LywkBo7bTazd...4H2hSqN</div>
+          <a class="pc-link" href="https://explorer.solana.com/tx/LywkBo7bTazdKiNeVTYHTTdLNGVnWBKTRbgHqVTPwVnowrU67BTeuiMFHkXz7XTx7QW2TZzN4Yv1xVbn4H2hSqN?cluster=devnet" target="_blank" rel="noopener">&#x1F50D; Explorer</a>
+        </div>
+        <div class="proof-card">
+          <div class="pc-label" data-i18n="proofR2">Round 2 — BATNA Leverage (Vendor: 0.4, DC: 0.18)</div>
+          <div class="pc-sig">586QGxVEB5Eg...bNbfvFv</div>
+          <a class="pc-link" href="https://explorer.solana.com/tx/586QGxVEB5Eggs6QLEF3bT7h8JocenEFnfDiYdjVRLL8vx37w2yozEYuxu8sHkyL6HXEacvcUMntYDJEpbNbfvFv?cluster=devnet" target="_blank" rel="noopener">&#x1F50D; Explorer</a>
+        </div>
+        <div class="proof-card">
+          <div class="pc-label" data-i18n="proofR3">Round 3 — Tactic Detection (Vendor: 0.32, DC: 0.22)</div>
+          <div class="pc-sig">5y2Z5ZX8mNPg...Wpm2pBR</div>
+          <a class="pc-link" href="https://explorer.solana.com/tx/5y2Z5ZX8mNPgRm11HfMnhP1v9U5fZzAqfUTDc8Fjz856sk4kSbehxjT4VMjimXSq5LghtcH25VBFVPTSLWpm2pBR?cluster=devnet" target="_blank" rel="noopener">&#x1F50D; Explorer</a>
+        </div>
+        <div class="proof-card">
+          <div class="pc-label" data-i18n="proofR4">Round 4 — Deal Closed at 0.25 SOL (50% savings)</div>
+          <div class="pc-sig">1VSwaUnk5H8H...dnAX1H</div>
+          <a class="pc-link" href="https://explorer.solana.com/tx/1VSwaUnk5H8H5LymRR7ZmgPaZjitSEJRsKxqCXEonLeHZJTZq3hFJqheRPPfhbYZEsTJNAKo45ajiqgF9dnAX1H?cluster=devnet" target="_blank" rel="noopener">&#x1F50D; Explorer</a>
+        </div>
+
+        <div class="proof-group-title"><span class="pg-icon">&#x1F512;</span><span data-i18n="proofEscrowGroup">Escrow Operations</span></div>
+        <div class="proof-card">
+          <div class="pc-label" data-i18n="proofEscrowLock">Escrow Lock: Buyer &#x2192; Escrow (0.25 SOL)</div>
+          <div class="pc-sig">3Qb8Y7GUZFqr...fSjauNK</div>
+          <a class="pc-link" href="https://explorer.solana.com/tx/3Qb8Y7GUZFqryNifN3p2Xh6rFpm36dzg7cY3EWXZznrEj7FVdyZdoYiHvoXfcZZwAs4UH9xY2L3zjAMrFfSjauNK?cluster=devnet" target="_blank" rel="noopener">&#x1F50D; Explorer</a>
+        </div>
+        <div class="proof-card">
+          <div class="pc-label" data-i18n="proofEscrowRelease">Escrow Release: Escrow &#x2192; Seller (0.25 SOL)</div>
+          <div class="pc-sig">217Us6RtfcPv...KxkxYY</div>
+          <a class="pc-link" href="https://explorer.solana.com/tx/217Us6RtfcPvUmM82LGngaJrBaqY8c15jQUHwuSLtFuwfc1J6F5bhqQTwwVYoAFGQd15aehr2Mzz3MyhfUKxkxYY?cluster=devnet" target="_blank" rel="noopener">&#x1F50D; Explorer</a>
+        </div>
+
+        <div class="proof-group-title"><span class="pg-icon">&#x26A1;</span><span data-i18n="proofX402Group">x402 Payment</span></div>
+        <div class="proof-card">
+          <div class="pc-label" data-i18n="proofX402Pay">x402 Payment: Buyer Agent &#x2192; Seller Agent (0.15 SOL)</div>
+          <div class="pc-sig">3ZNzs7UKLi8h...uMmLup</div>
+          <a class="pc-link" href="https://explorer.solana.com/tx/3ZNzs7UKLi8hqVHv1dYTHWakamKwsuc3cSn9axJkjsx8sP4XyvPwTU4ehEKs9LMsLffyJwqtAN5Nh5yaU6uMmLup?cluster=devnet" target="_blank" rel="noopener">&#x1F50D; Explorer</a>
+        </div>
+
+        <div class="proof-group-title"><span class="pg-icon">&#x1F6AB;</span><span data-i18n="proofWalkGroup">Walk-Away Protocol</span></div>
+        <div class="proof-card">
+          <div class="pc-label" data-i18n="proofWalkMemo">Memo: Walk-Away Protocol Activated</div>
+          <div class="pc-sig">4Z1bd78A33FY...CXwduMq</div>
+          <a class="pc-link" href="https://explorer.solana.com/tx/4Z1bd78A33FYS7MtXbrzWL1fJXTQ8XhY2EXWsMApJ4QAtCN45gyfB3tgjkJsVvxUgJhvr9R5ZBA8pjv2pCXwduMq?cluster=devnet" target="_blank" rel="noopener">&#x1F50D; Explorer</a>
+        </div>
+        <div class="proof-card">
+          <div class="pc-label" data-i18n="proofWalkLock">Escrow Lock: Buyer &#x2192; Escrow (0.1 SOL pre-auth)</div>
+          <div class="pc-sig">4ZeSJxJYGgGr...DVhtQa</div>
+          <a class="pc-link" href="https://explorer.solana.com/tx/4ZeSJxJYGgGru6C96FW1gd7BVEhU1EtU6VcyHXL1FGnSFGd6FctCHqLeCbmXn8nLb6nfZrnPVGgH3op9YbDVhtQa?cluster=devnet" target="_blank" rel="noopener">&#x1F50D; Explorer</a>
+        </div>
+        <div class="proof-card">
+          <div class="pc-label" data-i18n="proofWalkRefund">Escrow Refund: Escrow &#x2192; Buyer (0.1 SOL walk-away refund)</div>
+          <div class="pc-sig">5VkDakES6vmH...K1GDv</div>
+          <a class="pc-link" href="https://explorer.solana.com/tx/5VkDakES6vmHeviME3FPJZCvqna13Y8PqiMvcgB8uQefVmyabrda8cz38ErUstuAPvRCdSDsS11XYTyUCQ2K1GDv?cluster=devnet" target="_blank" rel="noopener">&#x1F50D; Explorer</a>
+        </div>
+
+        <div class="proof-wallets">
+          <div class="pw-title" data-i18n="proofWallets">Wallet Addresses</div>
+          <div class="pw-row"><span class="pw-role" data-i18n="proofEscrowWallet">Escrow</span><span class="pw-addr">8fzHM3zW1ZpqSAK9jN7Lhwb8k4SxBm2YKozSsKU78Q2S</span></div>
+          <div class="pw-row"><span class="pw-role" data-i18n="proofBuyerWallet">Buyer</span><span class="pw-addr">DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv</span></div>
+          <div class="pw-row"><span class="pw-role" data-i18n="proofSellerWallet">Seller</span><span class="pw-addr">GteXijiHQTw98kB9zMknxv6tjvkSEGHyBU358exnKaAL</span></div>
+        </div>
+      </div>
     </div>
 
     <!-- Modal -->
@@ -761,6 +852,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
       <button class="nav-btn" onclick="switchTab('Stats',this)"><span class="nav-icon">&#x1F4CA;</span><span data-i18n="navStats">Stats</span></button>
       <button class="nav-btn" onclick="switchTab('X402',this)"><span class="nav-icon">&#x26A1;</span><span data-i18n="navX402">x402</span></button>
       <button class="nav-btn" onclick="switchTab('About',this)"><span class="nav-icon">&#x1F99E;</span><span data-i18n="navAbout">About</span></button>
+      <button class="nav-btn" onclick="switchTab('Proof',this)"><span class="nav-icon">&#x1F517;</span><span data-i18n="navProof">Proof</span></button>
     </div>
   </div>
 </div>
@@ -806,7 +898,28 @@ const I18N = {
     navStats: "Stats",
     navX402: "x402",
     navAbout: "About",
-    // Deals
+    navProof: "Proof",
+    // On-Chain Proof
+    proofTitle: "On-Chain Proof",
+    proofSub: "Verified on Solana Devnet",
+    proofMemoGroup: "Negotiation Memos",
+    proofR1: "Round 1 \u2014 Anchoring (Vendor: 0.5, DC: 0.15)",
+    proofR2: "Round 2 \u2014 BATNA Leverage (Vendor: 0.4, DC: 0.18)",
+    proofR3: "Round 3 \u2014 Tactic Detection (Vendor: 0.32, DC: 0.22)",
+    proofR4: "Round 4 \u2014 Deal Closed at 0.25 SOL (50% savings)",
+    proofEscrowGroup: "Escrow Operations",
+    proofEscrowLock: "Escrow Lock: Buyer \u2192 Escrow (0.25 SOL)",
+    proofEscrowRelease: "Escrow Release: Escrow \u2192 Seller (0.25 SOL)",
+    proofX402Group: "x402 Payment",
+    proofX402Pay: "x402 Payment: Buyer Agent \u2192 Seller Agent (0.15 SOL)",
+    proofWalkGroup: "Walk-Away Protocol",
+    proofWalkMemo: "Memo: Walk-Away Protocol Activated",
+    proofWalkLock: "Escrow Lock: Buyer \u2192 Escrow (0.1 SOL pre-auth)",
+    proofWalkRefund: "Escrow Refund: Escrow \u2192 Buyer (0.1 SOL walk-away refund)",
+    proofWallets: "Wallet Addresses",
+    proofEscrowWallet: "Escrow",
+    proofBuyerWallet: "Buyer",
+    proofSellerWallet: "Seller",
     deal1Title: "Web3 Website Design",
     deal2Title: "NFT Art Commission",
     deal3Title: "Smart Contract Audit",
@@ -1088,6 +1201,27 @@ const I18N = {
     navStats: "统计",
     navX402: "x402",
     navAbout: "关于",
+    navProof: "链上证明",
+    proofTitle: "链上验证",
+    proofSub: "已在 Solana Devnet 验证",
+    proofMemoGroup: "谈判备忘录",
+    proofR1: "第1轮 — 锚定（供应商: 0.5, DC: 0.15）",
+    proofR2: "第2轮 — BATNA 杠杆（供应商: 0.4, DC: 0.18）",
+    proofR3: "第3轮 — 策略检测（供应商: 0.32, DC: 0.22）",
+    proofR4: "第4轮 — 成交价 0.25 SOL（节省 50%）",
+    proofEscrowGroup: "托管操作",
+    proofEscrowLock: "托管锁定: 买方 → 托管 (0.25 SOL)",
+    proofEscrowRelease: "托管释放: 托管 → 卖方 (0.25 SOL)",
+    proofX402Group: "x402 支付",
+    proofX402Pay: "x402 支付: 买方代理 → 卖方代理 (0.15 SOL)",
+    proofWalkGroup: "退出协议",
+    proofWalkMemo: "备忘录: 退出协议已激活",
+    proofWalkLock: "托管锁定: 买方 → 托管 (0.1 SOL 预授权)",
+    proofWalkRefund: "托管退款: 托管 → 买方 (0.1 SOL 退出退款)",
+    proofWallets: "钱包地址",
+    proofEscrowWallet: "托管",
+    proofBuyerWallet: "买方",
+    proofSellerWallet: "卖方",
     deal1Title: "Web3 网站设计",
     deal2Title: "NFT 艺术委托",
     deal3Title: "智能合约审计",

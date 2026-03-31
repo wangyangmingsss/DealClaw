@@ -1,0 +1,61 @@
+{
+  "agent": "DealClaw Agent #1",
+  "wallet": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
+  "network": "solana-devnet",
+  "protocol": "DealClaw Negotiation Protocol (DNP)",
+  "session": "2026-03-31T07:42:49.905Z",
+  "deals": [
+    {
+      "id": "audit-001",
+      "service": "Smart Contract Audit",
+      "outcome": "DEAL_CLOSED",
+      "vendor_initial": 0.5,
+      "final_price": 0.25,
+      "savings": "50%",
+      "rounds": 4,
+      "tactics_used": [
+        "ANCHORING",
+        "BATNA_LEVERAGE",
+        "TACTIC_DETECTION"
+      ],
+      "tactics_detected": [
+        "scope_reduction"
+      ],
+      "escrow": {
+        "lock": "3Qb8Y7GUZFqryNifN3p2Xh6rFpm36dzg7cY3EWXZznrEj7FVdyZdoYiHvoXfcZZwAs4UH9xY2L3zjAMrFfSjauNK",
+        "release": "217Us6RtfcPvUmM82LGngaJrBaqY8c15jQUHwuSLtFuwfc1J6F5bhqQTwwVYoAFGQd15aehr2Mzz3MyhfUKxkxYY"
+      }
+    },
+    {
+      "id": "logo-002",
+      "service": "Logo Design",
+      "outcome": "WALK_AWAY",
+      "vendor_final": 0.3,
+      "budget": 0.15,
+      "reason": "Exceeded budget after 4 rounds",
+      "batna": "Designer_B at 0.12 SOL",
+      "escrow": {
+        "lock": "4ZeSJxJYGgGru6C96FW1gd7BVEhU1EtU6VcyHXL1FGnSFGd6FctCHqLeCbmXn8nLb6nfZrnPVGgH3op9YbDVhtQa",
+        "refund": "5VkDakES6vmHeviME3FPJZCvqna13Y8PqiMvcgB8uQefVmyabrda8cz38ErUstuAPvRCdSDsS11XYTyUCQ2K1GDv"
+      }
+    }
+  ],
+  "x402Payments": [
+    {
+      "type": "agent_to_agent",
+      "amount": 0.15,
+      "skill": "NFT Commission (quick deal)",
+      "from": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
+      "to": "GteXijiHQTw98kB9zMknxv6tjvkSEGHyBU358exnKaAL",
+      "signature": "3ZNzs7UKLi8hqVHv1dYTHWakamKwsuc3cSn9axJkjsx8sP4XyvPwTU4ehEKs9LMsLffyJwqtAN5Nh5yaU6uMmLup",
+      "explorer": "https://explorer.solana.com/tx/3ZNzs7UKLi8hqVHv1dYTHWakamKwsuc3cSn9axJkjsx8sP4XyvPwTU4ehEKs9LMsLffyJwqtAN5Nh5yaU6uMmLup?cluster=devnet"
+    }
+  ],
+  "performance": {
+    "dealsCompleted": 1,
+    "dealsWalkedAway": 1,
+    "totalSaved": 0.25,
+    "avgSavings": "50%",
+    "winRate": "100%"
+  }
+}
