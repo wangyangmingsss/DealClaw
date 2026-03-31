@@ -2379,6 +2379,87 @@ const SERVICE_NAMES = {
   consulting: { en: 'Token Launch Advisory', zh: '代币发行咨询' },
 };
 
+// ===================== DEEPSEEK LLM INTEGRATION =====================
+const DEEPSEEK_CONFIG = {
+  endpoint: 'https://api.deepseek.com/chat/completions',
+  apiKey: 'sk-76afd04c39dc4e50a8fdf78cc65f754e',
+  model: 'deepseek-chat',
+  enabled: true,
+};
+
+async function callDeepSeekReasoning(context) {
+  if (!DEEPSEEK_CONFIG.enabled || !DEEPSEEK_CONFIG.apiKey) return null;
+  const systemPrompt = `You are DealClaw AI Negotiation Engine v1.0, an autonomous negotiation agent on Solana blockchain. You analyze vendor offers and generate strategic reasoning for each negotiation round.
+
+Output a JSON object with exactly this structure (no markdown, no code blocks, just raw JSON):
+{
+  "reasoning": ["step1", "step2", "step3", "step4"],
+  "confidence_rationale": "why this confidence level",
+  "risk_assessment": "brief risk note",
+  "recommended_action": "one line action"
+}
+
+Keep each reasoning step under 80 characters. Be analytical and precise. Reference specific numbers.`;
+
+  const userPrompt = `Negotiation Context:
+- Service: ${context.service}
+- Round: ${context.round}
+- Budget: ${context.budget} SOL
+- Walk-away price: ${context.walkaway} SOL
+- Market average: ${context.marketAvg} SOL
+- Vendor offer this round: ${context.vendorOffer} SOL
+- Our counter offer: ${context.counterOffer} SOL
+- Engine tactic: ${context.tactic}
+- Engine confidence: ${context.confidence}
+- Vendor concession rate: ${context.vendorConcessionRate}
+- Gap to target: ${context.gapToTarget} SOL
+- Walk-away risk: ${context.walkAwayRisk}
+- Rounds remaining: ${context.roundsRemaining}
+${context.prevOffers ? '- Previous vendor offers: ' + context.prevOffers : ''}
+${context.isFinal ? '- STATUS: ' + context.tactic + ' (final round)' : ''}
+
+Generate your strategic reasoning analysis.`;
+
+  try {
+    const resp = await fetch(DEEPSEEK_CONFIG.endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + DEEPSEEK_CONFIG.apiKey,
+      },
+      body: JSON.stringify({
+        model: DEEPSEEK_CONFIG.model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+        max_tokens: 300,
+        temperature: 0.3,
+      }),
+    });
+    if (!resp.ok) {
+      console.warn('DeepSeek API error:', resp.status);
+      DEEPSEEK_CONFIG.enabled = false;
+      return null;
+    }
+    const data = await resp.json();
+    const content = data.choices?.[0]?.message?.content;
+    if (!content) return null;
+    // Try to parse JSON from response
+    try {
+      const cleaned = content.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+      return JSON.parse(cleaned);
+    } catch(e) {
+      // If not valid JSON, wrap the text as reasoning
+      return { reasoning: [content.substring(0, 200)], confidence_rationale: '', risk_assessment: '', recommended_action: '' };
+    }
+  } catch(e) {
+    console.warn('DeepSeek fetch error:', e);
+    DEEPSEEK_CONFIG.enabled = false;
+    return null;
+  }
+}
+
 function tpl(template, vars) {
   let s = template;
   for (const [k, v] of Object.entries(vars)) s = s.replace(new RegExp('\\{' + k + '\\}', 'g'), v);
@@ -2616,6 +2697,14 @@ function startCustomDemo() {
   var chatArea = document.getElementById('chatArea');
   chatArea.innerHTML = '';
 
+  // Show AI model badge if DeepSeek is available
+  if (DEEPSEEK_CONFIG.enabled) {
+    var aiBadge = document.createElement('div');
+    aiBadge.style.cssText = 'text-align:center;padding:4px 8px;margin-bottom:6px;font-size:9px;font-family:var(--font-mono);color:var(--purple);background:rgba(153,69,255,0.06);border:1px solid rgba(153,69,255,0.15);border-radius:8px';
+    aiBadge.innerHTML = '<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--purple);margin-right:4px;box-shadow:0 0 4px var(--purple)"></span>DealClawEngine/1.0 + DeepSeek LLM &middot; Verifiable AI Pipeline';
+    chatArea.appendChild(aiBadge);
+  }
+
   var serviceKey = document.getElementById('cfService').value;
   var serviceName = SERVICE_NAMES[serviceKey][currentLang === 'zh' ? 'zh' : 'en'];
   var budget = parseInt(document.getElementById('cfBudget').value);
@@ -2670,6 +2759,34 @@ function startCustomDemo() {
     engineResults.push(result);
     prevVendorOffer = vendorOffer;
     if (engine.getState() === 'DEAL_CLOSED' || engine.getState() === 'WALK_AWAY') break;
+  }
+
+  // Fire DeepSeek LLM calls in parallel for enhanced reasoning
+  var llmPromises = [];
+  for (var li = 0; li < engineResults.length; li++) {
+    var lr = engineResults[li];
+    var lv = vendorOffers[li];
+    llmPromises.push(callDeepSeekReasoning({
+      service: serviceName,
+      round: li + 1,
+      budget: budget,
+      walkaway: walkaway,
+      marketAvg: marketData.avgPrice,
+      vendorOffer: lv,
+      counterOffer: lr.counterOffer,
+      tactic: lr.tactic,
+      confidence: lr.confidence,
+      vendorConcessionRate: lr.metrics.vendorConcessionRate,
+      gapToTarget: lr.metrics.gapToTarget,
+      walkAwayRisk: lr.metrics.walkAwayRisk,
+      roundsRemaining: lr.metrics.roundsRemaining,
+      prevOffers: vendorOffers.slice(0, li).join(', '),
+      isFinal: lr.tactic === 'DEAL_CLOSED' || lr.tactic === 'WALK_AWAY',
+    }));
+  }
+  // Store promises on engine results for later use
+  for (var pi = 0; pi < engineResults.length; pi++) {
+    engineResults[pi]._llmPromise = llmPromises[pi];
   }
 
   // Build animation sequence from engine results
@@ -2842,12 +2959,48 @@ function executeCustomStep(step) {
       var hashSpan = document.createElement('span');
       hashSpan.className = 'reasoning-hash';
       hashSpan.textContent = 'sha256: computing...';
+      // LLM reasoning container (async DeepSeek)
+      var llmDiv = document.createElement('div');
+      llmDiv.className = 'llm-reasoning';
+      llmDiv.style.cssText = 'margin-top:6px;padding:6px 8px;background:rgba(153,69,255,0.08);border:1px solid rgba(153,69,255,0.2);border-radius:6px;font-size:10px;font-family:var(--font-mono);color:var(--text2);display:none';
       bubble.innerHTML = html;
       bubble.appendChild(hashSpan);
+      bubble.appendChild(llmDiv);
       if (er._hashPromise) {
         er._hashPromise.then(function(hash) {
           hashSpan.textContent = 'sha256:' + hash.substring(0, 16) + '...' + hash.substring(hash.length - 8);
         });
+      }
+      // Async: inject DeepSeek LLM reasoning when available
+      if (er._llmPromise) {
+        llmDiv.style.display = 'block';
+        llmDiv.innerHTML = '<span style="color:var(--purple)">DeepSeek AI</span> analyzing...';
+        er._llmPromise.then(function(llmResult) {
+          if (llmResult && llmResult.reasoning) {
+            var llmHtml = '<div style="color:var(--purple);font-weight:600;margin-bottom:3px">DeepSeek AI Reasoning</div>';
+            llmResult.reasoning.forEach(function(line) {
+              llmHtml += '<div style="margin:1px 0;color:var(--text2)">' + line + '</div>';
+            });
+            if (llmResult.risk_assessment) {
+              llmHtml += '<div style="margin-top:3px;color:var(--coral);font-size:9px">Risk: ' + llmResult.risk_assessment + '</div>';
+            }
+            if (llmResult.recommended_action) {
+              llmHtml += '<div style="color:var(--cyan);font-size:9px">Action: ' + llmResult.recommended_action + '</div>';
+            }
+            llmDiv.innerHTML = llmHtml;
+            gsap.from(llmDiv, { opacity: 0, y: 5, duration: 0.4 });
+            // Re-hash with LLM reasoning included for verifiable AI
+            var fullReasoning = JSON.stringify(er.reasoning.concat(llmResult.reasoning));
+            crypto.subtle.digest('SHA-256', new TextEncoder().encode(fullReasoning)).then(function(buf) {
+              var newHash = Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+              hashSpan.textContent = 'sha256(engine+llm):' + newHash.substring(0, 12) + '...' + newHash.substring(newHash.length - 6);
+              hashSpan.style.color = 'var(--purple)';
+            });
+          } else {
+            llmDiv.style.display = 'none';
+          }
+          sc.scrollTop = sc.scrollHeight;
+        }).catch(function() { llmDiv.style.display = 'none'; });
       }
     } else {
       bubble.innerHTML = html;

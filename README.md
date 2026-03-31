@@ -46,7 +46,7 @@ AI Agent 经济正在爆发 -- Solana Agent Kit、AI16z Eliza 框架、自主 Ag
 
 ## 创新性 ★★★★★
 
-**首个 "Negotiation-on-Chain" 协议。首个 AI 推理可验证的谈判系统。**
+**首个 "Negotiation-on-Chain" 协议。首个 AI 推理可验证的谈判系统。首个规则引擎 + LLM 双层决策架构的链上 Agent。**
 
 ### 创新 1: DealClaw Negotiation Protocol (DNP/1.0) -- 首个链上谈判标准
 
@@ -122,13 +122,21 @@ Layer 2  SPL Token      Deal Certificate NFT + Merkle Root
 Layer 1  Solana L1      最终确认层，零 L2 依赖
 ```
 
-### AI 谈判引擎 -- DealClawEngine/1.0
+### AI 谈判引擎 -- DealClawEngine/1.0 + DeepSeek LLM
 
-**不是硬编码脚本。是一个参数化决策引擎。** （`engine/DealClawEngine.mjs`, 222 行生产代码）
+**双层 AI 架构：规则引擎决策 + LLM 推理增强。** （`engine/DealClawEngine.mjs`, 222 行生产代码 + DeepSeek API 集成）
 
+**Layer 1 -- 规则引擎**（确定性决策，零幻觉）：
 **输入**：预算、Walk-away 底线、市场均价、替代方案（BATNA）、对手报价历史
 **处理**：5 种策略算法 + 6 种操纵检测 + 让步曲线建模 + BATNA 评分矩阵
 **输出**：策略选择、还价金额、置信度评分、完整推理链、SHA-256 推理哈希
+
+**Layer 2 -- DeepSeek LLM**（语义推理增强）：
+**输入**：引擎决策上下文（策略、报价、风险评估）
+**处理**：DeepSeek-V3 生成自然语言推理分析（市场解读、风险评估、行动建议）
+**输出**：结构化推理 JSON → 与引擎推理合并 → SHA-256 哈希上链
+
+**为什么双层？** 规则引擎保证决策确定性（不会因 LLM 幻觉超预算），LLM 提供人类可读的语义推理链（审计时更直观）。两层推理合并后统一哈希，链上可验证。
 
 **5 种策略**：
 
@@ -140,16 +148,20 @@ Layer 1  Solana L1      最终确认层，零 L2 依赖
 | TACTIC_DETECTION | 检测到操纵行为 | 识别并反制对手策略 |
 | WALK_AWAY | 超过底线 | 自动退出 + Escrow 退款 |
 
-### Verifiable AI Decision Pipeline
+### Verifiable AI Decision Pipeline (Dual-Layer)
 
 ```
 Engine.processRound(vendorOffer)
-  -> reasoning[] (完整决策推理链)
-  -> SHA-256(reasoning) -> reasoningHash
+  -> engineReasoning[] (规则引擎推理链)
+  -> DeepSeek.analyze(context) -> llmReasoning[] (LLM 语义推理)
+  -> mergedReasoning = engineReasoning + llmReasoning
+  -> SHA-256(mergedReasoning) -> reasoningHash
   -> 写入 Solana Memo (与报价数据一起)
   -> 所有轮次 reasoningHash -> Merkle Tree -> merkleRoot
   -> 写入 Certificate NFT Metadata Memo
 ```
+
+**双层验证**：规则引擎推理（确定性）+ LLM 推理（语义增强）合并后哈希。篡改任一层推理都会导致哈希不匹配。
 
 **验证方法**：下载 `ai-reasoning-log.json`，对每轮 reasoning 文本做 SHA-256，与链上 Memo 的 `reasoning_hash` 字段比对。全部匹配 = AI 决策过程未被篡改。
 
