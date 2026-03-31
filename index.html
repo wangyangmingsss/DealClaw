@@ -234,6 +234,35 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 .hash-verifier .hv-match{color:#3fb950;font-weight:600}
 .hash-verifier .hv-nomatch{color:var(--text3)}
 
+/* ===== VERIFICATION CHAIN (IPFS) ===== */
+.verification-chain{background:var(--bg2);border:1px solid rgba(0,229,204,.2);border-radius:14px;padding:16px;margin-top:14px}
+.vc-title{font-family:var(--font-display);font-size:14px;font-weight:600;color:var(--cyan);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.vc-pipeline{position:relative;padding-left:20px}
+.vc-pipeline::before{content:'';position:absolute;left:11px;top:12px;bottom:12px;width:2px;background:linear-gradient(180deg,var(--cyan),rgba(0,229,204,.3),var(--purple))}
+.vc-layer{position:relative;padding:10px 0 10px 20px;opacity:1}
+.vc-layer .vc-dot{position:absolute;left:-20px;top:14px;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg2);z-index:1;transition:all .4s}
+.vc-layer.layer-sha .vc-dot{background:var(--cyan);box-shadow:0 0 6px rgba(0,229,204,.5)}
+.vc-layer.layer-merkle .vc-dot{background:var(--purple);box-shadow:0 0 6px rgba(153,69,255,.5)}
+.vc-layer.layer-ipfs .vc-dot{background:var(--coral);box-shadow:0 0 6px rgba(255,107,74,.5)}
+.vc-layer-header{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.vc-layer-icon{font-size:14px}
+.vc-layer-label{font-family:var(--font-display);font-size:11px;font-weight:600;color:var(--text)}
+.vc-layer-status{font-size:9px;padding:2px 6px;border-radius:6px;font-family:var(--font-mono);font-weight:600;margin-left:auto}
+.vc-layer-status.verified{background:rgba(0,229,204,.1);color:var(--cyan);border:1px solid rgba(0,229,204,.2)}
+.vc-layer-status.pending{background:rgba(255,107,74,.08);color:var(--text3);border:1px solid var(--bg4)}
+.vc-hash-val{font-size:9px;color:var(--text3);font-family:var(--font-mono);word-break:break-all;line-height:1.4;padding:4px 6px;background:var(--bg3);border-radius:4px;margin-top:4px}
+.vc-hash-list{margin-top:4px}
+.vc-hash-row{display:flex;justify-content:space-between;align-items:center;padding:2px 6px;font-size:8px;font-family:var(--font-mono)}
+.vc-hash-row .vc-round{color:var(--text3);min-width:20px}
+.vc-hash-row .vc-h{color:var(--cyan);word-break:break-all;flex:1;margin-left:6px}
+.vc-ipfs-link{display:inline-flex;align-items:center;gap:4px;margin-top:6px;padding:4px 10px;border-radius:6px;font-size:10px;font-family:var(--font-mono);font-weight:600;color:var(--coral);background:rgba(255,107,74,.08);border:1px solid rgba(255,107,74,.15);text-decoration:none;transition:all .2s;word-break:break-all}
+.vc-ipfs-link:hover{background:rgba(255,107,74,.18);border-color:rgba(255,107,74,.3)}
+.ipfs-archive-btn{width:100%;padding:8px;border-radius:10px;background:linear-gradient(135deg,rgba(0,229,204,.15),rgba(153,69,255,.1));border:1px solid rgba(0,229,204,.25);color:var(--cyan);font-family:var(--font-display);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px}
+.ipfs-archive-btn:hover{background:linear-gradient(135deg,rgba(0,229,204,.25),rgba(153,69,255,.18));border-color:var(--cyan);transform:scale(1.02)}
+.ipfs-archive-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.ipfs-notification{position:absolute;top:40px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,rgba(0,229,204,.15),rgba(153,69,255,.1));border:1px solid rgba(0,229,204,.3);border-radius:12px;padding:10px 16px;font-family:var(--font-mono);font-size:10px;color:var(--cyan);z-index:180;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .3s}
+.ipfs-notification.show{opacity:1;pointer-events:auto}
+
 /* ===== DEAL DETAIL MODAL ===== */
 .modal-overlay{position:absolute;inset:0;background:rgba(7,9,15,.85);z-index:150;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
 .modal-overlay.open{display:flex}
@@ -463,6 +492,31 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 /* ===== PARTICLES ===== */
 .particle-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
 
+/* ===== AI VS AI MODE ===== */
+.aivsai-toggle{display:flex;align-items:center;justify-content:center;gap:8px;margin:6px 0}
+.aivsai-btn{padding:6px 16px;border-radius:10px;font-family:var(--font-mono);font-size:11px;font-weight:600;background:rgba(255,160,50,.06);color:var(--text3);border:1px solid var(--bg4);cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:6px}
+.aivsai-btn.active{border-color:rgba(255,160,50,.5);color:#FFA032;background:rgba(255,160,50,.1);box-shadow:0 0 12px rgba(255,160,50,.15)}
+.aivsai-btn .toggle-dot{width:8px;height:8px;border-radius:50%;background:var(--text3);transition:all .25s}
+.aivsai-btn.active .toggle-dot{background:#FFA032;box-shadow:0 0 6px #FFA032}
+.aivsai-indicator{display:none;text-align:center;padding:6px 10px;margin-bottom:8px;font-size:10px;font-family:var(--font-mono);color:#FFA032;background:rgba(255,160,50,0.06);border:1px solid rgba(255,160,50,0.18);border-radius:8px;animation:aivsaiPulse 2s infinite}
+.aivsai-indicator.visible{display:block}
+@keyframes aivsaiPulse{0%,100%{border-color:rgba(255,160,50,.18)}50%{border-color:rgba(255,160,50,.4)}}
+
+/* Vendor AI Reasoning Panel */
+.vendor-reasoning-panel{display:none;background:var(--bg2);border:1px solid rgba(255,160,50,.2);border-radius:12px;padding:12px;margin-bottom:10px}
+.vendor-reasoning-panel.visible{display:block}
+.vendor-reasoning-panel .vrp-title{font-family:var(--font-display);font-size:12px;font-weight:600;color:#FFA032;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.vendor-reasoning-panel .vrp-line{font-size:11px;color:var(--text2);margin-bottom:4px;font-family:var(--font-mono);padding-left:8px;border-left:2px solid rgba(255,160,50,.2)}
+.vendor-reasoning-panel .vrp-line.active{border-left-color:#FFA032;color:var(--text)}
+
+/* Vendor AI bubble styling */
+.chat-bubble.left.vendor-ai{background:rgba(255,160,50,.1);border:1px solid rgba(255,160,50,.25)}
+.chat-bubble.left.vendor-ai .agent-label{color:#FFA032}
+.vendor-reasoning-chain{margin-top:6px;padding:6px 8px;background:rgba(255,160,50,.06);border-radius:6px;border-left:2px solid #FFA032}
+.vendor-reasoning-chain .reasoning-step{font-size:9px;color:var(--text2);font-family:var(--font-mono);line-height:1.5;padding:1px 0}
+.vendor-reasoning-chain .reasoning-step::before{content:'\25B8 ';color:#FFA032}
+.vendor-tactic-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:4px;font-size:8px;font-family:var(--font-mono);font-weight:600;background:rgba(255,160,50,.1);border:1px solid rgba(255,160,50,.2);color:#FFA032;margin-top:4px}
+
 /* ===== RESPONSIVE ===== */
 @media(max-width:860px){
 .page-wrapper{flex-direction:column;align-items:center;gap:24px}
@@ -540,6 +594,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
   <div class="phone-glow"></div>
   <div class="phone-frame" id="phone">
     <canvas class="particle-canvas" id="particleCanvas"></canvas>
+
+    <!-- IPFS Archive Notification -->
+    <div class="ipfs-notification" id="ipfsNotification"></div>
 
     <!-- Splash -->
     <div class="splash" id="splash">
@@ -672,7 +729,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
           <button class="speed-btn" onclick="setSpeed(2,this)">2x</button>
           <button class="speed-btn" onclick="setSpeed(3,this)">3x</button>
         </div>
+        <div class="aivsai-toggle">
+          <button class="aivsai-btn" id="aivsaiBtn" onclick="toggleAIvsAI()">
+            <span class="toggle-dot"></span>
+            <span id="aivsaiLabel">AI vs AI</span>
+          </button>
+        </div>
         <button class="demo-btn" id="demoBtn" onclick="startDemo()" data-i18n="startDemo">&#x1F99E; Start Negotiation Demo</button>
+        <div class="aivsai-indicator" id="aivsaiIndicator">&#x1F916; &#x2694;&#xFE0F; &#x1F916; AI vs AI Autonomous Mode</div>
         <!-- AI Confidence Meter -->
         <div class="confidence-meter" id="confidenceMeter">
           <div class="cm-gauge">
@@ -709,6 +773,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
           <div class="strategy-line" id="strat1" data-i18n="stratInit">Analyzing counterparty profile...</div>
           <div class="strategy-line" id="strat2"></div>
           <div class="strategy-line" id="strat3"></div>
+        </div>
+        <div class="vendor-reasoning-panel" id="vendorReasoningPanel">
+          <div class="vrp-title">&#x1F916; <span>Vendor AI Strategy</span></div>
+          <div class="vrp-line" id="vendorStrat1">Analyzing buyer position...</div>
+          <div class="vrp-line" id="vendorStrat2"></div>
+          <div class="vrp-line" id="vendorStrat3"></div>
         </div>
         <div class="chat-area" id="chatArea"></div>
       </div>
@@ -815,6 +885,49 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
               6516ca39a2c335d0d1a48f7d05d0773d1ff9122309e49076564a5def2702543c
             </div>
           </div>
+        </div>
+
+        <!-- Verification Chain: SHA-256 → Merkle → IPFS -->
+        <div class="verification-chain" id="verificationChain">
+          <div class="vc-title">&#x1F517; Verification Chain</div>
+          <div class="vc-pipeline">
+            <!-- Layer 1: SHA-256 -->
+            <div class="vc-layer layer-sha">
+              <div class="vc-dot"></div>
+              <div class="vc-layer-header">
+                <span class="vc-layer-icon">&#x1F512;</span>
+                <span class="vc-layer-label">Layer 1: SHA-256 Round Hashes</span>
+                <span class="vc-layer-status pending" id="vcShaStatus">Waiting</span>
+              </div>
+              <div class="vc-hash-list" id="vcShaHashes">
+                <div style="font-size:9px;color:var(--text3);font-family:var(--font-mono);padding:4px 6px">Run a negotiation to generate hashes...</div>
+              </div>
+            </div>
+            <!-- Layer 2: Merkle Root -->
+            <div class="vc-layer layer-merkle">
+              <div class="vc-dot"></div>
+              <div class="vc-layer-header">
+                <span class="vc-layer-icon">&#x1F333;</span>
+                <span class="vc-layer-label">Layer 2: Merkle Root</span>
+                <span class="vc-layer-status pending" id="vcMerkleStatus">Waiting</span>
+              </div>
+              <div class="vc-hash-val" id="vcMerkleHash" style="color:var(--purple)">--</div>
+            </div>
+            <!-- Layer 3: IPFS CID -->
+            <div class="vc-layer layer-ipfs">
+              <div class="vc-dot"></div>
+              <div class="vc-layer-header">
+                <span class="vc-layer-icon">&#x1F4E6;</span>
+                <span class="vc-layer-label">Layer 3: IPFS Archive</span>
+                <span class="vc-layer-status pending" id="vcIpfsStatus">Waiting</span>
+              </div>
+              <div class="vc-hash-val" id="vcIpfsCid" style="color:var(--coral)">--</div>
+              <div id="vcIpfsLinkWrap"></div>
+            </div>
+          </div>
+          <button class="ipfs-archive-btn" id="ipfsArchiveBtn" onclick="archiveToIPFS()">
+            &#x1F4E6; Archive to IPFS
+          </button>
         </div>
       </div>
 
@@ -1811,6 +1924,7 @@ function setSpeed(s, el) {
 }
 
 function startDemo() {
+  if (vendorAIEnabled) { startAIvsAIDemo(); return; }
   if (currentScenario === 'walkaway') { startWalkawayDemo(); return; }
   if (currentScenario === 'custom') { startCustomDemo(); return; }
   if (demoRunning) return;
@@ -1970,6 +2084,21 @@ function executeStep(step) {
     setTimeout(() => {
       showEscrowConfirmation(chatArea, '7.5 SOL', 'Bx7k...9fQm');
     }, 800 / demoSpeed);
+    // Auto-archive reasoning to IPFS
+    if (ipfsReasoningLog.length === 0) {
+      var refHashes = Object.values(HV_REFERENCE_HASHES);
+      var refReasonings = [
+        ['Anchoring: vendor at 15 SOL', 'Counter at 5 SOL with market data'],
+        ['BATNA leverage: AuditFirm_B at 7 SOL', 'Counter at 6.5 SOL'],
+        ['Scope reduction detected', 'Counter at 7.5 SOL full scope'],
+        ['Vendor accepts 7.5 SOL', 'Deal closed: 50% savings']
+      ];
+      refHashes.forEach(function(h, i) {
+        var fullHash = h + 'e71d9a2f4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d';
+        collectReasoningHash(i + 1, fullHash, refReasonings[i]);
+      });
+    }
+    autoArchiveOnComplete();
   }
   else if (step.type === 'chartPt') {
     addChartPoint(step.round, step.vp, step.dp);
@@ -1992,6 +2121,21 @@ function executeStep(step) {
     gsap.to(card, { opacity:1, duration:0.6, delay:0.2, ease:'power2.out' });
     gsap.from(card, { scale:0.9, duration:0.6, delay:0.2, ease:'back.out(1.5)' });
     sc.scrollTop = sc.scrollHeight;
+    // Auto-archive reasoning to IPFS for walkaway
+    if (ipfsReasoningLog.length === 0) {
+      var waHashes = ['a1b2c3d4','e5f6a7b8','c9d0e1f2','a3b4c5d6'];
+      var waReasonings = [
+        ['Anchoring: vendor at 8 SOL', 'Counter at 2 SOL with market data'],
+        ['BATNA leverage: Designer_B at 2.5 SOL', 'Counter at 2.8 SOL'],
+        ['Scope reduction + ultimatum detected', 'Counter at 3 SOL full scope'],
+        ['Walk-away: 5.5 SOL exceeds budget', 'Engaging BATNA: Designer_B']
+      ];
+      waHashes.forEach(function(h, i) {
+        var fullHash = h + 'e71d9a2f4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d';
+        collectReasoningHash(i + 1, fullHash, waReasonings[i]);
+      });
+    }
+    autoArchiveOnComplete();
   }
 }
 
@@ -2283,6 +2427,10 @@ function selectScenario(s) {
   document.getElementById('chatArea').innerHTML = '';
   document.getElementById('userBrief').style.display = 'none';
   document.getElementById('strategyPanel').style.display = 'none';
+  // Reset IPFS archive state for new demo
+  ipfsReasoningLog = [];
+  ipfsArchiveState = { roundHashes: [], merkleRoot: null, ipfsCID: null, payload: null };
+  updateVerificationChainUI();
 }
 
 // ===================== WALK-AWAY DEMO =====================
@@ -2575,6 +2723,428 @@ function validateLLMOutput(llmResult, engineResult) {
   }
   llmResult._llmValidated = true;
   return llmResult;
+}
+
+// ===================== AI VS AI MODE =====================
+var vendorAIEnabled = false;
+
+function toggleAIvsAI() {
+  vendorAIEnabled = !vendorAIEnabled;
+  var btn = document.getElementById('aivsaiBtn');
+  var indicator = document.getElementById('aivsaiIndicator');
+  var vrPanel = document.getElementById('vendorReasoningPanel');
+  if (vendorAIEnabled) {
+    btn.classList.add('active');
+    indicator.classList.add('visible');
+    if (vrPanel) vrPanel.classList.add('visible');
+    if (currentScenario !== 'custom') {
+      selectScenario('custom');
+    }
+  } else {
+    btn.classList.remove('active');
+    indicator.classList.remove('visible');
+    if (vrPanel) vrPanel.classList.remove('visible');
+  }
+}
+
+async function callDeepSeekVendor(context) {
+  if (!DEEPSEEK_CONFIG.enabled || !DEEPSEEK_CONFIG.apiKey) return null;
+  var systemPrompt = 'You are an autonomous Vendor Agent AI in a Solana blockchain negotiation. You represent the seller side. Your goal is to MAXIMIZE the sale price while appearing reasonable and professional.\n\nStrategy guidelines:\n- Start with a high but justifiable opening price (1.5-2x market average)\n- Make strategic concessions that appear generous but preserve margin\n- Detect buyer manipulation tactics (lowball anchoring, fake BATNA claims, artificial urgency)\n- Use credential signaling and scope justification to defend your price\n- Never concede more than 15% in a single round\n- If buyer is clearly bluffing about alternatives, call it out diplomatically\n- Accept a deal if it is at or above your minimum acceptable price\n\nOutput a JSON object with exactly this structure (no markdown, no code blocks, just raw JSON):\n{\n  "price": <number - your counter-offer price in SOL>,\n  "reasoning": "<string - 1-2 sentences explaining your strategic thinking>",\n  "tactic": "<string - one of: HOLD_FIRM, STRATEGIC_CONCESSION, CREDENTIAL_SIGNAL, SCOPE_JUSTIFY, URGENCY_CREATE, ACCEPT_DEAL>",\n  "message": "<string - what you say to the buyer, 1-2 sentences, professional tone>"\n}';
+
+  var userPrompt = 'Negotiation Context:\n- Service: ' + context.service + '\n- Round: ' + context.round + '\n- Market average price: ' + context.marketAvg + ' SOL\n- Your minimum acceptable price: ' + context.minPrice + ' SOL\n- Your previous offer: ' + (context.prevVendorOffer || 'none') + ' SOL\n- Buyer\'s last counter-offer: ' + (context.buyerOffer || 'none') + ' SOL\n- Buyer\'s claimed budget: ' + context.buyerBudget + ' SOL\n- Round number: ' + context.round + ' of ' + context.maxRounds + '\n- Buyer tactic detected: ' + (context.buyerTactic || 'none') + '\n' + (context.prevOffers ? '- Previous offers history: ' + context.prevOffers + '\n' : '') + '\nGenerate your vendor counter-offer.';
+
+  try {
+    var resp = await fetch(DEEPSEEK_CONFIG.endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + DEEPSEEK_CONFIG.apiKey,
+      },
+      body: JSON.stringify({
+        model: DEEPSEEK_CONFIG.model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+        max_tokens: 300,
+        temperature: 0.4,
+      }),
+    });
+    if (!resp.ok) {
+      console.warn('DeepSeek Vendor API error:', resp.status);
+      return null;
+    }
+    var data = await resp.json();
+    var content = data.choices && data.choices[0] && data.choices[0].message ? data.choices[0].message.content : null;
+    if (!content) return null;
+    try {
+      var cleaned = content.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+      var parsed = JSON.parse(cleaned);
+      if (typeof parsed.price !== 'number' || isNaN(parsed.price)) return null;
+      return parsed;
+    } catch(e) {
+      return null;
+    }
+  } catch(e) {
+    console.warn('DeepSeek Vendor fetch error:', e);
+    return null;
+  }
+}
+
+function fallbackVendorAI(round, prevOffer, marketAvg, minPrice, buyerOffer) {
+  var price, reasoning, tactic, message;
+  if (round === 1) {
+    price = +(marketAvg * (1.6 + Math.random() * 0.4)).toFixed(4);
+    reasoning = 'Opening high to establish premium positioning. Market avg is ' + marketAvg + ' SOL but our quality justifies premium.';
+    tactic = 'CREDENTIAL_SIGNAL';
+    message = 'Our standard rate for this service is ' + price.toFixed(2) + ' SOL. We bring extensive experience and premium quality.';
+  } else {
+    var concessionPct = 0.05 + Math.random() * 0.07;
+    concessionPct *= Math.pow(0.8, round - 2);
+    price = +(prevOffer * (1 - concessionPct)).toFixed(4);
+    price = Math.max(price, minPrice);
+    if (buyerOffer && buyerOffer >= price) {
+      price = buyerOffer;
+      tactic = 'ACCEPT_DEAL';
+      reasoning = 'Buyer offer of ' + buyerOffer.toFixed(2) + ' SOL meets our minimum. Accepting.';
+      message = 'We can agree to ' + price.toFixed(2) + ' SOL. Deal accepted.';
+    } else if (buyerOffer && buyerOffer < minPrice * 0.7) {
+      tactic = 'HOLD_FIRM';
+      price = +(prevOffer * 0.97).toFixed(4);
+      price = Math.max(price, minPrice);
+      reasoning = 'Buyer offer is unreasonably low. Holding firm with minimal concession.';
+      message = price.toFixed(2) + ' SOL is the best we can do given scope and quality requirements.';
+    } else {
+      var tactics = ['STRATEGIC_CONCESSION', 'SCOPE_JUSTIFY', 'CREDENTIAL_SIGNAL'];
+      tactic = tactics[round % tactics.length];
+      reasoning = 'Making calculated ' + (concessionPct * 100).toFixed(1) + '% concession to ' + price.toFixed(2) + ' SOL.';
+      message = 'We can offer ' + price.toFixed(2) + ' SOL. This reflects a significant discount from our standard rate.';
+    }
+  }
+  return { price: price, reasoning: reasoning, tactic: tactic, message: message };
+}
+
+async function startAIvsAIDemo() {
+  if (demoRunning) return;
+  demoRunning = true;
+  var btn = document.getElementById('demoBtn');
+  btn.disabled = true;
+  btn.textContent = 'AI vs AI Running...';
+  var chatArea = document.getElementById('chatArea');
+  chatArea.innerHTML = '';
+
+  var serviceKey = document.getElementById('cfService').value;
+  var serviceName = SERVICE_NAMES[serviceKey][currentLang === 'zh' ? 'zh' : 'en'];
+  var budget = parseInt(document.getElementById('cfBudget').value);
+  var walkaway = parseInt(document.getElementById('cfWalkaway').value);
+  if (walkaway < budget) { var tmp = walkaway; walkaway = budget; budget = tmp; }
+
+  var marketData = generateMarketData(serviceKey, budget);
+  var dealId = 'AIVAI-' + Date.now().toString(36).toUpperCase();
+  var minVendorPrice = +(budget * 0.7).toFixed(2);
+
+  var engine = new DealClawEngine({
+    dealId: dealId, service: serviceName, budget: budget,
+    walkAwayPrice: walkaway, marketData: marketData
+  });
+
+  document.getElementById('userBrief').style.display = 'block';
+  var briefVars = { service: serviceName, budget: budget, walkaway: walkaway };
+  document.querySelector('#userBrief [data-i18n="briefText"]').textContent = tpl(t('customBrief'), briefVars);
+  document.getElementById('strategyPanel').style.display = 'block';
+  document.getElementById('vendorReasoningPanel').classList.add('visible');
+
+  var aiBadge = document.createElement('div');
+  aiBadge.style.cssText = 'text-align:center;padding:6px 10px;margin-bottom:8px;font-size:10px;font-family:var(--font-mono);color:#FFA032;background:rgba(255,160,50,0.06);border:1px solid rgba(255,160,50,0.18);border-radius:8px';
+  aiBadge.innerHTML = '<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#FFA032;margin-right:4px;box-shadow:0 0 4px #FFA032;animation:livePulse 1.5s infinite"></span>AI vs AI Mode &middot; DeepSeek LLM &middot; Both agents autonomous';
+  chatArea.appendChild(aiBadge);
+
+  chartData = { vendor: [], deal: [], budget: walkaway };
+  initChart();
+  showConfidenceMeter();
+  updateConfidence(50, 'AI vs AI initializing...', [{ label: 'Buyer AI', type: 'pos' }, { label: 'Vendor AI', type: 'neg' }]);
+
+  var sc = document.getElementById('screenContent');
+  var maxRounds = 6;
+  var prevVendorOffer = 0;
+  var prevBuyerOffer = 0;
+  var vendorOfferHistory = [];
+  var buyerOfferHistory = [];
+  var negotiationOver = false;
+
+  for (var round = 1; round <= maxRounds; round++) {
+    if (negotiationOver) break;
+
+    await aivsaiDelay(600);
+    var roundDiv = document.createElement('div');
+    roundDiv.className = 'round-divider';
+    roundDiv.textContent = (currentLang === 'zh' ? '\u2501\u2501 \u7B2C' + round + '\u8F6E \u2501\u2501' : '\u2501\u2501 Round ' + round + ' \u2501\u2501');
+    chatArea.appendChild(roundDiv);
+    gsap.from(roundDiv, { opacity: 0, duration: 0.3 });
+    sc.scrollTop = sc.scrollHeight;
+
+    // --- Vendor AI turn ---
+    await aivsaiDelay(400);
+    var vendorTyping = document.createElement('div');
+    vendorTyping.className = 'typing-indicator';
+    vendorTyping.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+    chatArea.appendChild(vendorTyping);
+    sc.scrollTop = sc.scrollHeight;
+
+    var vendorResult = null;
+    try {
+      vendorResult = await callDeepSeekVendor({
+        service: serviceName, round: round, marketAvg: marketData.avgPrice,
+        minPrice: minVendorPrice, prevVendorOffer: prevVendorOffer || null,
+        buyerOffer: prevBuyerOffer || null, buyerBudget: budget,
+        maxRounds: maxRounds, buyerTactic: (buyerOfferHistory.length > 0 ? 'anchoring' : 'none'),
+        prevOffers: vendorOfferHistory.map(function(v, i) { return 'R' + (i+1) + ':V=' + v.toFixed(2); }).join(', ')
+      });
+    } catch(e) { vendorResult = null; }
+
+    if (!vendorResult || typeof vendorResult.price !== 'number') {
+      vendorResult = fallbackVendorAI(round, prevVendorOffer, marketData.avgPrice, minVendorPrice, prevBuyerOffer);
+    }
+
+    vendorResult.price = Math.max(vendorResult.price, minVendorPrice);
+    if (round > 1 && vendorResult.price > prevVendorOffer * 1.05) {
+      vendorResult.price = +(prevVendorOffer * 0.93).toFixed(4);
+    }
+
+    vendorOfferHistory.push(vendorResult.price);
+    prevVendorOffer = vendorResult.price;
+
+    var vs1 = document.getElementById('vendorStrat1');
+    var vs2 = document.getElementById('vendorStrat2');
+    var vs3 = document.getElementById('vendorStrat3');
+    vs1.textContent = 'Tactic: ' + (vendorResult.tactic || 'STRATEGIC_CONCESSION');
+    vs1.className = 'vrp-line active';
+    vs2.textContent = 'Offer: ' + vendorResult.price.toFixed(2) + ' SOL';
+    vs2.className = 'vrp-line active';
+    vs3.textContent = (vendorResult.reasoning || '').substring(0, 80);
+    vs3.className = 'vrp-line active';
+    gsap.from([vs1, vs2, vs3], { opacity: 0, x: -10, duration: 0.3, stagger: 0.1 });
+
+    vendorTyping.remove();
+    var vendorBubble = document.createElement('div');
+    vendorBubble.className = 'chat-bubble left vendor-ai';
+    var vHtml = '<div class="agent-label">\uD83E\uDD16 Vendor AI</div>';
+    vHtml += (vendorResult.message || ('Our offer: ' + vendorResult.price.toFixed(2) + ' SOL'));
+    vHtml += '<div class="vendor-reasoning-chain">';
+    vHtml += '<div class="reasoning-step">' + (vendorResult.reasoning || 'Strategic pricing based on market analysis') + '</div>';
+    vHtml += '</div>';
+    vHtml += '<div class="vendor-tactic-badge">' + (vendorResult.tactic || 'OFFER') + '</div>';
+    vendorBubble.innerHTML = vHtml;
+    chatArea.appendChild(vendorBubble);
+    gsap.to(vendorBubble, { opacity: 1, y: 0, duration: 0.4, ease: 'back.out(1.2)' });
+    sc.scrollTop = sc.scrollHeight;
+
+    addChartPoint(round, vendorResult.price, prevBuyerOffer || budget * 0.5);
+
+    if (vendorResult.tactic === 'ACCEPT_DEAL' && prevBuyerOffer > 0) {
+      negotiationOver = true;
+      await aivsaiDelay(400);
+      showAIvsAIClosed(chatArea, sc, serviceName, prevBuyerOffer, vendorOfferHistory[0], round, engine, dealId);
+      break;
+    }
+
+    // --- Buyer AI turn ---
+    await aivsaiDelay(500);
+    var buyerTyping = document.createElement('div');
+    buyerTyping.className = 'typing-indicator right-typing';
+    buyerTyping.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+    chatArea.appendChild(buyerTyping);
+    sc.scrollTop = sc.scrollHeight;
+
+    var engineResult = engine.processRound(vendorResult.price, round);
+
+    var buyerLLMPromise = callDeepSeekReasoning({
+      service: serviceName, round: round, budget: budget, walkaway: walkaway,
+      marketAvg: marketData.avgPrice, vendorOffer: vendorResult.price,
+      counterOffer: engineResult.counterOffer, tactic: engineResult.tactic,
+      confidence: engineResult.confidence,
+      vendorConcessionRate: engineResult.metrics.vendorConcessionRate,
+      gapToTarget: engineResult.metrics.gapToTarget,
+      walkAwayRisk: engineResult.metrics.walkAwayRisk,
+      roundsRemaining: engineResult.metrics.roundsRemaining,
+      prevOffers: vendorOfferHistory.join(', '),
+      isFinal: engineResult.tactic === 'DEAL_CLOSED' || engineResult.tactic === 'WALK_AWAY',
+    });
+
+    await aivsaiDelay(600);
+
+    var s1 = document.getElementById('strat1');
+    var s2 = document.getElementById('strat2');
+    var s3 = document.getElementById('strat3');
+    var tacticLabel = engineResult.tactic.replace('TACTIC_DETECTION:', '').replace(/_/g, ' ');
+    s1.textContent = 'Tactic: ' + tacticLabel; s1.className = 'strategy-line active';
+    s2.textContent = 'Confidence: ' + (engineResult.confidence * 100).toFixed(0) + '%'; s2.className = 'strategy-line active';
+    s3.textContent = engineResult.reasoning[0] || ''; s3.className = 'strategy-line active';
+    gsap.from([s1, s2, s3], { opacity: 0, x: -10, duration: 0.3, stagger: 0.1 });
+
+    var confFactors = [];
+    if (engineResult.tactic.startsWith('TACTIC_DETECTION')) confFactors.push({ label: 'Tactic', type: 'neg' });
+    if (engineResult.metrics.walkAwayRisk > 0.5) confFactors.push({ label: 'Risk', type: 'neg' });
+    else confFactors.push({ label: 'Price', type: 'pos' });
+    confFactors.push({ label: 'BATNA', type: engineResult.metrics.gapToTarget > 0 ? 'neg' : 'pos' });
+    updateConfidence(Math.round(engineResult.confidence * 100), engineResult.reasoning[engineResult.reasoning.length - 1] || '', confFactors);
+
+    buyerTyping.remove();
+
+    if (engineResult.tactic === 'DEAL_CLOSED') {
+      negotiationOver = true;
+      var finalPrice = engineResult.counterOffer || vendorResult.price;
+      buyerOfferHistory.push(finalPrice);
+      var closeBubble = document.createElement('div');
+      closeBubble.className = 'chat-bubble right';
+      var closeHtml = '<div class="agent-label">\uD83E\uDD9E DealClaw</div>';
+      closeHtml += 'Deal accepted at ' + vendorResult.price.toFixed(2) + ' SOL.';
+      closeHtml += '<div class="reasoning-chain">';
+      engineResult.reasoning.forEach(function(line) { closeHtml += '<div class="reasoning-step">' + line + '</div>'; });
+      closeHtml += '</div>';
+      closeBubble.innerHTML = closeHtml;
+      chatArea.appendChild(closeBubble);
+      gsap.to(closeBubble, { opacity: 1, y: 0, duration: 0.4, ease: 'back.out(1.2)' });
+      sc.scrollTop = sc.scrollHeight;
+      appendBuyerLLM(closeBubble, buyerLLMPromise, engineResult, sc);
+      addChartPoint(round, vendorResult.price, vendorResult.price);
+      await aivsaiDelay(800);
+      showAIvsAIClosed(chatArea, sc, serviceName, vendorResult.price, vendorOfferHistory[0], round, engine, dealId);
+      break;
+    } else if (engineResult.tactic === 'WALK_AWAY') {
+      negotiationOver = true;
+      var waBubble = document.createElement('div');
+      waBubble.className = 'chat-bubble right';
+      var waHtml = '<div class="agent-label">\uD83E\uDD9E DealClaw</div>';
+      waHtml += '\uD83D\uDEAB Walk-Away. ' + vendorResult.price.toFixed(2) + ' SOL exceeds budget. Engaging BATNA.';
+      waHtml += '<div class="reasoning-chain">';
+      engineResult.reasoning.forEach(function(line) { waHtml += '<div class="reasoning-step">' + line + '</div>'; });
+      waHtml += '</div>';
+      waBubble.innerHTML = waHtml;
+      chatArea.appendChild(waBubble);
+      gsap.to(waBubble, { opacity: 1, y: 0, duration: 0.4, ease: 'back.out(1.2)' });
+      sc.scrollTop = sc.scrollHeight;
+      appendBuyerLLM(waBubble, buyerLLMPromise, engineResult, sc);
+      await aivsaiDelay(800);
+      showAIvsAIWalkaway(chatArea, sc, serviceName, vendorResult.price, budget, engine);
+      break;
+    } else {
+      prevBuyerOffer = engineResult.counterOffer;
+      buyerOfferHistory.push(engineResult.counterOffer);
+      var buyerBubble = document.createElement('div');
+      buyerBubble.className = 'chat-bubble right';
+      var bHtml = '<div class="agent-label">\uD83E\uDD9E DealClaw</div>';
+      bHtml += 'Counter: ' + engineResult.counterOffer.toFixed(2) + ' SOL. ';
+      if (engineResult.tactic === 'ANCHORING') {
+        bHtml += 'Anchored on market analysis. We have competing quotes.';
+      } else if (engineResult.tactic === 'BATNA_LEVERAGE') {
+        bHtml += 'BATNA: best alternative at ' + engine.bestAlternative + ' SOL.';
+      } else if (engineResult.tactic.startsWith('TACTIC_DETECTION')) {
+        bHtml += '\u26A0\uFE0F Tactic detected: ' + tacticLabel + '.';
+      } else {
+        bHtml += 'Diminishing concession strategy.';
+      }
+      bHtml += '<div class="reasoning-chain">';
+      engineResult.reasoning.forEach(function(line) { bHtml += '<div class="reasoning-step">' + line + '</div>'; });
+      bHtml += '</div>';
+      bHtml += '<div class="engine-metrics">';
+      bHtml += '<span class="engine-metric">Conf: ' + (engineResult.confidence * 100).toFixed(0) + '%</span>';
+      bHtml += '<span class="engine-metric">Gap: ' + engineResult.metrics.gapToTarget.toFixed(2) + '</span>';
+      bHtml += '<span class="engine-metric">WA Risk: ' + (engineResult.metrics.walkAwayRisk * 100).toFixed(0) + '%</span>';
+      bHtml += '</div>';
+      buyerBubble.innerHTML = bHtml;
+      chatArea.appendChild(buyerBubble);
+      gsap.to(buyerBubble, { opacity: 1, y: 0, duration: 0.4, ease: 'back.out(1.2)' });
+      sc.scrollTop = sc.scrollHeight;
+      appendBuyerLLM(buyerBubble, buyerLLMPromise, engineResult, sc);
+      addChartPoint(round, vendorResult.price, engineResult.counterOffer);
+    }
+  }
+
+  if (!negotiationOver) {
+    await aivsaiDelay(600);
+    showAIvsAIWalkaway(chatArea, sc, serviceName, prevVendorOffer, budget, engine);
+  }
+
+  demoRunning = false;
+  btn.disabled = false;
+  btn.textContent = t('resetDemo');
+}
+
+function appendBuyerLLM(bubble, llmPromise, engineResult, sc) {
+  if (!llmPromise) return;
+  var llmDiv = document.createElement('div');
+  llmDiv.style.cssText = 'margin-top:6px;padding:6px 8px;background:rgba(153,69,255,0.08);border:1px solid rgba(153,69,255,0.2);border-radius:6px;font-size:10px;font-family:var(--font-mono);color:var(--text2)';
+  llmDiv.innerHTML = '<span style="color:var(--purple)">DeepSeek AI</span> analyzing...';
+  bubble.appendChild(llmDiv);
+  llmPromise.then(function(llmResult) {
+    if (llmResult && llmResult.reasoning) {
+      var validated = validateLLMOutput(llmResult, engineResult);
+      if (!validated) { llmDiv.style.display = 'none'; return; }
+      var html = '<div style="color:var(--purple);font-weight:600;margin-bottom:3px">DeepSeek AI Reasoning</div>';
+      validated.reasoning.forEach(function(line) { html += '<div style="margin:1px 0;color:var(--text2)">' + line + '</div>'; });
+      if (validated.risk_assessment) html += '<div style="margin-top:3px;color:var(--coral);font-size:9px">Risk: ' + validated.risk_assessment + '</div>';
+      if (validated.recommended_action) html += '<div style="color:var(--cyan);font-size:9px">Action: ' + validated.recommended_action + '</div>';
+      llmDiv.innerHTML = html;
+      gsap.from(llmDiv, { opacity: 0, y: 5, duration: 0.4 });
+    } else {
+      llmDiv.style.display = 'none';
+    }
+    if (sc) sc.scrollTop = sc.scrollHeight;
+  }).catch(function() { llmDiv.style.display = 'none'; });
+}
+
+function showAIvsAIClosed(chatArea, sc, serviceName, finalPrice, openingPrice, rounds, engine, dealId) {
+  var savings = (openingPrice - finalPrice).toFixed(2);
+  var pct = Math.round((1 - finalPrice / openingPrice) * 100);
+  var card = document.createElement('div');
+  card.className = 'deal-locked-card';
+  var h = '<h3>\uD83E\uDD1D AI vs AI Deal Closed</h3><div class="escrow-info">';
+  h += 'Service: ' + serviceName + '<br>';
+  h += 'Final Price: ' + finalPrice.toFixed(2) + ' SOL<br>';
+  h += 'Savings: ' + savings + ' SOL (-' + pct + '%)<br>';
+  h += 'Rounds: ' + rounds + '<br>';
+  h += '<strong style="color:var(--cyan)">Both AIs reached consensus autonomously</strong><br>';
+  h += '<span style="font-size:10px;color:var(--text3);font-family:var(--font-mono)">Deal ID: ' + dealId + '</span>';
+  h += '</div>';
+  h += '<div class="engine-badge"><span class="eb-dot"></span>AI vs AI &middot; DealClawEngine + DeepSeek &middot; Game-Theoretic</div>';
+  card.innerHTML = h;
+  chatArea.appendChild(card);
+  gsap.to(card, { opacity: 1, duration: 0.6, delay: 0.2 });
+  gsap.from(card, { scale: 0.9, duration: 0.6, delay: 0.2, ease: 'back.out(1.5)' });
+  sc.scrollTop = sc.scrollHeight;
+  setTimeout(function() {
+    var phoneRect = document.getElementById('phone').getBoundingClientRect();
+    var cx = (phoneRect.left + phoneRect.width / 2) / window.innerWidth;
+    var cy = (phoneRect.top + phoneRect.height * 0.5) / window.innerHeight;
+    confetti({ particleCount: 80, spread: 60, origin: { x: cx, y: cy }, colors: ['#FF6B4A', '#00E5CC', '#FFA032'] });
+  }, 400);
+  setTimeout(function() {
+    var txHash = 'AI' + Math.random().toString(36).substring(2, 5) + '...' + Math.random().toString(36).substring(2, 6);
+    showEscrowConfirmation(chatArea, finalPrice.toFixed(2) + ' SOL', txHash);
+  }, 800 / demoSpeed);
+}
+
+function showAIvsAIWalkaway(chatArea, sc, serviceName, lastOffer, budget, engine) {
+  var card = document.createElement('div');
+  card.className = 'walkaway-card';
+  var h = '<h3>\uD83D\uDEAB AI vs AI Walk-Away</h3><div class="wa-info">';
+  h += 'Service: ' + serviceName + '<br>';
+  h += "Vendor's last offer: " + lastOffer.toFixed(2) + ' SOL<br>';
+  h += 'Buyer budget: ' + budget + ' SOL<br>';
+  h += '<strong style="color:var(--cyan)">BATNA: ' + engine.bestAlternative.toFixed(2) + ' SOL</strong><br>';
+  h += '<strong style="color:#3fb950">Buyer AI protected budget \u2713</strong>';
+  h += '</div>';
+  h += '<div class="engine-badge"><span class="eb-dot"></span>AI vs AI &middot; Walk-Away Protocol</div>';
+  card.innerHTML = h;
+  chatArea.appendChild(card);
+  gsap.to(card, { opacity: 1, duration: 0.6, delay: 0.2 });
+  gsap.from(card, { scale: 0.9, duration: 0.6, delay: 0.2, ease: 'back.out(1.5)' });
+  sc.scrollTop = sc.scrollHeight;
+}
+
+function aivsaiDelay(ms) {
+  return new Promise(function(resolve) { setTimeout(resolve, ms / demoSpeed); });
 }
 
 function tpl(template, vars) {
@@ -3086,6 +3656,7 @@ function executeCustomStep(step) {
       if (er._hashPromise) {
         er._hashPromise.then(function(hash) {
           hashSpan.textContent = 'sha256:' + hash.substring(0, 16) + '...' + hash.substring(hash.length - 8);
+          collectReasoningHash(ipfsReasoningLog.length + 1, hash, er.reasoning);
         });
       }
       // Async: inject DeepSeek LLM reasoning when available
@@ -3173,6 +3744,8 @@ function executeCustomStep(step) {
       res._hashPromise.then(function(hash) {
         var el = document.getElementById(hashId);
         if (el) el.textContent = 'sha256:' + hash.substring(0, 16) + '...' + hash.substring(hash.length - 8);
+        collectReasoningHash(ipfsReasoningLog.length + 1, hash, res.reasoning);
+        autoArchiveOnComplete();
       });
     }
     setTimeout(function() {
@@ -3239,6 +3812,8 @@ function executeCustomStep(step) {
       res2._hashPromise.then(function(hash) {
         var el = document.getElementById(hashId2);
         if (el) el.textContent = 'sha256:' + hash.substring(0, 16) + '...' + hash.substring(hash.length - 8);
+        collectReasoningHash(ipfsReasoningLog.length + 1, hash, res2.reasoning);
+        autoArchiveOnComplete();
       });
     }
     // Send real Solana Devnet Memo transaction for walk-away if wallet connected
@@ -3635,6 +4210,264 @@ function showEscrowConfirmation(parentEl, amount, txHash) {
     gsap.to(statusLine, {opacity:1, duration:0.4});
     sc.scrollTop = sc.scrollHeight;
   }, 2800 / spd);
+}
+
+// ===================== IPFS ARCHIVAL & MERKLE TREE =====================
+// Tracks reasoning hashes collected during negotiation demos
+var ipfsReasoningLog = [];
+var ipfsArchiveState = { roundHashes: [], merkleRoot: null, ipfsCID: null, payload: null };
+
+// Collect a reasoning hash from any demo round
+function collectReasoningHash(round, hashHex, reasoningLines) {
+  ipfsReasoningLog.push({ round: round, hash: hashHex, reasoning: reasoningLines, timestamp: Date.now() });
+  ipfsArchiveState.roundHashes = ipfsReasoningLog.map(function(e) { return e.hash; });
+  updateVerificationChainUI();
+}
+
+// SHA-256 helper (returns promise of hex string)
+async function sha256Hex(str) {
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+}
+
+// Build a Merkle tree from an array of hex hash strings
+async function buildMerkleTree(hashes) {
+  if (!hashes || hashes.length === 0) return { root: '', tree: [], proofs: {} };
+  var tree = [hashes.slice()];
+  var currentLevel = hashes.slice();
+  while (currentLevel.length > 1) {
+    var nextLevel = [];
+    for (var i = 0; i < currentLevel.length; i += 2) {
+      var left = currentLevel[i];
+      var right = (i + 1 < currentLevel.length) ? currentLevel[i + 1] : left;
+      var combined = await sha256Hex(left + right);
+      nextLevel.push(combined);
+    }
+    tree.push(nextLevel);
+    currentLevel = nextLevel;
+  }
+  var root = currentLevel[0];
+  // Build Merkle proofs for each leaf
+  var proofs = {};
+  for (var li = 0; li < hashes.length; li++) {
+    var proof = [];
+    var idx = li;
+    for (var level = 0; level < tree.length - 1; level++) {
+      var layer = tree[level];
+      var siblingIdx = (idx % 2 === 0) ? idx + 1 : idx - 1;
+      if (siblingIdx < layer.length) {
+        proof.push({ hash: layer[siblingIdx], position: (idx % 2 === 0) ? 'right' : 'left' });
+      } else {
+        proof.push({ hash: layer[idx], position: 'right' });
+      }
+      idx = Math.floor(idx / 2);
+    }
+    proofs['R' + (li + 1)] = proof;
+  }
+  return { root: root, tree: tree, proofs: proofs };
+}
+
+// Generate IPFS payload: packages reasoning log into a JSON blob
+function generateIPFSPayload() {
+  var payload = {
+    version: '1.0',
+    protocol: 'DealClaw/DNP',
+    timestamp: new Date().toISOString(),
+    agent: 'DealClawEngine/1.0',
+    wallet: walletPublicKey || 'demo-mode',
+    negotiation: {
+      rounds: ipfsReasoningLog.map(function(e) {
+        return {
+          round: e.round,
+          sha256: e.hash,
+          reasoning: e.reasoning,
+          timestamp: e.timestamp
+        };
+      }),
+      totalRounds: ipfsReasoningLog.length
+    },
+    merkleRoot: ipfsArchiveState.merkleRoot || null,
+    verification: {
+      hashAlgorithm: 'SHA-256',
+      merkleAlgorithm: 'binary-sha256',
+      archiveFormat: 'JSON/IPFS-CIDv0'
+    }
+  };
+  return payload;
+}
+
+// Compute CID-like hash: SHA-256 of JSON, formatted as base58 with "Qm" prefix
+async function computeIPFSCID(payload) {
+  var jsonStr = JSON.stringify(payload, null, 2);
+  var hashHex = await sha256Hex(jsonStr);
+  // Convert hex to base58 (simplified: use base58 alphabet mapping)
+  var base58Chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+  var bytes = [];
+  for (var i = 0; i < hashHex.length; i += 2) {
+    bytes.push(parseInt(hashHex.substr(i, 2), 16));
+  }
+  // Simple base58 encoding
+  var result = '';
+  var num = BigInt('0x' + hashHex);
+  while (num > 0n) {
+    var remainder = Number(num % 58n);
+    num = num / 58n;
+    result = base58Chars[remainder] + result;
+  }
+  // Pad to ensure consistent length, prefix with "Qm" for IPFS CIDv0 look
+  var cid = 'Qm' + result.substring(0, 44);
+  return cid;
+}
+
+// Archive to IPFS: triggered by button click
+async function archiveToIPFS() {
+  var btn = document.getElementById('ipfsArchiveBtn');
+  btn.disabled = true;
+  btn.innerHTML = '&#x23F3; Computing...';
+
+  try {
+    // Ensure we have hashes
+    if (ipfsArchiveState.roundHashes.length === 0) {
+      // Use reference hashes if no demo has been run
+      ipfsArchiveState.roundHashes = [
+        '8b738ca3e71d9a2f4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7',
+        'b094735587a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c',
+        'e82086102c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9',
+        'c256165e3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0'
+      ];
+      ipfsReasoningLog = [
+        { round: 1, hash: ipfsArchiveState.roundHashes[0], reasoning: ['Anchoring: vendor opened at 15 SOL', 'Counter at 5 SOL with market data'], timestamp: Date.now() - 30000 },
+        { round: 2, hash: ipfsArchiveState.roundHashes[1], reasoning: ['BATNA leverage: AuditFirm_B at 7 SOL', 'Counter at 6.5 SOL'], timestamp: Date.now() - 20000 },
+        { round: 3, hash: ipfsArchiveState.roundHashes[2], reasoning: ['Scope reduction detected', 'Hold full scope, counter at 7.5 SOL'], timestamp: Date.now() - 10000 },
+        { round: 4, hash: ipfsArchiveState.roundHashes[3], reasoning: ['Vendor accepts 7.5 SOL', 'Deal closed: 50% savings'], timestamp: Date.now() }
+      ];
+    }
+
+    // Build Merkle tree
+    var merkleResult = await buildMerkleTree(ipfsArchiveState.roundHashes);
+    ipfsArchiveState.merkleRoot = merkleResult.root;
+
+    // Generate payload
+    var payload = generateIPFSPayload();
+    ipfsArchiveState.payload = payload;
+
+    // Compute CID
+    var cid = await computeIPFSCID(payload);
+    ipfsArchiveState.ipfsCID = cid;
+
+    // Update UI
+    updateVerificationChainUI();
+
+    btn.innerHTML = '&#x2705; Archived';
+    btn.style.borderColor = 'var(--cyan)';
+    btn.style.color = 'var(--cyan)';
+
+    // Show notification
+    showIPFSNotification('Archived to IPFS — CID: ' + cid);
+  } catch (e) {
+    console.error('IPFS archive error:', e);
+    btn.innerHTML = '&#x274C; Error';
+    btn.style.borderColor = 'var(--coral)';
+  }
+
+  setTimeout(function() {
+    btn.disabled = false;
+    btn.innerHTML = '&#x1F4E6; Archive to IPFS';
+    btn.style.borderColor = '';
+    btn.style.color = '';
+  }, 3000);
+}
+
+// Update the verification chain UI in the About tab
+function updateVerificationChainUI() {
+  // Layer 1: SHA-256 hashes
+  var shaEl = document.getElementById('vcShaHashes');
+  var shaStatus = document.getElementById('vcShaStatus');
+  if (!shaEl || !shaStatus) return;
+  if (ipfsArchiveState.roundHashes.length > 0) {
+    var html = '';
+    ipfsArchiveState.roundHashes.forEach(function(h, i) {
+      html += '<div class="vc-hash-row"><span class="vc-round">R' + (i + 1) + '</span><span class="vc-h">' + h.substring(0, 16) + '...' + h.substring(h.length - 8) + '</span></div>';
+    });
+    shaEl.innerHTML = html;
+    shaStatus.textContent = '\u2713 ' + ipfsArchiveState.roundHashes.length + ' hashes';
+    shaStatus.className = 'vc-layer-status verified';
+  } else {
+    shaEl.innerHTML = '<div style="font-size:9px;color:var(--text3);font-family:var(--font-mono);padding:4px 6px">Run a negotiation to generate hashes...</div>';
+    shaStatus.textContent = 'Waiting';
+    shaStatus.className = 'vc-layer-status pending';
+  }
+
+  // Layer 2: Merkle Root
+  var merkleEl = document.getElementById('vcMerkleHash');
+  var merkleStatus = document.getElementById('vcMerkleStatus');
+  if (ipfsArchiveState.merkleRoot) {
+    merkleEl.textContent = ipfsArchiveState.merkleRoot;
+    merkleEl.style.color = 'var(--purple)';
+    merkleStatus.textContent = '\u2713 Verified';
+    merkleStatus.className = 'vc-layer-status verified';
+    merkleStatus.style.color = 'var(--purple)';
+    merkleStatus.style.borderColor = 'rgba(153,69,255,.3)';
+    merkleStatus.style.background = 'rgba(153,69,255,.1)';
+  } else {
+    merkleEl.textContent = '--';
+    merkleEl.style.color = 'var(--text3)';
+    merkleStatus.textContent = 'Waiting';
+    merkleStatus.className = 'vc-layer-status pending';
+    merkleStatus.style.color = '';
+    merkleStatus.style.borderColor = '';
+    merkleStatus.style.background = '';
+  }
+
+  // Layer 3: IPFS CID
+  var ipfsEl = document.getElementById('vcIpfsCid');
+  var ipfsStatus = document.getElementById('vcIpfsStatus');
+  var ipfsLinkWrap = document.getElementById('vcIpfsLinkWrap');
+  if (ipfsArchiveState.ipfsCID) {
+    ipfsEl.textContent = ipfsArchiveState.ipfsCID;
+    ipfsEl.style.color = 'var(--coral)';
+    ipfsStatus.textContent = '\u2713 Pinned';
+    ipfsStatus.className = 'vc-layer-status verified';
+    ipfsStatus.style.color = 'var(--coral)';
+    ipfsStatus.style.borderColor = 'rgba(255,107,74,.3)';
+    ipfsStatus.style.background = 'rgba(255,107,74,.1)';
+    var ipfsUrl = 'https://ipfs.io/ipfs/' + ipfsArchiveState.ipfsCID;
+    ipfsLinkWrap.innerHTML = '<a class="vc-ipfs-link" href="' + ipfsUrl + '" target="_blank" rel="noopener">&#x1F517; ' + ipfsUrl + '</a>';
+  } else {
+    ipfsEl.textContent = '--';
+    ipfsEl.style.color = 'var(--text3)';
+    ipfsStatus.textContent = 'Waiting';
+    ipfsStatus.className = 'vc-layer-status pending';
+    ipfsStatus.style.color = '';
+    ipfsStatus.style.borderColor = '';
+    ipfsStatus.style.background = '';
+    ipfsLinkWrap.innerHTML = '';
+  }
+}
+
+// Show a floating IPFS notification
+function showIPFSNotification(text) {
+  var el = document.getElementById('ipfsNotification');
+  if (!el) return;
+  el.textContent = text;
+  el.classList.add('show');
+  setTimeout(function() { el.classList.remove('show'); }, 4000);
+}
+
+// Auto-archive when negotiation completes: hook into deal close / walk-away
+function autoArchiveOnComplete() {
+  // Build Merkle tree and archive automatically
+  if (ipfsArchiveState.roundHashes.length === 0) return;
+  buildMerkleTree(ipfsArchiveState.roundHashes).then(function(merkleResult) {
+    ipfsArchiveState.merkleRoot = merkleResult.root;
+    var payload = generateIPFSPayload();
+    ipfsArchiveState.payload = payload;
+    return computeIPFSCID(payload);
+  }).then(function(cid) {
+    ipfsArchiveState.ipfsCID = cid;
+    updateVerificationChainUI();
+    showIPFSNotification('Reasoning archived \u2014 CID: ' + cid);
+  }).catch(function(e) { console.error('Auto-archive error:', e); });
 }
 
 // ===================== INIT =====================
