@@ -397,6 +397,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 .feed-item .fi-meta .fi-tag.green{border-color:rgba(0,229,204,.2);color:var(--cyan)}
 .feed-item .fi-meta .fi-tag.red{border-color:rgba(248,81,73,.2);color:#f85149}
 .feed-item .fi-meta .fi-tag.coral{border-color:rgba(255,107,74,.2);color:var(--coral)}
+
+/* ===== ENGINE REASONING HASH ===== */
+.reasoning-hash{font-family:var(--font-mono);font-size:8px;color:var(--text3);margin-top:4px;word-break:break-all;line-height:1.3;opacity:.7}
+.reasoning-chain{margin-top:6px;padding:6px 8px;background:rgba(0,0,0,.2);border-radius:6px;border-left:2px solid var(--purple)}
+.reasoning-step{font-size:9px;color:var(--text2);font-family:var(--font-mono);line-height:1.5;padding:1px 0}
+.reasoning-step::before{content:'\25B8 ';color:var(--purple)}
+.engine-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:9px;font-family:var(--font-mono);font-weight:600;background:rgba(153,69,255,.1);border:1px solid rgba(153,69,255,.2);color:var(--purple);margin-top:8px}
+.engine-badge .eb-dot{width:5px;height:5px;border-radius:50%;background:var(--purple);box-shadow:0 0 4px var(--purple);animation:livePulse 1.5s infinite}
+.tactic-alert{margin-top:6px;padding:6px 8px;background:rgba(255,107,74,.08);border:1px solid rgba(255,107,74,.2);border-radius:6px;font-size:9px;color:var(--coral);font-family:var(--font-mono);line-height:1.5}
+.tactic-alert .ta-title{font-weight:600;margin-bottom:2px}
+.engine-metrics{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.engine-metric{font-size:8px;padding:2px 5px;border-radius:4px;font-family:var(--font-mono);background:rgba(0,229,204,.06);border:1px solid rgba(0,229,204,.1);color:var(--text2)}
 .feed-parallel{background:var(--bg2);border:1px solid var(--bg4);border-radius:12px;padding:12px;margin-bottom:12px}
 .feed-parallel .fp-title{font-family:var(--font-display);font-size:12px;font-weight:600;color:var(--coral);margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .parallel-row{display:flex;gap:6px;margin-bottom:6px;align-items:center}
@@ -2281,49 +2293,263 @@ function tpl(template, vars) {
   return s;
 }
 
+// ===================== DEALCLAW ENGINE (Browser Port) =====================
+class DealClawEngine {
+  constructor({ dealId, service, budget, walkAwayPrice, marketData }) {
+    this.dealId = dealId;
+    this.service = service;
+    this.budget = budget;
+    this.walkAwayPrice = walkAwayPrice;
+    this.market = marketData;
+    this.bestAlternative = Math.min(...marketData.alternatives.map(a => a.price));
+    this.state = 'INITIATING';
+    this.rounds = [];
+    this.vendorOffers = [];
+    this.counterOffers = [];
+    this.vendorConcessions = [];
+    this.ourConcessions = [];
+    this.initialConcession = null;
+  }
+  processRound(vendorOffer, round) {
+    this.state = 'NEGOTIATING';
+    this.vendorOffers.push(vendorOffer);
+    if (this.vendorOffers.length > 1) {
+      this.vendorConcessions.push(this.vendorOffers[this.vendorOffers.length - 2] - vendorOffer);
+    }
+    if (this._shouldClose(vendorOffer, round)) {
+      this.state = 'DEAL_CLOSED';
+      return this._buildResult('DEAL_CLOSED', vendorOffer, round, 0.99,
+        ['Vendor offer ' + vendorOffer + ' SOL meets acceptance criteria', 'Deal closed on round ' + round]);
+    }
+    if (this._shouldWalkAway(vendorOffer, round)) {
+      this.state = 'WALK_AWAY';
+      return this._buildResult('WALK_AWAY', null, round, 0.95,
+        ['Offer ' + vendorOffer + ' SOL exceeds walk-away threshold', 'Negotiation terminated after round ' + round]);
+    }
+    var detected = this._detectTactics(vendorOffer, round);
+    if (detected) return detected;
+    var r = this._pickTactic(vendorOffer, round);
+    this.counterOffers.push(r.counter);
+    if (this.counterOffers.length > 1) {
+      var diff = r.counter - this.counterOffers[this.counterOffers.length - 2];
+      if (this.initialConcession === null && diff > 0) this.initialConcession = diff;
+      this.ourConcessions.push(diff);
+    }
+    return this._buildResult(r.tactic, r.counter, round, r.confidence, r.reasoning);
+  }
+  _pickTactic(vendorOffer, round) {
+    if (round === 1) return this._anchoring(vendorOffer);
+    if (round === 2 || this._vendorConcessionRate() < 0.15) return this._batnaLeverage(vendorOffer, round);
+    return this._concessionMapping(vendorOffer, round);
+  }
+  _anchoring(vendorOffer) {
+    var reasoning = [];
+    var pctAbove = ((vendorOffer - this.market.avgPrice) / this.market.avgPrice * 100).toFixed(0);
+    reasoning.push('Vendor opened at ' + vendorOffer + ' SOL, ' + pctAbove + '% above market avg (' + this.market.avgPrice + ')');
+    var anchor = this.market.avgPrice * 0.65;
+    var floor = this.budget * 0.5;
+    var ceil = this.budget * 0.8;
+    anchor = Math.max(floor, Math.min(ceil, anchor));
+    anchor = +anchor.toFixed(4);
+    reasoning.push('Setting anchor at 65% of market avg: ' + (this.market.avgPrice * 0.65).toFixed(4) + ' SOL');
+    reasoning.push('Capped to [' + floor.toFixed(4) + ', ' + ceil.toFixed(4) + ']: ' + anchor + ' SOL');
+    var aggressive = vendorOffer > this.market.avgPrice * 2;
+    if (aggressive) reasoning.push('WARNING: Vendor pricing is aggressive (>2x market avg)');
+    var confidence = aggressive ? 0.7 : 0.85;
+    reasoning.push('Confidence: ' + (confidence >= 0.8 ? 'high' : 'moderate') + ' (' + confidence + ') - ' + this.market.alternatives.length + ' BATNA alternatives');
+    return { tactic: 'ANCHORING', counter: anchor, confidence: confidence, reasoning: reasoning };
+  }
+  _batnaLeverage(vendorOffer, round) {
+    var reasoning = [];
+    var batnaScore = this.market.alternatives.reduce(function(s, a) { return s + (vendorOffer - a.price); }, 0) / this.market.alternatives.length;
+    reasoning.push('BATNA score: ' + batnaScore.toFixed(4) + ' (avg savings vs alternatives)');
+    reasoning.push('Best alternative: ' + this.bestAlternative + ' SOL');
+    var lastCounter = this.counterOffers.length > 0 ? this.counterOffers[this.counterOffers.length - 1] : this.budget * 0.5;
+    var counter = Math.min(lastCounter * 1.15, this.budget * 0.9);
+    counter = +counter.toFixed(4);
+    reasoning.push('Counter: min(' + (lastCounter * 1.15).toFixed(4) + ', ' + (this.budget * 0.9).toFixed(4) + ') = ' + counter + ' SOL');
+    var confidence = batnaScore > 0 ? 0.8 : 0.6;
+    reasoning.push('Confidence: ' + confidence + ' - BATNA ' + (batnaScore > 0 ? 'supports' : 'weak on') + ' our position');
+    return { tactic: 'BATNA_LEVERAGE', counter: counter, confidence: confidence, reasoning: reasoning };
+  }
+  _concessionMapping(vendorOffer, round) {
+    var reasoning = [];
+    var base = this.initialConcession != null ? this.initialConcession : this.budget * 0.1;
+    var concession = base * Math.pow(0.6, round - 1);
+    var lastCounter = this.counterOffers.length > 0 ? this.counterOffers[this.counterOffers.length - 1] : this.budget * 0.5;
+    var counter = +(lastCounter + concession).toFixed(4);
+    counter = Math.min(counter, this.budget);
+    reasoning.push('Diminishing concession: ' + base.toFixed(4) + ' * 0.6^' + (round - 1) + ' = ' + concession.toFixed(4) + ' SOL');
+    reasoning.push('Counter: ' + lastCounter.toFixed(4) + ' + ' + concession.toFixed(4) + ' = ' + counter + ' SOL');
+    if (this.vendorConcessions.length >= 2) {
+      var avgDrop = this.vendorConcessions.reduce(function(a, b) { return a + b; }, 0) / this.vendorConcessions.length;
+      var estimatedFloor = +(vendorOffer - avgDrop * 2).toFixed(4);
+      reasoning.push('Predicted vendor floor: ' + estimatedFloor + ' SOL (extrapolated from avg drop ' + avgDrop.toFixed(4) + ')');
+    }
+    var gap = vendorOffer - counter;
+    var confidence = gap < this.budget * 0.3 ? 0.75 : 0.6;
+    reasoning.push('Gap to close: ' + gap.toFixed(4) + ' SOL, confidence: ' + confidence);
+    return { tactic: 'CONCESSION_MAPPING', counter: counter, confidence: confidence, reasoning: reasoning };
+  }
+  _detectTactics(vendorOffer, round) {
+    if (round < 2) return null;
+    var prev = this.vendorOffers[this.vendorOffers.length - 2];
+    var movement = prev > 0 ? Math.abs(prev - vendorOffer) / prev : 1;
+    if (movement < 0.02) {
+      var reasoning = [
+        'Vendor moved only ' + (movement * 100).toFixed(1) + '% (<2%) - take-it-or-leave-it detected',
+        'Responding with firm counter at budget ceiling'
+      ];
+      this.counterOffers.push(this.budget);
+      return this._buildResult('TACTIC_DETECTION:take_it_or_leave_it', this.budget, round, 0.7, reasoning);
+    }
+    if (String(vendorOffer).endsWith('9') && round >= 2) {
+      var counter = this.counterOffers.length > 0 ? this.counterOffers[this.counterOffers.length - 1] : this.budget * 0.7;
+      var reasoning2 = [
+        'Urgency pressure pattern detected (offer ' + vendorOffer + ')',
+        'Ignoring pressure - holding position at ' + counter + ' SOL'
+      ];
+      this.counterOffers.push(counter);
+      return this._buildResult('TACTIC_DETECTION:urgency_pressure', counter, round, 0.65, reasoning2);
+    }
+    if (prev > vendorOffer && this.vendorConcessions.length > 0 && this.vendorConcessions[this.vendorConcessions.length - 1] < 0) {
+      var counter3 = this.counterOffers.length > 0 ? this.counterOffers[this.counterOffers.length - 1] : this.budget * 0.7;
+      var reasoning3 = [
+        'Scope reduction detected: headline dropped but effective value decreased',
+        'Countering at previous position ' + counter3 + ' SOL'
+      ];
+      this.counterOffers.push(counter3);
+      return this._buildResult('TACTIC_DETECTION:scope_reduction', counter3, round, 0.6, reasoning3);
+    }
+    return null;
+  }
+  _shouldWalkAway(vendorOffer, round) {
+    if (round >= 6) return true;
+    return vendorOffer > this.walkAwayPrice && round >= 3 && this._vendorConcessionRate() < 0.05;
+  }
+  _shouldClose(vendorOffer, round) {
+    if (vendorOffer <= this.budget) return true;
+    return vendorOffer <= this.walkAwayPrice && round >= 3 && vendorOffer <= this.bestAlternative;
+  }
+  _vendorConcessionRate() {
+    if (this.vendorOffers.length < 2) return 1;
+    var prev = this.vendorOffers[this.vendorOffers.length - 2];
+    return prev > 0 ? (prev - this.vendorOffers[this.vendorOffers.length - 1]) / prev : 0;
+  }
+  _buildResult(tactic, counterOffer, round, confidence, reasoning) {
+    var reasoningStr = JSON.stringify(reasoning);
+    var reasoningHash = '__pending__';
+    var lastVendor = this.vendorOffers[this.vendorOffers.length - 1];
+    var result = {
+      tactic: tactic,
+      counterOffer: counterOffer,
+      confidence: +confidence.toFixed(2),
+      reasoning: reasoning,
+      reasoningHash: reasoningHash,
+      metrics: {
+        vendorConcessionRate: +this._vendorConcessionRate().toFixed(4),
+        gapToTarget: +(lastVendor - this.budget).toFixed(4),
+        roundsRemaining: Math.max(0, 6 - round),
+        walkAwayRisk: +Math.min(1, Math.max(0,
+          (lastVendor - this.walkAwayPrice) / this.walkAwayPrice + (round / 10)
+        )).toFixed(2),
+      },
+    };
+    // Compute SHA-256 hash asynchronously, store promise
+    result._hashPromise = crypto.subtle.digest('SHA-256', new TextEncoder().encode(reasoningStr)).then(function(buf) {
+      var hash = Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+      result.reasoningHash = hash;
+      return hash;
+    });
+    this.rounds.push({ round: round, tactic: tactic, counterOffer: counterOffer, confidence: result.confidence, reasoning: reasoning, reasoningHash: reasoningHash, metrics: result.metrics });
+    return result;
+  }
+  getState() { return this.state; }
+  getSummary() {
+    return {
+      dealId: this.dealId, service: this.service, state: this.state,
+      totalRounds: this.rounds.length, budget: this.budget,
+      walkAwayPrice: this.walkAwayPrice, bestAlternative: this.bestAlternative,
+      rounds: this.rounds,
+    };
+  }
+  getReasoning(round) {
+    var entry = this.rounds.find(function(r) { return r.round === round; });
+    return entry ? entry.reasoning : null;
+  }
+}
+
+// Generate realistic market data for a given service type and budget
+function generateMarketData(serviceKey, budget) {
+  var avgMultipliers = { audit: 0.85, design: 0.7, nft: 0.65, marketing: 0.75, dev: 0.9, consulting: 0.8 };
+  var mult = avgMultipliers[serviceKey] || 0.75;
+  var avgPrice = +(budget * mult).toFixed(2);
+  var alternatives = [
+    { provider: 'Vendor_B', price: +(avgPrice * (0.85 + Math.random() * 0.15)).toFixed(2) },
+    { provider: 'Vendor_C', price: +(avgPrice * (0.9 + Math.random() * 0.2)).toFixed(2) },
+    { provider: 'Vendor_D', price: +(avgPrice * (1.0 + Math.random() * 0.15)).toFixed(2) }
+  ];
+  return { avgPrice: avgPrice, alternatives: alternatives };
+}
+
+// Vendor simulation: generates vendor offers that decrease with some tactics
+function simulateVendorOffer(round, prevOffer, budget, walkaway) {
+  if (round === 1) {
+    // Vendor opens aggressively: 1.5x-2x of budget
+    return +(budget * (1.5 + Math.random() * 0.5)).toFixed(4);
+  }
+  // Vendor makes concessions with decreasing rate
+  var concessionPct = 0.12 + Math.random() * 0.08; // 12-20% concession
+  concessionPct *= Math.pow(0.7, round - 2); // diminishing
+  var newOffer = +(prevOffer * (1 - concessionPct)).toFixed(4);
+  // Round 3: sometimes vendor tries scope reduction (offer ending in 9 for urgency in some cases)
+  if (round === 3 && Math.random() < 0.3) {
+    // Make the offer end in 9 to trigger urgency detection
+    newOffer = Math.floor(newOffer) + 0.9;
+    newOffer = +newOffer.toFixed(4);
+  }
+  // Round 4+: vendor may try take-it-or-leave-it (tiny movement)
+  if (round >= 4 && Math.random() < 0.25) {
+    newOffer = +(prevOffer * 0.99).toFixed(4); // <2% movement
+  }
+  return newOffer;
+}
+
 function startCustomDemo() {
   if (demoRunning) return;
   demoRunning = true;
-  const btn = document.getElementById('demoBtn');
+  var btn = document.getElementById('demoBtn');
   btn.disabled = true;
   btn.textContent = '...';
-  const chatArea = document.getElementById('chatArea');
+  var chatArea = document.getElementById('chatArea');
   chatArea.innerHTML = '';
 
-  const serviceKey = document.getElementById('cfService').value;
-  const serviceName = SERVICE_NAMES[serviceKey][currentLang === 'zh' ? 'zh' : 'en'];
-  const budget = parseInt(document.getElementById('cfBudget').value);
-  const walkaway = parseInt(document.getElementById('cfWalkaway').value);
-  const sp = STYLE_PARAMS[currentStyle];
+  var serviceKey = document.getElementById('cfService').value;
+  var serviceName = SERVICE_NAMES[serviceKey][currentLang === 'zh' ? 'zh' : 'en'];
+  var budget = parseInt(document.getElementById('cfBudget').value);
+  var walkaway = parseInt(document.getElementById('cfWalkaway').value);
+  // Ensure walkaway >= budget (swap if user set wrong)
+  if (walkaway < budget) { var tmp = walkaway; walkaway = budget; budget = tmp; }
 
-  // Generate dynamic prices
-  const vendorOpen = +(budget * (1.5 + Math.random() * 0.3)).toFixed(1);
-  const dealOpen = +(budget * sp.openFactor).toFixed(1);
-  const marketLow = +(budget * 0.4).toFixed(1);
-  const marketHigh = +(budget * 0.7).toFixed(1);
-  const batna = +(walkaway * (0.75 + Math.random() * 0.15)).toFixed(1);
+  var marketData = generateMarketData(serviceKey, budget);
+  var dealId = 'DEAL-' + Date.now().toString(36).toUpperCase();
 
-  const vendorR2 = +(vendorOpen * (0.7 + Math.random() * 0.05)).toFixed(1);
-  const dealR2 = +(dealOpen + (walkaway - dealOpen) * sp.concessionRate * 3).toFixed(1);
-  const vendorR3 = +(vendorR2 * (0.65 + Math.random() * 0.08)).toFixed(1);
-  const dealR3 = +(dealR2 + (walkaway - dealR2) * sp.concessionRate * 4).toFixed(1);
-
-  // Determine outcome: will the deal close?
-  // Deal closes when vendor can reasonably meet near or below walkaway
-  const midPrice = (vendorR3 + dealR3) / 2;
-  const willClose = vendorR3 * 0.82 <= walkaway;
-  const finalPrice = willClose ? +Math.min(midPrice, walkaway * 0.96).toFixed(1) : 0;
-  const vendorR4 = willClose ? finalPrice : +(walkaway * (1.2 + Math.random() * 0.3)).toFixed(1);
-
-  const vars = { service: serviceName, budget, walkaway, vendorOpen, dealOpen, marketLow, marketHigh, batna, vendorR2, dealR2, vendorR3, dealR3, vendorR4, finalPrice, finalOrNot: willClose ? (currentLang === 'zh' ? '最终报价。' : 'Final offer.') : (currentLang === 'zh' ? '接近底线。' : 'Near limit.') };
+  var engine = new DealClawEngine({
+    dealId: dealId,
+    service: serviceName,
+    budget: budget,
+    walkAwayPrice: walkaway,
+    marketData: marketData
+  });
 
   // Show brief and strategy
   document.getElementById('userBrief').style.display = 'block';
-  document.querySelector('#userBrief [data-i18n="briefText"]').textContent = tpl(t('customBrief'), vars);
+  var briefVars = { service: serviceName, budget: budget, walkaway: walkaway };
+  document.querySelector('#userBrief [data-i18n="briefText"]').textContent = tpl(t('customBrief'), briefVars);
   document.getElementById('strategyPanel').style.display = 'block';
-  const s1 = document.getElementById('strat1');
-  const s2 = document.getElementById('strat2');
-  const s3 = document.getElementById('strat3');
+  var s1 = document.getElementById('strat1');
+  var s2 = document.getElementById('strat2');
+  var s3 = document.getElementById('strat3');
   s1.textContent = t('stratInit'); s1.className = 'strategy-line active';
   s2.textContent = ''; s2.className = 'strategy-line';
   s3.textContent = ''; s3.className = 'strategy-line';
@@ -2334,105 +2560,206 @@ function startCustomDemo() {
 
   // Show confidence meter
   showConfidenceMeter();
-  const scenarioType = willClose ? 'success' : 'walkaway';
-  const c0 = getConfidenceStep(scenarioType, 0);
-  updateConfidence(c0.pct, c0.status, c0.factors);
+  updateConfidence(50, currentLang === 'zh' ? '引擎初始化...' : 'Engine initializing...', [
+    { label: currentLang === 'zh' ? '市场' : 'Market', type: 'neu' },
+    { label: 'BATNA', type: 'pos' }
+  ]);
 
-  const styleLabel = currentLang === 'zh' ? t('style' + currentStyle.charAt(0).toUpperCase() + currentStyle.slice(1)) : currentStyle.charAt(0).toUpperCase() + currentStyle.slice(1);
+  // Pre-compute all rounds using the engine
+  var maxRounds = 5;
+  var vendorOffers = [];
+  var engineResults = [];
+  var prevVendorOffer = 0;
 
-  const sequence = [
-    { type:'round', round:1, delay:800 },
-    { type:'confidence', scenario: scenarioType, index:1, delay:300 },
-    { type:'strategy', texts: [currentLang === 'zh' ? '策略：低锚定' : 'Tactic: Anchoring Low', currentLang === 'zh' ? '风格：' + styleLabel : 'Style: ' + styleLabel, currentLang === 'zh' ? '市场数据施压' : 'Market data pressure'], delay:200 },
-    { type:'typing', side:'left', delay:400 },
-    { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', text: tpl(t('customR1Vendor'), vars), delay:1200 },
-    { type:'chart', round:1, vp: vendorOpen, dp: dealOpen, delay:200 },
-    { type:'typing', side:'right', delay:600 },
-    { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', text: tpl(t('customR1Deal'), vars), delay:1400 },
-    { type:'round', round:2, delay:800 },
-    { type:'confidence', scenario: scenarioType, index:2, delay:300 },
-    { type:'strategy', texts: [currentLang === 'zh' ? '策略：BATNA 杠杆' : 'Tactic: BATNA Leverage', currentLang === 'zh' ? '检测到：资质论证' : 'Detected: credential justification', currentLang === 'zh' ? '引入替代方案' : 'Presenting alternative'], delay:200 },
-    { type:'typing', side:'left', delay:400 },
-    { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', text: tpl(t('customR2Vendor'), vars), delay:1200 },
-    { type:'chart', round:2, vp: vendorR2, dp: dealR2, delay:200 },
-    { type:'typing', side:'right', delay:600 },
-    { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', text: tpl(t('customR2Deal'), vars), delay:1400 },
-    { type:'round', round:3, delay:800 },
-    { type:'confidence', scenario: scenarioType, index:3, delay:300 },
-    { type:'strategy', texts: [currentLang === 'zh' ? '策略：范围防御' : 'Tactic: Scope Defense', '\u26A0\uFE0F ' + (currentLang === 'zh' ? '检测到：范围缩减' : 'Detected: scope reduction'), currentLang === 'zh' ? '坚守全范围' : 'Hold full scope'], delay:200 },
-    { type:'typing', side:'left', delay:400 },
-    { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', text: tpl(t('customR3Vendor'), vars), delay:1200 },
-    { type:'chart', round:3, vp: vendorR3, dp: dealR3, delay:200 },
-    { type:'typing', side:'right', delay:600 },
-    { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', text: tpl(t('customR3Deal'), vars), delay:1400 },
-    { type:'round', round:4, delay:800 },
-    { type:'confidence', scenario: scenarioType, index:4, delay:300 },
-  ];
-
-  if (willClose) {
-    sequence.push(
-      { type:'strategy', texts: [currentLang === 'zh' ? '状态：交易达成' : 'Status: DEAL CLOSING', currentLang === 'zh' ? '最终价格在预算内 \u2713' : 'Final price within budget \u2713', currentLang === 'zh' ? '启动 Solana 托管...' : 'Initiating Solana escrow...'], delay:500 },
-      { type:'typing', side:'left', delay:400 },
-      { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', text: tpl(t('customR4VendorAccept'), vars), delay:1000 },
-      { type:'chart', round:4, vp: finalPrice, dp: finalPrice, delay:200 },
-      { type:'customClosed', vars, delay:1200 },
-    );
-  } else {
-    sequence.push(
-      { type:'strategy', texts: [currentLang === 'zh' ? '状态：退出协议' : 'Status: WALK-AWAY', '\u26A0\uFE0F ' + (currentLang === 'zh' ? '超出预算' : 'Exceeds budget'), currentLang === 'zh' ? '启动 BATNA...' : 'Engaging BATNA...'], delay:500 },
-      { type:'typing', side:'left', delay:400 },
-      { type:'msg', side:'left', label:'\uD83E\uDD16 Vendor Agent', text: tpl(t('customR4VendorReject'), vars), delay:1000 },
-      { type:'chart', round:4, vp: vendorR4, dp: dealR3, delay:200 },
-      { type:'typing', side:'right', delay:600 },
-      { type:'msg', side:'right', label:'\uD83E\uDD9E DealClaw', text: tpl(t('customR4DealWalk'), vars), delay:1200 },
-      { type:'customWalkaway', vars, delay:1000 },
-    );
+  for (var r = 1; r <= maxRounds; r++) {
+    var vendorOffer = simulateVendorOffer(r, prevVendorOffer, budget, walkaway);
+    vendorOffers.push(vendorOffer);
+    var result = engine.processRound(vendorOffer, r);
+    engineResults.push(result);
+    prevVendorOffer = vendorOffer;
+    if (engine.getState() === 'DEAL_CLOSED' || engine.getState() === 'WALK_AWAY') break;
   }
 
-  let totalDelay = 0;
-  sequence.forEach(step => { totalDelay += step.delay; setTimeout(() => executeCustomStep(step), totalDelay / demoSpeed); });
-  setTimeout(() => { demoRunning = false; btn.disabled = false; btn.textContent = t('resetDemo'); }, (totalDelay + 500) / demoSpeed);
+  // Build animation sequence from engine results
+  var sequence = [];
+  for (var i = 0; i < engineResults.length; i++) {
+    var res = engineResults[i];
+    var roundNum = i + 1;
+    var vo = vendorOffers[i];
+    var isFinal = (res.tactic === 'DEAL_CLOSED' || res.tactic === 'WALK_AWAY');
+    var isTactic = res.tactic.startsWith('TACTIC_DETECTION');
+
+    // Round divider
+    sequence.push({ type: 'round', round: roundNum, delay: 800 });
+
+    // Strategy panel update from engine
+    var tacticLabel = res.tactic.replace('TACTIC_DETECTION:', '').replace(/_/g, ' ');
+    var stratTexts = [];
+    if (isFinal) {
+      stratTexts = [
+        (currentLang === 'zh' ? '状态：' : 'Status: ') + tacticLabel,
+        res.reasoning[0],
+        res.reasoning.length > 1 ? res.reasoning[1] : ''
+      ];
+    } else {
+      stratTexts = [
+        (currentLang === 'zh' ? '策略：' : 'Tactic: ') + tacticLabel,
+        (currentLang === 'zh' ? '置信度：' : 'Confidence: ') + (res.confidence * 100).toFixed(0) + '%',
+        res.reasoning.length > 0 ? res.reasoning[0] : ''
+      ];
+    }
+    sequence.push({ type: 'engineStrategy', texts: stratTexts, delay: 300 });
+
+    // Confidence meter update from engine
+    var confPct = Math.round(res.confidence * 100);
+    var confStatus = res.reasoning.length > 0 ? res.reasoning[res.reasoning.length - 1] : '';
+    var confFactors = [];
+    if (isTactic) confFactors.push({ label: currentLang === 'zh' ? '战术' : 'Tactic', type: 'neg' });
+    if (res.metrics.walkAwayRisk > 0.5) confFactors.push({ label: currentLang === 'zh' ? '风险' : 'Risk', type: 'neg' });
+    else confFactors.push({ label: currentLang === 'zh' ? '价格' : 'Price', type: 'pos' });
+    if (res.metrics.roundsRemaining <= 2) confFactors.push({ label: currentLang === 'zh' ? '轮次' : 'Rounds', type: 'neu' });
+    confFactors.push({ label: 'BATNA', type: res.metrics.gapToTarget > 0 ? 'neg' : 'pos' });
+    sequence.push({ type: 'engineConfidence', pct: confPct, status: confStatus, factors: confFactors, delay: 200 });
+
+    // Vendor message
+    var vendorText = (currentLang === 'zh' ? '报价：' : 'Our offer: ') + vo.toFixed(2) + ' SOL';
+    if (roundNum === 1) {
+      vendorText = (currentLang === 'zh'
+        ? '你好！' + serviceName + '的标准价格为 ' + vo.toFixed(2) + ' SOL。包含完整范围和交付物。'
+        : 'Hello! Our standard rate for ' + serviceName + ' is ' + vo.toFixed(2) + ' SOL. Full scope included.');
+    } else if (roundNum === 2) {
+      vendorText = vo.toFixed(2) + ' SOL ' + (currentLang === 'zh' ? '是我们的最佳报价。我们有丰富经验和高端品质。' : 'is our best rate. Extensive experience and premium quality.');
+    } else if (isTactic && res.tactic.indexOf('take_it_or_leave_it') >= 0) {
+      vendorText = vo.toFixed(2) + ' SOL. ' + (currentLang === 'zh' ? '这是最终报价。接受或放弃。' : 'Final offer. Take it or leave it.');
+    } else if (roundNum >= 3) {
+      vendorText = vo.toFixed(2) + ' SOL. ' + (currentLang === 'zh' ? '范围调整为核心交付物。额外项另计。' : 'Scope adjusted to core deliverables. Extras charged separately.');
+    }
+    sequence.push({ type: 'typing', side: 'left', delay: 400 });
+    sequence.push({ type: 'engineMsg', side: 'left', label: '\uD83E\uDD16 Vendor Agent', text: vendorText, delay: 1200 });
+
+    // Chart point
+    var dpVal = res.counterOffer != null ? res.counterOffer : (engineResults[i - 1] ? engineResults[i - 1].counterOffer : budget * 0.5);
+    sequence.push({ type: 'chart', round: roundNum, vp: vo, dp: isFinal && res.tactic === 'DEAL_CLOSED' ? vo : dpVal, delay: 200 });
+
+    if (isFinal) {
+      // Final outcome
+      if (res.tactic === 'DEAL_CLOSED') {
+        sequence.push({ type: 'engineClosed', result: res, vendorOpen: vendorOffers[0], serviceName: serviceName, engine: engine, delay: 1200 });
+      } else {
+        sequence.push({ type: 'typing', side: 'right', delay: 400 });
+        var walkText = (currentLang === 'zh'
+          ? '\uD83D\uDEAB 退出。' + vo.toFixed(2) + ' SOL 超出预算（' + budget + ' SOL）。启动 BATNA。'
+          : '\uD83D\uDEAB Walk-Away. ' + vo.toFixed(2) + ' SOL exceeds budget (' + budget + ' SOL). Engaging BATNA.');
+        sequence.push({ type: 'engineMsg', side: 'right', label: '\uD83E\uDD9E DealClaw', text: walkText, engineResult: res, delay: 1000 });
+        sequence.push({ type: 'engineWalkaway', result: res, vendorOpen: vendorOffers[0], serviceName: serviceName, budget: budget, batna: engine.bestAlternative, engine: engine, delay: 1000 });
+      }
+    } else {
+      // DealClaw counter-offer with engine reasoning
+      var counterText = '';
+      if (isTactic) {
+        var tacticName = res.tactic.split(':')[1].replace(/_/g, ' ');
+        counterText = '\u26A0\uFE0F ' + (currentLang === 'zh' ? '检测到战术：' + tacticName + '。' : 'Tactic detected: ' + tacticName + '. ');
+        counterText += (currentLang === 'zh' ? '还价：' : 'Counter: ') + res.counterOffer.toFixed(2) + ' SOL';
+      } else {
+        counterText = (currentLang === 'zh' ? '还价：' : 'Counter: ') + res.counterOffer.toFixed(2) + ' SOL. ';
+        if (res.tactic === 'ANCHORING') {
+          counterText += (currentLang === 'zh' ? '基于市场分析锚定。有竞争报价。' : 'Anchored on market analysis. We have competing quotes.');
+        } else if (res.tactic === 'BATNA_LEVERAGE') {
+          counterText += (currentLang === 'zh' ? 'BATNA：最佳替代 ' + engine.bestAlternative + ' SOL。' : 'BATNA: best alternative at ' + engine.bestAlternative + ' SOL.');
+        } else {
+          counterText += (currentLang === 'zh' ? '递减让步策略。' : 'Diminishing concession strategy.');
+        }
+      }
+      sequence.push({ type: 'typing', side: 'right', delay: 600 });
+      sequence.push({ type: 'engineMsg', side: 'right', label: '\uD83E\uDD9E DealClaw', text: counterText, engineResult: res, delay: 1400 });
+    }
+  }
+
+  // Execute sequence with delays
+  var totalDelay = 0;
+  sequence.forEach(function(step) {
+    totalDelay += step.delay;
+    setTimeout(function() { executeCustomStep(step); }, totalDelay / demoSpeed);
+  });
+  setTimeout(function() {
+    demoRunning = false;
+    btn.disabled = false;
+    btn.textContent = t('resetDemo');
+  }, (totalDelay + 500) / demoSpeed);
 }
 
 function executeCustomStep(step) {
-  const chatArea = document.getElementById('chatArea');
-  const sc = document.getElementById('screenContent');
+  var chatArea = document.getElementById('chatArea');
+  var sc = document.getElementById('screenContent');
 
-  if (step.type === 'confidence') {
-    const c = getConfidenceStep(step.scenario, step.index);
-    updateConfidence(c.pct, c.status, c.factors);
+  if (step.type === 'engineConfidence') {
+    updateConfidence(step.pct, step.status, step.factors);
   }
   else if (step.type === 'round') {
-    const roundText = currentLang === 'zh' ? '\u2501\u2501 \u7B2C' + step.round + '\u8F6E \u2501\u2501' : '\u2501\u2501 Round ' + step.round + ' \u2501\u2501';
-    const div = document.createElement('div');
+    var roundText = currentLang === 'zh' ? '\u2501\u2501 \u7B2C' + step.round + '\u8F6E \u2501\u2501' : '\u2501\u2501 Round ' + step.round + ' \u2501\u2501';
+    var div = document.createElement('div');
     div.className = 'round-divider';
     div.textContent = roundText;
     chatArea.appendChild(div);
     gsap.from(div, { opacity: 0, duration: 0.3 });
   }
-  else if (step.type === 'strategy') {
-    const s1 = document.getElementById('strat1');
-    const s2 = document.getElementById('strat2');
-    const s3 = document.getElementById('strat3');
+  else if (step.type === 'engineStrategy') {
+    var s1 = document.getElementById('strat1');
+    var s2 = document.getElementById('strat2');
+    var s3 = document.getElementById('strat3');
     s1.textContent = step.texts[0]; s1.className = 'strategy-line active';
     s2.textContent = step.texts[1]; s2.className = 'strategy-line active';
     s3.textContent = step.texts[2]; s3.className = 'strategy-line active';
     gsap.from([s1,s2,s3], { opacity:0, x:-10, duration:0.3, stagger:0.1 });
   }
   else if (step.type === 'typing') {
-    const ind = document.createElement('div');
+    var ind = document.createElement('div');
     ind.className = 'typing-indicator' + (step.side === 'right' ? ' right-typing' : '');
     ind.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
     ind.id = 'currentTyping';
     chatArea.appendChild(ind);
     sc.scrollTop = sc.scrollHeight;
   }
-  else if (step.type === 'msg') {
-    const existing = document.getElementById('currentTyping');
+  else if (step.type === 'engineMsg') {
+    var existing = document.getElementById('currentTyping');
     if (existing) existing.remove();
-    const bubble = document.createElement('div');
+    var bubble = document.createElement('div');
     bubble.className = 'chat-bubble ' + step.side;
-    bubble.innerHTML = '<div class="agent-label">' + step.label + '</div>' + step.text;
+    var html = '<div class="agent-label">' + step.label + '</div>' + step.text;
+    // If this is a DealClaw message with engine result, show reasoning chain + hash
+    if (step.engineResult && step.side === 'right') {
+      var er = step.engineResult;
+      html += '<div class="reasoning-chain">';
+      er.reasoning.forEach(function(line) {
+        html += '<div class="reasoning-step">' + line + '</div>';
+      });
+      html += '</div>';
+      // Tactic detection alert
+      if (er.tactic.startsWith('TACTIC_DETECTION')) {
+        var tacticType = er.tactic.split(':')[1].replace(/_/g, ' ');
+        html += '<div class="tactic-alert"><div class="ta-title">\u26A0\uFE0F Tactic Detected: ' + tacticType + '</div>' + er.reasoning[0] + '</div>';
+      }
+      // Engine metrics
+      html += '<div class="engine-metrics">';
+      html += '<span class="engine-metric">Conf: ' + (er.confidence * 100).toFixed(0) + '%</span>';
+      html += '<span class="engine-metric">Gap: ' + er.metrics.gapToTarget.toFixed(2) + '</span>';
+      html += '<span class="engine-metric">WA Risk: ' + (er.metrics.walkAwayRisk * 100).toFixed(0) + '%</span>';
+      html += '<span class="engine-metric">Rounds left: ' + er.metrics.roundsRemaining + '</span>';
+      html += '</div>';
+      // Reasoning hash (async)
+      var hashSpan = document.createElement('span');
+      hashSpan.className = 'reasoning-hash';
+      hashSpan.textContent = 'sha256: computing...';
+      bubble.innerHTML = html;
+      bubble.appendChild(hashSpan);
+      if (er._hashPromise) {
+        er._hashPromise.then(function(hash) {
+          hashSpan.textContent = 'sha256:' + hash.substring(0, 16) + '...' + hash.substring(hash.length - 8);
+        });
+      }
+    } else {
+      bubble.innerHTML = html;
+    }
     chatArea.appendChild(bubble);
     gsap.to(bubble, { opacity:1, y:0, duration:0.4, ease:'back.out(1.2)' });
     sc.scrollTop = sc.scrollHeight;
@@ -2440,49 +2767,90 @@ function executeCustomStep(step) {
   else if (step.type === 'chart') {
     addChartPoint(step.round, step.vp, step.dp);
   }
-  else if (step.type === 'customClosed') {
-    const v = step.vars;
-    const savings = (v.vendorOpen - v.finalPrice).toFixed(1);
-    const pct = Math.round((1 - v.finalPrice / v.vendorOpen) * 100);
-    const card = document.createElement('div');
+  else if (step.type === 'engineClosed') {
+    var res = step.result;
+    var vendorOpen = step.vendorOpen;
+    var finalPrice = res.counterOffer;
+    var savings = (vendorOpen - finalPrice).toFixed(2);
+    var pct = Math.round((1 - finalPrice / vendorOpen) * 100);
+    var summary = step.engine.getSummary();
+    var card = document.createElement('div');
     card.className = 'deal-locked-card';
-    card.innerHTML = '<h3>' + t('dealClosedTitle') + '</h3><div class="escrow-info">' +
-      tpl(t('customClosedLine1'), v) + '<br>' +
-      tpl(t('customClosedLine2'), { price: v.finalPrice }) + '<br>' +
-      tpl(t('customClosedLine3'), { savings, pct }) + '<br>' +
-      '<strong style="color:var(--cyan)">' + (currentLang === 'zh' ? '状态：等待人工审批' : 'Status: Awaiting approval') + '</strong></div>' +
-      '<button class="share-btn" onclick="showShareCard({result:\'-' + pct + '%\',label:\'' + (currentLang==='zh'?'节省达成':'Savings achieved') + '\',detail:\'<span>' + tpl(t('customClosedLine1'), v).replace(/'/g, "\\'") + '</span><br><span>' + tpl(t('customClosedLine2'), { price: v.finalPrice }).replace(/'/g, "\\'") + '</span><br><span>' + tpl(t('customClosedLine3'), { savings, pct }).replace(/'/g, "\\'") + '</span>\'})">&#x1F4E4; ' + (currentLang==='zh'?'分享战果':'Share Result') + '</button>';
+    var cHtml = '<h3>' + t('dealClosedTitle') + '</h3><div class="escrow-info">';
+    cHtml += tpl(t('customClosedLine1'), { service: step.serviceName }) + '<br>';
+    cHtml += tpl(t('customClosedLine2'), { price: finalPrice.toFixed(2) }) + '<br>';
+    cHtml += tpl(t('customClosedLine3'), { savings: savings, pct: pct }) + '<br>';
+    cHtml += '<strong style="color:var(--cyan)">' + (currentLang === 'zh' ? '状态：等待人工审批' : 'Status: Awaiting approval') + '</strong><br>';
+    cHtml += '<span style="font-size:10px;color:var(--text3);font-family:var(--font-mono)">Rounds: ' + summary.totalRounds + ' | Deal ID: ' + summary.dealId + '</span>';
+    cHtml += '</div>';
+    cHtml += '<div class="engine-badge"><span class="eb-dot"></span>Verified by DealClawEngine/1.0</div>';
+    // Reasoning chain for final round
+    cHtml += '<div class="reasoning-chain" style="margin-top:8px">';
+    res.reasoning.forEach(function(line) { cHtml += '<div class="reasoning-step">' + line + '</div>'; });
+    cHtml += '</div>';
+    var hashId = 'closedHash' + Date.now();
+    cHtml += '<div class="reasoning-hash" id="' + hashId + '">sha256: computing...</div>';
+    var safeLine1 = tpl(t('customClosedLine1'), { service: step.serviceName }).replace(/'/g, "\\'");
+    var safeLine2 = tpl(t('customClosedLine2'), { price: finalPrice.toFixed(2) }).replace(/'/g, "\\'");
+    var safeLine3 = tpl(t('customClosedLine3'), { savings: savings, pct: pct }).replace(/'/g, "\\'");
+    cHtml += '<button class="share-btn" onclick="showShareCard({result:\'-' + pct + '%\',label:\'' + (currentLang==='zh'?'节省达成':'Savings achieved') + '\',detail:\'<span>' + safeLine1 + '</span><br><span>' + safeLine2 + '</span><br><span>' + safeLine3 + '</span>\'})">&#x1F4E4; ' + (currentLang==='zh'?'分享战果':'Share Result') + '</button>';
+    card.innerHTML = cHtml;
     chatArea.appendChild(card);
     gsap.to(card, { opacity:1, duration:0.6, delay:0.2 });
     gsap.from(card, { scale:0.9, duration:0.6, delay:0.2, ease:'back.out(1.5)' });
     sc.scrollTop = sc.scrollHeight;
-    setTimeout(() => {
-      const phoneRect = document.getElementById('phone').getBoundingClientRect();
-      const cx = (phoneRect.left + phoneRect.width / 2) / window.innerWidth;
-      const cy = (phoneRect.top + phoneRect.height * 0.5) / window.innerHeight;
+    if (res._hashPromise) {
+      res._hashPromise.then(function(hash) {
+        var el = document.getElementById(hashId);
+        if (el) el.textContent = 'sha256:' + hash.substring(0, 16) + '...' + hash.substring(hash.length - 8);
+      });
+    }
+    setTimeout(function() {
+      var phoneRect = document.getElementById('phone').getBoundingClientRect();
+      var cx = (phoneRect.left + phoneRect.width / 2) / window.innerWidth;
+      var cy = (phoneRect.top + phoneRect.height * 0.5) / window.innerHeight;
       confetti({ particleCount:80, spread:60, origin:{x:cx, y:cy}, colors:['#FF6B4A','#00E5CC','#9945FF'] });
     }, 400);
-    // Escrow on-chain confirmation
-    setTimeout(() => {
-      const txHash = 'Cx' + Math.random().toString(36).substring(2,5) + '...' + Math.random().toString(36).substring(2,6);
-      showEscrowConfirmation(chatArea, v.finalPrice + ' SOL', txHash);
+    setTimeout(function() {
+      var txHash = 'Cx' + Math.random().toString(36).substring(2,5) + '...' + Math.random().toString(36).substring(2,6);
+      showEscrowConfirmation(chatArea, finalPrice.toFixed(2) + ' SOL', txHash);
     }, 800 / demoSpeed);
   }
-  else if (step.type === 'customWalkaway') {
-    const v = step.vars;
-    const card = document.createElement('div');
-    card.className = 'walkaway-card';
-    card.innerHTML = '<h3>' + t('walkawayTitle') + '</h3><div class="wa-info">' +
-      tpl(t('customWalkLine1'), v) + '<br>' +
-      tpl(t('customWalkLine2'), { lastOffer: v.vendorR4 }) + '<br>' +
-      tpl(t('customWalkLine3'), v) + '<br>' +
-      '<strong style="color:var(--cyan)">' + tpl(t('customWalkLine4'), v) + '</strong><br>' +
-      '<strong style="color:#3fb950">' + (currentLang === 'zh' ? '坏交易已拒绝 \u2713' : 'Bad deal rejected \u2713') + '</strong></div>' +
-      '<button class="share-btn" onclick="showShareCard({result:\'&#x1F6AB;\',label:\'' + (currentLang==='zh'?'坏交易已拒绝':'Bad deal rejected') + '\',detail:\'<span>' + tpl(t('customWalkLine1'), v).replace(/'/g, "\\'") + '</span><br><span>' + tpl(t('customWalkLine2'), { lastOffer: v.vendorR4 }).replace(/'/g, "\\'") + '</span><br><span>' + tpl(t('customWalkLine4'), v).replace(/'/g, "\\'") + '</span>\'})">&#x1F4E4; ' + (currentLang==='zh'?'分享战果':'Share Result') + '</button>';
-    chatArea.appendChild(card);
-    gsap.to(card, { opacity:1, duration:0.6, delay:0.2 });
-    gsap.from(card, { scale:0.9, duration:0.6, delay:0.2, ease:'back.out(1.5)' });
+  else if (step.type === 'engineWalkaway') {
+    var res2 = step.result;
+    var summary2 = step.engine.getSummary();
+    var lastOffer = step.engine.vendorOffers[step.engine.vendorOffers.length - 1];
+    var card2 = document.createElement('div');
+    card2.className = 'walkaway-card';
+    var wHtml = '<h3>' + t('walkawayTitle') + '</h3><div class="wa-info">';
+    wHtml += tpl(t('customWalkLine1'), { service: step.serviceName }) + '<br>';
+    wHtml += tpl(t('customWalkLine2'), { lastOffer: lastOffer.toFixed(2) }) + '<br>';
+    wHtml += tpl(t('customWalkLine3'), { budget: step.budget }) + '<br>';
+    wHtml += '<strong style="color:var(--cyan)">' + tpl(t('customWalkLine4'), { batna: step.batna.toFixed(2) }) + '</strong><br>';
+    wHtml += '<strong style="color:#3fb950">' + (currentLang === 'zh' ? '坏交易已拒绝 \u2713' : 'Bad deal rejected \u2713') + '</strong><br>';
+    wHtml += '<span style="font-size:10px;color:var(--text3);font-family:var(--font-mono)">Rounds: ' + summary2.totalRounds + ' | Deal ID: ' + summary2.dealId + '</span>';
+    wHtml += '</div>';
+    wHtml += '<div class="engine-badge"><span class="eb-dot"></span>Verified by DealClawEngine/1.0</div>';
+    wHtml += '<div class="reasoning-chain" style="margin-top:8px">';
+    res2.reasoning.forEach(function(line) { wHtml += '<div class="reasoning-step">' + line + '</div>'; });
+    wHtml += '</div>';
+    var hashId2 = 'walkHash' + Date.now();
+    wHtml += '<div class="reasoning-hash" id="' + hashId2 + '">sha256: computing...</div>';
+    var safeSvc = tpl(t('customWalkLine1'), { service: step.serviceName }).replace(/'/g, "\\'");
+    var safeOffer = tpl(t('customWalkLine2'), { lastOffer: lastOffer.toFixed(2) }).replace(/'/g, "\\'");
+    var safeBatna = tpl(t('customWalkLine4'), { batna: step.batna.toFixed(2) }).replace(/'/g, "\\'");
+    wHtml += '<button class="share-btn" onclick="showShareCard({result:\'&#x1F6AB;\',label:\'' + (currentLang==='zh'?'坏交易已拒绝':'Bad deal rejected') + '\',detail:\'<span>' + safeSvc + '</span><br><span>' + safeOffer + '</span><br><span>' + safeBatna + '</span>\'})">&#x1F4E4; ' + (currentLang==='zh'?'分享战果':'Share Result') + '</button>';
+    card2.innerHTML = wHtml;
+    chatArea.appendChild(card2);
+    gsap.to(card2, { opacity:1, duration:0.6, delay:0.2 });
+    gsap.from(card2, { scale:0.9, duration:0.6, delay:0.2, ease:'back.out(1.5)' });
     sc.scrollTop = sc.scrollHeight;
+    if (res2._hashPromise) {
+      res2._hashPromise.then(function(hash) {
+        var el = document.getElementById(hashId2);
+        if (el) el.textContent = 'sha256:' + hash.substring(0, 16) + '...' + hash.substring(hash.length - 8);
+      });
+    }
   }
 }
 
