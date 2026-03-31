@@ -262,6 +262,23 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 .ipfs-archive-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .ipfs-notification{position:absolute;top:40px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,rgba(0,229,204,.15),rgba(153,69,255,.1));border:1px solid rgba(0,229,204,.3);border-radius:12px;padding:10px 16px;font-family:var(--font-mono);font-size:10px;color:var(--cyan);z-index:180;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .3s}
 .ipfs-notification.show{opacity:1;pointer-events:auto}
+.ipfs-action-row{display:flex;gap:6px;margin-top:8px}
+.ipfs-action-btn{flex:1;padding:6px 8px;border-radius:8px;font-family:var(--font-mono);font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:4px;border:1px solid;background:none}
+.ipfs-action-btn.btn-download{background:rgba(0,229,204,.08);border-color:rgba(0,229,204,.25);color:var(--cyan)}
+.ipfs-action-btn.btn-download:hover{background:rgba(0,229,204,.18);border-color:var(--cyan)}
+.ipfs-action-btn.btn-copy{background:rgba(153,69,255,.08);border-color:rgba(153,69,255,.25);color:var(--purple)}
+.ipfs-action-btn.btn-copy:hover{background:rgba(153,69,255,.18);border-color:var(--purple)}
+.ipfs-action-btn.btn-pin{background:rgba(255,107,74,.08);border-color:rgba(255,107,74,.2);color:var(--coral)}
+.ipfs-action-btn.btn-pin:hover{background:rgba(255,107,74,.18);border-color:var(--coral)}
+.vc-layer-status.computed{background:rgba(255,107,74,.08);color:var(--coral);border:1px solid rgba(255,107,74,.2)}
+.vc-layer-status.pinned{background:rgba(0,229,204,.1);color:var(--cyan);border:1px solid rgba(0,229,204,.2)}
+.vc-pin-status{font-size:9px;color:var(--text3);font-family:var(--font-mono);margin-top:4px;padding:3px 6px;background:var(--bg3);border-radius:4px;display:flex;align-items:center;gap:4px}
+.vc-pin-status .pin-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.vc-pin-status .pin-dot.pinned{background:var(--cyan);box-shadow:0 0 4px var(--cyan)}
+.vc-pin-status .pin-dot.local{background:var(--coral);box-shadow:0 0 4px var(--coral)}
+.ipfs-gateway-row{margin-top:6px;display:flex;gap:4px;flex-wrap:wrap}
+.ipfs-gateway-link{font-size:9px;font-family:var(--font-mono);padding:2px 6px;border-radius:4px;text-decoration:none;transition:all .2s;border:1px solid var(--bg4);color:var(--text2);background:var(--bg3)}
+.ipfs-gateway-link:hover{border-color:var(--cyan);color:var(--cyan)}
 
 /* ===== DEAL DETAIL MODAL ===== */
 .modal-overlay{position:absolute;inset:0;background:rgba(7,9,15,.85);z-index:150;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
@@ -551,6 +568,23 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 .pw-addr{color:var(--text3);font-family:var(--font-mono);word-break:break-all;text-align:right;max-width:65%}
 .proof-network{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:9px;font-family:var(--font-mono);font-weight:600;background:rgba(153,69,255,.08);border:1px solid rgba(153,69,255,.12);color:var(--purple);margin-bottom:12px}
 .proof-network .pn-dot{width:5px;height:5px;border-radius:50%;background:var(--purple);box-shadow:0 0 4px var(--purple)}
+
+/* ===== JUPITER SWAP ===== */
+.jup-swap-section{margin-top:12px;padding-top:12px;border-top:1px solid var(--bg4)}
+.jup-swap-btn{width:100%;padding:10px 16px;border-radius:12px;background:linear-gradient(135deg,var(--coral),var(--cyan));border:none;color:#fff;font-family:var(--font-display);font-size:12px;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s,opacity .15s;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:6px}
+.jup-swap-btn:hover{transform:scale(1.02);box-shadow:0 4px 20px rgba(255,107,74,.3)}
+.jup-swap-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.jup-swap-btn .jup-icon{font-size:15px}
+.jup-swap-estimate{font-size:10px;color:var(--text3);font-family:var(--font-mono);text-align:center;margin-top:6px}
+.jup-swap-result{margin-top:10px;padding:10px 12px;background:linear-gradient(135deg,rgba(0,229,204,.08),rgba(153,69,255,.06));border:1px solid rgba(0,229,204,.25);border-radius:10px;text-align:center;animation:jupFadeIn .4s ease}
+@keyframes jupFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.jup-swap-result .jsr-title{font-family:var(--font-display);font-size:13px;font-weight:600;color:var(--cyan);margin-bottom:4px}
+.jup-swap-result .jsr-detail{font-size:10px;color:var(--text2);font-family:var(--font-mono);line-height:1.7}
+.jup-swap-result .jsr-link{display:inline-flex;align-items:center;gap:4px;margin-top:6px;padding:3px 10px;border-radius:6px;font-size:10px;font-family:var(--font-mono);font-weight:600;color:var(--cyan);background:rgba(0,229,204,.08);border:1px solid rgba(0,229,204,.15);text-decoration:none;transition:all .2s}
+.jup-swap-result .jsr-link:hover{background:rgba(0,229,204,.18);border-color:rgba(0,229,204,.3)}
+.jup-swap-result .jsr-note{font-size:9px;color:var(--text3);margin-top:6px;font-family:var(--font-mono)}
+.jup-swap-error{font-size:10px;color:var(--coral);font-family:var(--font-mono);text-align:center;margin-top:6px}
+.jup-swap-connect{font-size:10px;color:var(--text3);font-family:var(--font-mono);text-align:center;margin-top:6px}
 </style>
 </head>
 <body>
@@ -928,6 +962,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
           <button class="ipfs-archive-btn" id="ipfsArchiveBtn" onclick="archiveToIPFS()">
             &#x1F4E6; Archive to IPFS
           </button>
+          <div class="ipfs-action-row" id="ipfsActionRow" style="display:none">
+            <button class="ipfs-action-btn btn-download" onclick="downloadArchiveJSON()" title="Download JSON archive">
+              &#x2B07; Download JSON
+            </button>
+            <button class="ipfs-action-btn btn-copy" onclick="copyPayloadToClipboard()" title="Copy payload for manual pinning">
+              &#x1F4CB; Copy Payload
+            </button>
+            <button class="ipfs-action-btn btn-pin" onclick="openPinataUpload()" title="Pin via Pinata">
+              &#x1F4CC; Pin to IPFS
+            </button>
+          </div>
+          <div id="vcPinStatus" style="display:none"></div>
         </div>
       </div>
 
@@ -2067,7 +2113,8 @@ function executeStep(step) {
         ${t('dealClosedLine5')}
       </div>
       <button class="share-btn" onclick="showShareCard({result:'-50%',label:'${currentLang==='zh'?'节省达成':'Savings achieved'}',detail:'<span>${t("dealClosedLine1")}</span><br><span>${t("dealClosedLine2")}</span><br><span>${t("dealClosedLine4")}</span>'})">&#x1F4E4; ${currentLang==='zh'?'分享战果':'Share Result'}</button>
-      <button class="commentary-btn" onclick="showCommentary()">&#x1F9E0; ${currentLang==='zh'?'策略解说':'Strategy Breakdown'}</button>`;
+      <button class="commentary-btn" onclick="showCommentary()">&#x1F9E0; ${currentLang==='zh'?'策略解说':'Strategy Breakdown'}</button>
+      ${buildJupiterSwapSection(7.5)}`;
     chatArea.appendChild(card);
     gsap.to(card, { opacity:1, duration:0.6, delay:0.2, ease:'power2.out' });
     gsap.from(card, { scale:0.9, duration:0.6, delay:0.2, ease:'back.out(1.5)' });
@@ -2429,7 +2476,7 @@ function selectScenario(s) {
   document.getElementById('strategyPanel').style.display = 'none';
   // Reset IPFS archive state for new demo
   ipfsReasoningLog = [];
-  ipfsArchiveState = { roundHashes: [], merkleRoot: null, ipfsCID: null, payload: null };
+  ipfsArchiveState = { roundHashes: [], merkleRoot: null, ipfsCID: null, payload: null, isPinned: false, jsonBlob: null };
   updateVerificationChainUI();
 }
 
@@ -2616,15 +2663,24 @@ const SERVICE_NAMES = {
 };
 
 // ===================== DEEPSEEK LLM INTEGRATION =====================
+// Production: requests go through Cloudflare Worker proxy (API key stays server-side).
+// The proxy adds the Authorization header, so the client never needs the key.
+// See /worker/deepseek-proxy.js for the proxy implementation.
+const DEEPSEEK_PROXY_URL = 'https://dealclaw-proxy.YOUR_WORKER.workers.dev/api/chat';
+
+// --- DEVELOPMENT ONLY --- fallback key for local testing; empty in production ---
+const _DEV_ONLY_DEEPSEEK_KEY = '';
+
 const DEEPSEEK_CONFIG = {
-  endpoint: 'https://api.deepseek.com/chat/completions',
-  apiKey: 'sk-76afd04c39dc4e50a8fdf78cc65f754e',
+  proxyEndpoint: DEEPSEEK_PROXY_URL,
+  directEndpoint: 'https://api.deepseek.com/chat/completions',
+  apiKey: '', // intentionally empty — proxy handles auth in production
   model: 'deepseek-chat',
   enabled: true,
 };
 
 async function callDeepSeekReasoning(context) {
-  if (!DEEPSEEK_CONFIG.enabled || !DEEPSEEK_CONFIG.apiKey) return null;
+  if (!DEEPSEEK_CONFIG.enabled) return null;
   const systemPrompt = `You are DealClaw AI Negotiation Engine v1.0, an autonomous negotiation agent on Solana blockchain. You analyze vendor offers and generate strategic reasoning for each negotiation round.
 
 Output a JSON object with exactly this structure (no markdown, no code blocks, just raw JSON):
@@ -2657,13 +2713,8 @@ ${context.isFinal ? '- STATUS: ' + context.tactic + ' (final round)' : ''}
 Generate your strategic reasoning analysis.`;
 
   try {
-    const resp = await fetch(DEEPSEEK_CONFIG.endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + DEEPSEEK_CONFIG.apiKey,
-      },
-      body: JSON.stringify({
+    // Build request body (proxy and direct API use the same body shape)
+    const requestBody = JSON.stringify({
         model: DEEPSEEK_CONFIG.model,
         messages: [
           { role: 'system', content: systemPrompt },
@@ -2671,8 +2722,38 @@ Generate your strategic reasoning analysis.`;
         ],
         max_tokens: 300,
         temperature: 0.3,
-      }),
     });
+
+    // Try proxy first (no Authorization header — proxy injects the key)
+    let resp;
+    try {
+      resp = await fetch(DEEPSEEK_CONFIG.proxyEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: requestBody,
+      });
+    } catch (_proxyErr) {
+      resp = null;
+    }
+
+    // Fallback: direct API call with dev-only key (local development)
+    if (!resp || !resp.ok) {
+      if (_DEV_ONLY_DEEPSEEK_KEY) {
+        resp = await fetch(DEEPSEEK_CONFIG.directEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + _DEV_ONLY_DEEPSEEK_KEY,
+          },
+          body: requestBody,
+        });
+      } else if (!resp) {
+        console.warn('DeepSeek proxy unreachable and no dev key configured');
+        DEEPSEEK_CONFIG.enabled = false;
+        return null;
+      }
+    }
+
     if (!resp.ok) {
       console.warn('DeepSeek API error:', resp.status);
       DEEPSEEK_CONFIG.enabled = false;
@@ -2748,19 +2829,13 @@ function toggleAIvsAI() {
 }
 
 async function callDeepSeekVendor(context) {
-  if (!DEEPSEEK_CONFIG.enabled || !DEEPSEEK_CONFIG.apiKey) return null;
+  if (!DEEPSEEK_CONFIG.enabled) return null;
   var systemPrompt = 'You are an autonomous Vendor Agent AI in a Solana blockchain negotiation. You represent the seller side. Your goal is to MAXIMIZE the sale price while appearing reasonable and professional.\n\nStrategy guidelines:\n- Start with a high but justifiable opening price (1.5-2x market average)\n- Make strategic concessions that appear generous but preserve margin\n- Detect buyer manipulation tactics (lowball anchoring, fake BATNA claims, artificial urgency)\n- Use credential signaling and scope justification to defend your price\n- Never concede more than 15% in a single round\n- If buyer is clearly bluffing about alternatives, call it out diplomatically\n- Accept a deal if it is at or above your minimum acceptable price\n\nOutput a JSON object with exactly this structure (no markdown, no code blocks, just raw JSON):\n{\n  "price": <number - your counter-offer price in SOL>,\n  "reasoning": "<string - 1-2 sentences explaining your strategic thinking>",\n  "tactic": "<string - one of: HOLD_FIRM, STRATEGIC_CONCESSION, CREDENTIAL_SIGNAL, SCOPE_JUSTIFY, URGENCY_CREATE, ACCEPT_DEAL>",\n  "message": "<string - what you say to the buyer, 1-2 sentences, professional tone>"\n}';
 
   var userPrompt = 'Negotiation Context:\n- Service: ' + context.service + '\n- Round: ' + context.round + '\n- Market average price: ' + context.marketAvg + ' SOL\n- Your minimum acceptable price: ' + context.minPrice + ' SOL\n- Your previous offer: ' + (context.prevVendorOffer || 'none') + ' SOL\n- Buyer\'s last counter-offer: ' + (context.buyerOffer || 'none') + ' SOL\n- Buyer\'s claimed budget: ' + context.buyerBudget + ' SOL\n- Round number: ' + context.round + ' of ' + context.maxRounds + '\n- Buyer tactic detected: ' + (context.buyerTactic || 'none') + '\n' + (context.prevOffers ? '- Previous offers history: ' + context.prevOffers + '\n' : '') + '\nGenerate your vendor counter-offer.';
 
   try {
-    var resp = await fetch(DEEPSEEK_CONFIG.endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + DEEPSEEK_CONFIG.apiKey,
-      },
-      body: JSON.stringify({
+    var requestBody = JSON.stringify({
         model: DEEPSEEK_CONFIG.model,
         messages: [
           { role: 'system', content: systemPrompt },
@@ -2768,8 +2843,37 @@ async function callDeepSeekVendor(context) {
         ],
         max_tokens: 300,
         temperature: 0.4,
-      }),
     });
+
+    // Try proxy first (no Authorization header — proxy injects the key)
+    var resp;
+    try {
+      resp = await fetch(DEEPSEEK_CONFIG.proxyEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: requestBody,
+      });
+    } catch (_proxyErr) {
+      resp = null;
+    }
+
+    // Fallback: direct API call with dev-only key (local development)
+    if (!resp || !resp.ok) {
+      if (_DEV_ONLY_DEEPSEEK_KEY) {
+        resp = await fetch(DEEPSEEK_CONFIG.directEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + _DEV_ONLY_DEEPSEEK_KEY,
+          },
+          body: requestBody,
+        });
+      } else if (!resp) {
+        console.warn('DeepSeek Vendor proxy unreachable and no dev key configured');
+        return null;
+      }
+    }
+
     if (!resp.ok) {
       console.warn('DeepSeek Vendor API error:', resp.status);
       return null;
@@ -3108,6 +3212,7 @@ function showAIvsAIClosed(chatArea, sc, serviceName, finalPrice, openingPrice, r
   h += '<span style="font-size:10px;color:var(--text3);font-family:var(--font-mono)">Deal ID: ' + dealId + '</span>';
   h += '</div>';
   h += '<div class="engine-badge"><span class="eb-dot"></span>AI vs AI &middot; DealClawEngine + DeepSeek &middot; Game-Theoretic</div>';
+  h += buildJupiterSwapSection(parseFloat(finalPrice.toFixed(2)));
   card.innerHTML = h;
   chatArea.appendChild(card);
   gsap.to(card, { opacity: 1, duration: 0.6, delay: 0.2 });
@@ -3735,6 +3840,7 @@ function executeCustomStep(step) {
     var safeLine2 = tpl(t('customClosedLine2'), { price: finalPrice.toFixed(2) }).replace(/'/g, "\\'");
     var safeLine3 = tpl(t('customClosedLine3'), { savings: savings, pct: pct }).replace(/'/g, "\\'");
     cHtml += '<button class="share-btn" onclick="showShareCard({result:\'-' + pct + '%\',label:\'' + (currentLang==='zh'?'节省达成':'Savings achieved') + '\',detail:\'<span>' + safeLine1 + '</span><br><span>' + safeLine2 + '</span><br><span>' + safeLine3 + '</span>\'})">&#x1F4E4; ' + (currentLang==='zh'?'分享战果':'Share Result') + '</button>';
+    cHtml += buildJupiterSwapSection(parseFloat(finalPrice.toFixed(2)));
     card.innerHTML = cHtml;
     chatArea.appendChild(card);
     gsap.to(card, { opacity:1, duration:0.6, delay:0.2 });
@@ -4215,7 +4321,7 @@ function showEscrowConfirmation(parentEl, amount, txHash) {
 // ===================== IPFS ARCHIVAL & MERKLE TREE =====================
 // Tracks reasoning hashes collected during negotiation demos
 var ipfsReasoningLog = [];
-var ipfsArchiveState = { roundHashes: [], merkleRoot: null, ipfsCID: null, payload: null };
+var ipfsArchiveState = { roundHashes: [], merkleRoot: null, ipfsCID: null, payload: null, isPinned: false, jsonBlob: null };
 
 // Collect a reasoning hash from any demo round
 function collectReasoningHash(round, hashHex, reasoningLines) {
@@ -4270,10 +4376,10 @@ async function buildMerkleTree(hashes) {
 // Generate IPFS payload: packages reasoning log into a JSON blob
 function generateIPFSPayload() {
   var payload = {
-    version: '1.0',
+    version: '2.0',
     protocol: 'DealClaw/DNP',
     timestamp: new Date().toISOString(),
-    agent: 'DealClawEngine/1.0',
+    agent: 'DealClawEngine/2.0',
     wallet: walletPublicKey || 'demo-mode',
     negotiation: {
       rounds: ipfsReasoningLog.map(function(e) {
@@ -4290,45 +4396,89 @@ function generateIPFSPayload() {
     verification: {
       hashAlgorithm: 'SHA-256',
       merkleAlgorithm: 'binary-sha256',
-      archiveFormat: 'JSON/IPFS-CIDv0'
+      cidVersion: 1,
+      cidCodec: 'raw',
+      cidMultihash: 'sha2-256',
+      archiveFormat: 'JSON/IPFS-CIDv1'
     }
   };
   return payload;
 }
 
-// Compute CID-like hash: SHA-256 of JSON, formatted as base58 with "Qm" prefix
+// Encode bytes to base32 (RFC 4648, lowercase, no padding) for CIDv1
+function base32Encode(bytes) {
+  var alphabet = 'abcdefghijklmnopqrstuvwxyz234567';
+  var bits = 0, value = 0, output = '';
+  for (var i = 0; i < bytes.length; i++) {
+    value = (value << 8) | bytes[i];
+    bits += 8;
+    while (bits >= 5) {
+      output += alphabet[(value >>> (bits - 5)) & 31];
+      bits -= 5;
+    }
+  }
+  if (bits > 0) {
+    output += alphabet[(value << (5 - bits)) & 31];
+  }
+  return output;
+}
+
+// Compute a deterministic CIDv1 (raw codec, sha2-256) from the payload JSON
+// CIDv1 binary structure: <multibase><version><codec><multihash>
+// multibase 'b' = base32lower, version=1, codec=0x55 (raw), multihash=0x12 (sha2-256) + 0x20 (32 bytes) + digest
 async function computeIPFSCID(payload) {
-  var jsonStr = JSON.stringify(payload, null, 2);
-  var hashHex = await sha256Hex(jsonStr);
-  // Convert hex to base58 (simplified: use base58 alphabet mapping)
-  var base58Chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-  var bytes = [];
-  for (var i = 0; i < hashHex.length; i += 2) {
-    bytes.push(parseInt(hashHex.substr(i, 2), 16));
-  }
-  // Simple base58 encoding
-  var result = '';
-  var num = BigInt('0x' + hashHex);
-  while (num > 0n) {
-    var remainder = Number(num % 58n);
-    num = num / 58n;
-    result = base58Chars[remainder] + result;
-  }
-  // Pad to ensure consistent length, prefix with "Qm" for IPFS CIDv0 look
-  var cid = 'Qm' + result.substring(0, 44);
+  var jsonStr = JSON.stringify(payload);
+  var hashBuf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(jsonStr));
+  var hashBytes = new Uint8Array(hashBuf);
+  // Build CIDv1 binary: version(1) + codec(0x55=raw) + multihash-fn(0x12=sha256) + multihash-len(0x20=32) + digest
+  var cidBytes = new Uint8Array(2 + 2 + hashBytes.length);
+  cidBytes[0] = 0x01; // CIDv1
+  cidBytes[1] = 0x55; // raw codec
+  cidBytes[2] = 0x12; // sha2-256 multihash function code
+  cidBytes[3] = 0x20; // digest length = 32
+  cidBytes.set(hashBytes, 4);
+  // Encode as base32lower with 'b' multibase prefix
+  var cid = 'b' + base32Encode(cidBytes);
+  // Store the canonical JSON for verification
+  ipfsArchiveState.jsonBlob = jsonStr;
   return cid;
+}
+
+// Attempt to pin content to IPFS via NFT.Storage free upload endpoint
+async function tryPinToIPFS(jsonStr) {
+  var endpoints = [
+    { name: 'NFT.Storage', url: 'https://api.nft.storage/upload', authHeader: null },
+    { name: 'Web3.Storage', url: 'https://api.web3.storage/upload', authHeader: null }
+  ];
+  // Try public gateway upload (these require auth, so they will gracefully fail for demo)
+  for (var i = 0; i < endpoints.length; i++) {
+    try {
+      var resp = await fetch(endpoints[i].url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: jsonStr,
+        signal: AbortSignal.timeout(5000)
+      });
+      if (resp.ok) {
+        var data = await resp.json();
+        return { pinned: true, service: endpoints[i].name, response: data };
+      }
+    } catch (e) {
+      // Expected to fail without auth - continue to fallback
+    }
+  }
+  return { pinned: false, service: null, response: null };
 }
 
 // Archive to IPFS: triggered by button click
 async function archiveToIPFS() {
   var btn = document.getElementById('ipfsArchiveBtn');
   btn.disabled = true;
-  btn.innerHTML = '&#x23F3; Computing...';
+  btn.innerHTML = '&#x23F3; Computing CID...';
 
   try {
     // Ensure we have hashes
     if (ipfsArchiveState.roundHashes.length === 0) {
-      // Use reference hashes if no demo has been run
       ipfsArchiveState.roundHashes = [
         '8b738ca3e71d9a2f4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7',
         'b094735587a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c',
@@ -4347,23 +4497,35 @@ async function archiveToIPFS() {
     var merkleResult = await buildMerkleTree(ipfsArchiveState.roundHashes);
     ipfsArchiveState.merkleRoot = merkleResult.root;
 
-    // Generate payload
+    // Generate payload and compute deterministic CIDv1
     var payload = generateIPFSPayload();
     ipfsArchiveState.payload = payload;
-
-    // Compute CID
     var cid = await computeIPFSCID(payload);
     ipfsArchiveState.ipfsCID = cid;
+
+    // Attempt real IPFS pinning
+    btn.innerHTML = '&#x23F3; Pinning to IPFS...';
+    var pinResult = await tryPinToIPFS(ipfsArchiveState.jsonBlob);
+    ipfsArchiveState.isPinned = pinResult.pinned;
 
     // Update UI
     updateVerificationChainUI();
 
-    btn.innerHTML = '&#x2705; Archived';
-    btn.style.borderColor = 'var(--cyan)';
-    btn.style.color = 'var(--cyan)';
+    // Show action buttons
+    var actionRow = document.getElementById('ipfsActionRow');
+    if (actionRow) actionRow.style.display = 'flex';
 
-    // Show notification
-    showIPFSNotification('Archived to IPFS — CID: ' + cid);
+    if (pinResult.pinned) {
+      btn.innerHTML = '&#x2705; Pinned to ' + pinResult.service;
+      btn.style.borderColor = 'var(--cyan)';
+      btn.style.color = 'var(--cyan)';
+      showIPFSNotification('Pinned to ' + pinResult.service + ' \u2014 CID: ' + cid);
+    } else {
+      btn.innerHTML = '&#x2705; CID Computed';
+      btn.style.borderColor = 'var(--cyan)';
+      btn.style.color = 'var(--cyan)';
+      showIPFSNotification('CID computed (local) \u2014 ' + cid.substring(0, 24) + '...');
+    }
   } catch (e) {
     console.error('IPFS archive error:', e);
     btn.innerHTML = '&#x274C; Error';
@@ -4375,7 +4537,62 @@ async function archiveToIPFS() {
     btn.innerHTML = '&#x1F4E6; Archive to IPFS';
     btn.style.borderColor = '';
     btn.style.color = '';
-  }, 3000);
+  }, 4000);
+}
+
+// Download the archive JSON for independent CID verification
+function downloadArchiveJSON() {
+  if (!ipfsArchiveState.jsonBlob) {
+    showIPFSNotification('Archive first to generate JSON');
+    return;
+  }
+  var blob = new Blob([ipfsArchiveState.jsonBlob], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'ai-reasoning-archive.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showIPFSNotification('Downloaded ai-reasoning-archive.json');
+}
+
+// Copy payload JSON to clipboard for manual pinning
+function copyPayloadToClipboard() {
+  if (!ipfsArchiveState.jsonBlob) {
+    showIPFSNotification('Archive first to generate payload');
+    return;
+  }
+  navigator.clipboard.writeText(ipfsArchiveState.jsonBlob).then(function() {
+    showIPFSNotification('Payload copied to clipboard');
+  }).catch(function() {
+    // Fallback for older browsers
+    var ta = document.createElement('textarea');
+    ta.value = ipfsArchiveState.jsonBlob;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showIPFSNotification('Payload copied to clipboard');
+  });
+}
+
+// Open Pinata web upload with instructions
+function openPinataUpload() {
+  if (!ipfsArchiveState.ipfsCID) {
+    showIPFSNotification('Archive first to compute CID');
+    return;
+  }
+  // Open Pinata pin manager in a new tab
+  window.open('https://app.pinata.cloud/pinmanager', '_blank');
+  showIPFSNotification('Pinata opened \u2014 paste JSON from clipboard to pin');
+  // Auto-copy payload for convenience
+  if (ipfsArchiveState.jsonBlob) {
+    navigator.clipboard.writeText(ipfsArchiveState.jsonBlob).catch(function() {});
+  }
 }
 
 // Update the verification chain UI in the About tab
@@ -4423,16 +4640,48 @@ function updateVerificationChainUI() {
   var ipfsEl = document.getElementById('vcIpfsCid');
   var ipfsStatus = document.getElementById('vcIpfsStatus');
   var ipfsLinkWrap = document.getElementById('vcIpfsLinkWrap');
+  var pinStatusEl = document.getElementById('vcPinStatus');
   if (ipfsArchiveState.ipfsCID) {
-    ipfsEl.textContent = ipfsArchiveState.ipfsCID;
+    var cid = ipfsArchiveState.ipfsCID;
+    ipfsEl.textContent = cid;
     ipfsEl.style.color = 'var(--coral)';
-    ipfsStatus.textContent = '\u2713 Pinned';
-    ipfsStatus.className = 'vc-layer-status verified';
-    ipfsStatus.style.color = 'var(--coral)';
-    ipfsStatus.style.borderColor = 'rgba(255,107,74,.3)';
-    ipfsStatus.style.background = 'rgba(255,107,74,.1)';
-    var ipfsUrl = 'https://ipfs.io/ipfs/' + ipfsArchiveState.ipfsCID;
-    ipfsLinkWrap.innerHTML = '<a class="vc-ipfs-link" href="' + ipfsUrl + '" target="_blank" rel="noopener">&#x1F517; ' + ipfsUrl + '</a>';
+
+    if (ipfsArchiveState.isPinned) {
+      ipfsStatus.textContent = '\u2713 Pinned';
+      ipfsStatus.className = 'vc-layer-status pinned';
+      ipfsStatus.style.color = 'var(--cyan)';
+      ipfsStatus.style.borderColor = 'rgba(0,229,204,.3)';
+      ipfsStatus.style.background = 'rgba(0,229,204,.1)';
+    } else {
+      ipfsStatus.textContent = 'CID Computed';
+      ipfsStatus.className = 'vc-layer-status computed';
+      ipfsStatus.style.color = 'var(--coral)';
+      ipfsStatus.style.borderColor = 'rgba(255,107,74,.3)';
+      ipfsStatus.style.background = 'rgba(255,107,74,.08)';
+    }
+
+    // Gateway links
+    var gateways = [
+      { name: 'ipfs.io', url: 'https://ipfs.io/ipfs/' + cid },
+      { name: 'dweb.link', url: 'https://' + cid + '.ipfs.dweb.link' },
+      { name: 'w3s.link', url: 'https://' + cid + '.ipfs.w3s.link' }
+    ];
+    var linkHtml = '<div class="ipfs-gateway-row">';
+    gateways.forEach(function(gw) {
+      linkHtml += '<a class="ipfs-gateway-link" href="' + gw.url + '" target="_blank" rel="noopener">' + gw.name + '</a>';
+    });
+    linkHtml += '</div>';
+    ipfsLinkWrap.innerHTML = linkHtml;
+
+    // Pin status indicator
+    if (pinStatusEl) {
+      pinStatusEl.style.display = 'block';
+      if (ipfsArchiveState.isPinned) {
+        pinStatusEl.innerHTML = '<div class="vc-pin-status"><span class="pin-dot pinned"></span>Content pinned and retrievable via IPFS gateways</div>';
+      } else {
+        pinStatusEl.innerHTML = '<div class="vc-pin-status"><span class="pin-dot local"></span>CID computed locally \u2014 pin via Pinata or web3.storage to make retrievable</div>';
+      }
+    }
   } else {
     ipfsEl.textContent = '--';
     ipfsEl.style.color = 'var(--text3)';
@@ -4442,6 +4691,7 @@ function updateVerificationChainUI() {
     ipfsStatus.style.borderColor = '';
     ipfsStatus.style.background = '';
     ipfsLinkWrap.innerHTML = '';
+    if (pinStatusEl) { pinStatusEl.style.display = 'none'; pinStatusEl.innerHTML = ''; }
   }
 }
 
@@ -4456,7 +4706,6 @@ function showIPFSNotification(text) {
 
 // Auto-archive when negotiation completes: hook into deal close / walk-away
 function autoArchiveOnComplete() {
-  // Build Merkle tree and archive automatically
   if (ipfsArchiveState.roundHashes.length === 0) return;
   buildMerkleTree(ipfsArchiveState.roundHashes).then(function(merkleResult) {
     ipfsArchiveState.merkleRoot = merkleResult.root;
@@ -4465,9 +4714,121 @@ function autoArchiveOnComplete() {
     return computeIPFSCID(payload);
   }).then(function(cid) {
     ipfsArchiveState.ipfsCID = cid;
+    // Attempt real pinning in background
+    return tryPinToIPFS(ipfsArchiveState.jsonBlob).then(function(pinResult) {
+      ipfsArchiveState.isPinned = pinResult.pinned;
+    }).catch(function() { ipfsArchiveState.isPinned = false; });
+  }).then(function() {
     updateVerificationChainUI();
-    showIPFSNotification('Reasoning archived \u2014 CID: ' + cid);
+    var actionRow = document.getElementById('ipfsActionRow');
+    if (actionRow) actionRow.style.display = 'flex';
+    var statusLabel = ipfsArchiveState.isPinned ? 'Pinned' : 'CID computed';
+    showIPFSNotification(statusLabel + ' \u2014 ' + ipfsArchiveState.ipfsCID.substring(0, 24) + '...');
   }).catch(function(e) { console.error('Auto-archive error:', e); });
+}
+
+// ===================== JUPITER SWAP INTEGRATION =====================
+var JUP_SOL_MINT = 'So11111111111111111111111111111111111111112';
+var JUP_USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
+var LAMPORTS_PER_SOL_JUP = 1000000000;
+var USDC_DECIMALS = 1000000;
+
+async function getJupiterQuote(inputMint, outputMint, amount) {
+  var url = 'https://quote-api.jup.ag/v6/quote?inputMint=' + inputMint + '&outputMint=' + outputMint + '&amount=' + amount + '&slippageBps=50';
+  var resp = await fetch(url);
+  if (!resp.ok) throw new Error('Jupiter Quote API error: ' + resp.status);
+  var data = await resp.json();
+  if (data.error) throw new Error(data.error);
+  return data;
+}
+
+async function executeJupiterSwap(quote) {
+  if (!walletConnected || !walletPublicKey) throw new Error('WALLET_NOT_CONNECTED');
+  var provider = getPhantomProvider();
+  if (!provider) throw new Error('WALLET_NOT_CONNECTED');
+  var swapResp = await fetch('https://quote-api.jup.ag/v6/swap', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ quoteResponse: quote, userPublicKey: walletPublicKey, wrapAndUnwrapSol: true })
+  });
+  if (!swapResp.ok) throw new Error('Jupiter Swap API error: ' + swapResp.status);
+  var swapData = await swapResp.json();
+  if (swapData.error) throw new Error(swapData.error);
+  var txBuf = Uint8Array.from(atob(swapData.swapTransaction), function(c) { return c.charCodeAt(0); });
+  if (!window.solanaWeb3) throw new Error('Solana web3 not loaded');
+  var transaction = solanaWeb3.VersionedTransaction.deserialize(txBuf);
+  var signed = await provider.signTransaction(transaction);
+  var connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.com', 'confirmed');
+  var sig = await connection.sendRawTransaction(signed.serialize(), { skipPreflight: false, maxRetries: 2 });
+  await connection.confirmTransaction(sig, 'confirmed');
+  return sig;
+}
+
+function buildJupiterSwapSection(solAmount) {
+  var id = 'jupSwap' + Date.now() + Math.random().toString(36).substring(2, 5);
+  var usdEst = solUsdPrice ? (solAmount * parseFloat(solUsdPrice)).toFixed(2) : null;
+  var h = '<div class="jup-swap-section" id="' + id + '">';
+  if (!walletConnected) {
+    h += '<button class="jup-swap-btn" disabled>';
+    h += '<span class="jup-icon">\u2B06\uFE0F</span> Swap SOL \u2192 USDC';
+    h += '</button>';
+    h += '<div class="jup-swap-connect">Connect Phantom to swap</div>';
+  } else {
+    h += '<button class="jup-swap-btn" onclick="handleJupiterSwap(' + solAmount + ',\'' + id + '\')">';
+    h += '<span class="jup-icon">\u2B06\uFE0F</span> Swap ' + solAmount + ' SOL \u2192 USDC';
+    h += '</button>';
+    if (usdEst) {
+      h += '<div class="jup-swap-estimate">Est. ~' + usdEst + ' USDC via Jupiter \u2728</div>';
+    } else {
+      h += '<div class="jup-swap-estimate">Lock deal price in USDC via Jupiter</div>';
+    }
+  }
+  h += '</div>';
+  return h;
+}
+
+async function handleJupiterSwap(solAmount, sectionId) {
+  var section = document.getElementById(sectionId);
+  if (!section) return;
+  var btn = section.querySelector('.jup-swap-btn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="jup-icon">\u23F3</span> Getting quote...'; }
+  var prevErr = section.querySelector('.jup-swap-error');
+  if (prevErr) prevErr.remove();
+  var prevResult = section.querySelector('.jup-swap-result');
+  if (prevResult) prevResult.remove();
+  try {
+    if (!walletConnected || !walletPublicKey) throw new Error('WALLET_NOT_CONNECTED');
+    var lamports = Math.round(solAmount * LAMPORTS_PER_SOL_JUP);
+    if (btn) btn.innerHTML = '<span class="jup-icon">\u23F3</span> Fetching Jupiter quote...';
+    var quote = await getJupiterQuote(JUP_SOL_MINT, JUP_USDC_MINT, lamports);
+    var outAmount = parseInt(quote.outAmount) / USDC_DECIMALS;
+    if (btn) btn.innerHTML = '<span class="jup-icon">\u23F3</span> Confirm in Phantom...';
+    var sig = await executeJupiterSwap(quote);
+    var resultHtml = '<div class="jup-swap-result">';
+    resultHtml += '<div class="jsr-title">\u2705 Swap Complete</div>';
+    resultHtml += '<div class="jsr-detail">';
+    resultHtml += 'Swapped ' + solAmount + ' SOL \u2192 ' + outAmount.toFixed(2) + ' USDC<br>';
+    resultHtml += 'Tx: ' + sig.slice(0, 8) + '...' + sig.slice(-6);
+    resultHtml += '</div>';
+    resultHtml += '<a class="jsr-link" href="https://explorer.solana.com/tx/' + sig + '" target="_blank" rel="noopener">\uD83D\uDD0D View on Solana Explorer</a>';
+    resultHtml += '<div class="jsr-note">Deal price locked in USDC</div>';
+    resultHtml += '</div>';
+    if (btn) btn.style.display = 'none';
+    var estEl = section.querySelector('.jup-swap-estimate');
+    if (estEl) estEl.style.display = 'none';
+    section.insertAdjacentHTML('beforeend', resultHtml);
+  } catch (err) {
+    var msg;
+    if (err.message === 'WALLET_NOT_CONNECTED') {
+      msg = 'Connect Phantom to swap';
+    } else if (err.message && (err.message.includes('User rejected') || err.message.includes('rejected') || err.message.includes('cancelled'))) {
+      msg = 'Swap cancelled';
+    } else {
+      msg = 'Swap failed: ' + (err.message || 'Unknown error');
+    }
+    if (btn) { btn.disabled = false; btn.innerHTML = '<span class="jup-icon">\u2B06\uFE0F</span> Swap ' + solAmount + ' SOL \u2192 USDC'; }
+    section.insertAdjacentHTML('beforeend', '<div class="jup-swap-error">' + msg + '</div>');
+  }
 }
 
 // ===================== INIT =====================
