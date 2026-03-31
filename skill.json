@@ -1,0 +1,237 @@
+{
+  "$schema": "https://openclaw.org/schemas/skill/v1.json",
+  "name": "dealclaw-negotiate",
+  "version": "1.0.0",
+  "description": "AI negotiation agent with verifiable reasoning on Solana. Autonomously negotiates service pricing using anchoring, BATNA leverage, concession mapping, and tactic detection — with SHA-256 hashed reasoning chains for on-chain verifiability.",
+  "author": "DealClaw",
+  "license": "MIT",
+  "homepage": "https://github.com/DealClaw/dealclaw-negotiate",
+  "entry": "engine/DealClawEngine.mjs",
+  "chain": "solana",
+  "protocols": ["DNP/1.0", "x402"],
+  "capabilities": [
+    "negotiation",
+    "tactic_detection",
+    "walk_away",
+    "verifiable_reasoning"
+  ],
+  "constructor": {
+    "description": "Initialize a new DealClawEngine instance for a specific deal.",
+    "params": {
+      "dealId": {
+        "type": "string",
+        "required": true,
+        "description": "Unique identifier for the negotiation deal."
+      },
+      "service": {
+        "type": "string",
+        "required": true,
+        "description": "Name or type of the service being negotiated."
+      },
+      "budget": {
+        "type": "number",
+        "required": true,
+        "description": "Maximum amount the buyer is willing to pay, in SOL."
+      },
+      "walkAwayPrice": {
+        "type": "number",
+        "required": true,
+        "description": "Absolute price ceiling beyond which the agent will terminate negotiation, in SOL."
+      },
+      "marketData": {
+        "type": "object",
+        "required": true,
+        "description": "Market pricing context used for anchoring and BATNA analysis.",
+        "properties": {
+          "avgPrice": {
+            "type": "number",
+            "description": "Average market price for the service in SOL."
+          },
+          "alternatives": {
+            "type": "array",
+            "description": "List of alternative service providers with pricing.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the alternative provider."
+                },
+                "price": {
+                  "type": "number",
+                  "description": "Price offered by the alternative provider in SOL."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "processRound",
+      "description": "Process a single negotiation round against the vendor's current offer. Selects the optimal tactic (anchoring, BATNA leverage, concession mapping, or tactic detection) and returns a counter-offer with full reasoning chain and a SHA-256 reasoning hash suitable for on-chain attestation.",
+      "parameters": {
+        "vendorOffer": {
+          "type": "number",
+          "required": true,
+          "description": "The vendor's current price offer in SOL."
+        },
+        "round": {
+          "type": "number",
+          "required": true,
+          "description": "The current negotiation round number (1-based). Maximum 6 rounds before automatic walk-away."
+        }
+      },
+      "returns": {
+        "type": "object",
+        "description": "Negotiation decision for this round.",
+        "properties": {
+          "tactic": {
+            "type": "string",
+            "description": "The tactic applied this round (ANCHORING, BATNA_LEVERAGE, CONCESSION_MAPPING, DEAL_CLOSED, WALK_AWAY, or TACTIC_DETECTION:*)."
+          },
+          "counterOffer": {
+            "type": "number",
+            "description": "The counter-offer in SOL, or null if walking away."
+          },
+          "confidence": {
+            "type": "number",
+            "description": "Confidence score for this decision (0.0 to 1.0)."
+          },
+          "reasoning": {
+            "type": "array",
+            "description": "Ordered list of reasoning steps explaining the decision.",
+            "items": { "type": "string" }
+          },
+          "reasoningHash": {
+            "type": "string",
+            "description": "SHA-256 hash of the reasoning array for on-chain verification."
+          },
+          "metrics": {
+            "type": "object",
+            "description": "Real-time negotiation analytics.",
+            "properties": {
+              "vendorConcessionRate": {
+                "type": "number",
+                "description": "Rate of vendor price movement between the last two offers."
+              },
+              "gapToTarget": {
+                "type": "number",
+                "description": "Difference between the latest vendor offer and the buyer's budget."
+              },
+              "roundsRemaining": {
+                "type": "number",
+                "description": "Number of rounds remaining before automatic walk-away."
+              },
+              "walkAwayRisk": {
+                "type": "number",
+                "description": "Probability estimate (0.0–1.0) that the deal will end in walk-away."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "getSummary",
+      "description": "Retrieve a complete summary of the negotiation, including configuration, current state, and the full history of all rounds with their decisions and reasoning.",
+      "parameters": {},
+      "returns": {
+        "type": "object",
+        "description": "Full negotiation summary.",
+        "properties": {
+          "dealId": { "type": "string" },
+          "service": { "type": "string" },
+          "state": { "type": "string", "enum": ["INITIATING", "NEGOTIATING", "DEAL_CLOSED", "WALK_AWAY"] },
+          "totalRounds": { "type": "number" },
+          "budget": { "type": "number" },
+          "walkAwayPrice": { "type": "number" },
+          "bestAlternative": { "type": "number" },
+          "rounds": { "type": "array" }
+        }
+      }
+    },
+    {
+      "name": "getReasoning",
+      "description": "Retrieve the reasoning chain for a specific negotiation round. Useful for auditing, dispute resolution, and on-chain verification against the stored reasoning hash.",
+      "parameters": {
+        "round": {
+          "type": "number",
+          "required": true,
+          "description": "The round number to retrieve reasoning for (1-based)."
+        }
+      },
+      "returns": {
+        "type": "array",
+        "nullable": true,
+        "description": "Array of reasoning step strings for the given round, or null if the round has not been played.",
+        "items": { "type": "string" }
+      }
+    }
+  ],
+  "tactics": [
+    {
+      "id": "ANCHORING",
+      "description": "Opens aggressively low at 65% of market average to set a favorable reference point.",
+      "appliesIn": "round 1"
+    },
+    {
+      "id": "BATNA_LEVERAGE",
+      "description": "Uses best-alternative-to-negotiated-agreement data to pressure the vendor when concession rate is low.",
+      "appliesIn": "round 2+, or when vendor concession rate < 15%"
+    },
+    {
+      "id": "CONCESSION_MAPPING",
+      "description": "Applies diminishing concessions (decay factor 0.6) while predicting the vendor's price floor.",
+      "appliesIn": "round 3+"
+    },
+    {
+      "id": "TACTIC_DETECTION:take_it_or_leave_it",
+      "description": "Detects when vendor movement is below 2% and responds with a firm budget-ceiling counter.",
+      "appliesIn": "round 2+"
+    },
+    {
+      "id": "TACTIC_DETECTION:urgency_pressure",
+      "description": "Identifies artificial urgency signals and holds the current position.",
+      "appliesIn": "round 2+"
+    },
+    {
+      "id": "TACTIC_DETECTION:scope_reduction",
+      "description": "Detects when headline price drops but effective value decreases, countering at the previous position.",
+      "appliesIn": "round 2+"
+    }
+  ],
+  "constraints": {
+    "maxRounds": 6,
+    "currency": "SOL",
+    "hashAlgorithm": "SHA-256",
+    "reasoningFormat": "ordered-steps"
+  },
+  "examples": [
+    {
+      "description": "Basic 3-round negotiation for a Solana RPC service",
+      "constructor": {
+        "dealId": "deal-001",
+        "service": "Solana RPC Node",
+        "budget": 2.0,
+        "walkAwayPrice": 3.0,
+        "marketData": {
+          "avgPrice": 2.5,
+          "alternatives": [
+            { "name": "Helius", "price": 2.2 },
+            { "name": "QuickNode", "price": 2.8 },
+            { "name": "Triton", "price": 2.4 }
+          ]
+        }
+      },
+      "calls": [
+        { "method": "processRound", "args": { "vendorOffer": 4.0, "round": 1 } },
+        { "method": "processRound", "args": { "vendorOffer": 3.2, "round": 2 } },
+        { "method": "processRound", "args": { "vendorOffer": 2.5, "round": 3 } },
+        { "method": "getSummary", "args": {} }
+      ]
+    }
+  ]
+}

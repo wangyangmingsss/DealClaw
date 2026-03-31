@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script src="https://unpkg.com/@solana/web3.js@1.95.8/lib/index.iife.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -214,6 +215,24 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 .arch-diagram .arch-highlight{font-weight:600}
 .tech-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .tech-badge{padding:5px 12px;border-radius:20px;font-size:10px;font-family:var(--font-mono);font-weight:600;border:1px solid var(--bg4);color:var(--text2);background:var(--bg2)}
+
+/* ===== ON-CHAIN HASH VERIFIER ===== */
+.hash-verifier{background:var(--bg2);border:1px solid var(--bg4);border-radius:14px;padding:16px;margin-top:14px}
+.hash-verifier .hv-title{font-family:var(--font-display);font-size:14px;font-weight:600;color:var(--coral);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.hash-verifier textarea{width:100%;height:64px;background:var(--bg3);border:1px solid var(--bg4);border-radius:8px;color:var(--text);font-family:var(--font-mono);font-size:11px;padding:8px;resize:vertical;outline:none;transition:border-color .2s}
+.hash-verifier textarea:focus{border-color:var(--cyan)}
+.hash-verifier .hv-btn{margin-top:8px;padding:6px 14px;border-radius:8px;background:linear-gradient(135deg,var(--coral),#ff8a6b);border:none;color:#fff;font-family:var(--font-mono);font-size:11px;font-weight:600;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.hash-verifier .hv-btn:hover{transform:scale(1.03);box-shadow:0 2px 12px rgba(255,107,74,.3)}
+.hash-verifier .hv-result{margin-top:10px;padding:8px;background:var(--bg3);border-radius:8px;font-family:var(--font-mono);font-size:10px;color:var(--cyan);word-break:break-all;display:none}
+.hash-verifier .hv-refs{margin-top:12px;border-top:1px solid var(--bg4);padding-top:10px}
+.hash-verifier .hv-refs-title{font-size:11px;color:var(--text2);font-family:var(--font-display);font-weight:600;margin-bottom:6px}
+.hash-verifier .hv-ref-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-family:var(--font-mono);font-size:10px}
+.hash-verifier .hv-ref-label{color:var(--text3)}
+.hash-verifier .hv-ref-hash{color:var(--cyan)}
+.hash-verifier .hv-merkle{margin-top:8px;padding:6px 8px;background:var(--bg3);border-radius:6px;font-family:var(--font-mono);font-size:9px;color:var(--purple);word-break:break-all;line-height:1.5}
+.hash-verifier .hv-merkle-label{font-size:10px;color:var(--text2);font-weight:600;margin-bottom:2px}
+.hash-verifier .hv-match{color:#3fb950;font-weight:600}
+.hash-verifier .hv-nomatch{color:var(--text3)}
 
 /* ===== DEAL DETAIL MODAL ===== */
 .modal-overlay{position:absolute;inset:0;background:rgba(7,9,15,.85);z-index:150;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
@@ -777,6 +796,25 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
         <div class="chart-section">
           <div class="chart-title" data-i18n="techStack">Tech Stack</div>
           <div class="tech-badges" id="techBadges"></div>
+        </div>
+
+        <!-- On-Chain Hash Verifier -->
+        <div class="hash-verifier">
+          <div class="hv-title">&#x1F50D; On-Chain Hash Verifier</div>
+          <textarea id="hvInput" placeholder="Paste reasoning text to verify..."></textarea>
+          <button class="hv-btn" onclick="computeHashVerifier()">Compute SHA-256</button>
+          <div class="hv-result" id="hvResult"></div>
+          <div class="hv-refs">
+            <div class="hv-refs-title">Token Launch Advisory - Reference Hashes</div>
+            <div class="hv-ref-row"><span class="hv-ref-label">R1</span><span class="hv-ref-hash" id="hvRef1">8b738ca3...</span></div>
+            <div class="hv-ref-row"><span class="hv-ref-label">R2</span><span class="hv-ref-hash" id="hvRef2">b0947355...</span></div>
+            <div class="hv-ref-row"><span class="hv-ref-label">R3</span><span class="hv-ref-hash" id="hvRef3">e8208610...</span></div>
+            <div class="hv-ref-row"><span class="hv-ref-label">R4</span><span class="hv-ref-hash" id="hvRef4">c256165e...</span></div>
+            <div class="hv-merkle">
+              <div class="hv-merkle-label">Merkle Root</div>
+              6516ca39a2c335d0d1a48f7d05d0773d1ff9122309e49076564a5def2702543c
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2025,6 +2063,56 @@ function renderAbout() {
   document.getElementById('techBadges').innerHTML = techBadgesArr.map(b => `<span class="tech-badge">${b}</span>`).join('');
 }
 
+// ===================== ON-CHAIN HASH VERIFIER =====================
+const HV_REFERENCE_HASHES = {
+  R1: '8b738ca3',
+  R2: 'b0947355',
+  R3: 'e8208610',
+  R4: 'c256165e',
+};
+const HV_MERKLE_ROOT = '6516ca39a2c335d0d1a48f7d05d0773d1ff9122309e49076564a5def2702543c';
+
+async function computeHashVerifier() {
+  var input = document.getElementById('hvInput').value;
+  var resultEl = document.getElementById('hvResult');
+  if (!input.trim()) {
+    resultEl.style.display = 'block';
+    resultEl.textContent = 'Please paste reasoning text first.';
+    resultEl.style.color = 'var(--text3)';
+    return;
+  }
+  try {
+    var encoder = new TextEncoder();
+    var data = encoder.encode(input);
+    var hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    var hashArray = Array.from(new Uint8Array(hashBuffer));
+    var hashHex = hashArray.map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+    resultEl.style.display = 'block';
+    resultEl.innerHTML = '<strong>SHA-256:</strong> ' + hashHex;
+    resultEl.style.color = 'var(--cyan)';
+    // Check against reference hashes
+    var prefix = hashHex.substring(0, 8);
+    var matched = false;
+    Object.keys(HV_REFERENCE_HASHES).forEach(function(round) {
+      var refEl = document.getElementById('hvRef' + round.replace('R', ''));
+      var refPrefix = HV_REFERENCE_HASHES[round];
+      if (prefix === refPrefix) {
+        matched = true;
+        if (refEl) refEl.innerHTML = refPrefix + '... <span class="hv-match">MATCH</span>';
+      } else {
+        if (refEl) refEl.innerHTML = refPrefix + '... <span class="hv-nomatch"></span>';
+      }
+    });
+    if (hashHex === HV_MERKLE_ROOT) {
+      resultEl.innerHTML += '<br><span class="hv-match">Merkle root match verified!</span>';
+    }
+  } catch(e) {
+    resultEl.style.display = 'block';
+    resultEl.textContent = 'Error computing hash: ' + e.message;
+    resultEl.style.color = 'var(--coral)';
+  }
+}
+
 // ===================== TICKER (with Jupiter Price API) =====================
 let solUsdPrice = null;
 let solPriceChange = null;
@@ -2458,6 +2546,35 @@ Generate your strategic reasoning analysis.`;
     DEEPSEEK_CONFIG.enabled = false;
     return null;
   }
+}
+
+function validateLLMOutput(llmResult, engineResult) {
+  if (!llmResult) {
+    return null;
+  }
+  // Check if reasoning exists and is an array
+  if (!llmResult.reasoning || !Array.isArray(llmResult.reasoning)) {
+    console.warn('LLM validation failed: reasoning is not an array');
+    return null;
+  }
+  // Extract the engine budget from the engineResult context
+  var budget = engineResult && engineResult.budget != null ? engineResult.budget : null;
+  if (budget != null) {
+    var solPattern = /(\d+\.?\d*)\s*SOL/gi;
+    for (var i = 0; i < llmResult.reasoning.length; i++) {
+      var line = llmResult.reasoning[i];
+      var match;
+      while ((match = solPattern.exec(line)) !== null) {
+        var mentionedPrice = parseFloat(match[1]);
+        if (mentionedPrice > budget) {
+          console.warn('LLM hallucination detected: mentioned ' + mentionedPrice + ' SOL exceeds budget ' + budget + ' SOL in reasoning line: ' + line);
+          return null;
+        }
+      }
+    }
+  }
+  llmResult._llmValidated = true;
+  return llmResult;
 }
 
 function tpl(template, vars) {
@@ -3068,6 +3185,20 @@ function executeCustomStep(step) {
       var txHash = 'Cx' + Math.random().toString(36).substring(2,5) + '...' + Math.random().toString(36).substring(2,6);
       showEscrowConfirmation(chatArea, finalPrice.toFixed(2) + ' SOL', txHash);
     }, 800 / demoSpeed);
+    // Send real Solana Devnet Memo transaction if wallet connected
+    if (walletConnected && window.solanaWeb3) {
+      var memoString = JSON.stringify({p:"DNP/1.0",d:step.engine.dealId,s:step.serviceName,r:summary.totalRounds,fp:finalPrice,sv:pct+"%"});
+      sendRealMemoTransaction(memoString).then(function(sig) {
+        if (sig) {
+          var memoEl = document.createElement('div');
+          memoEl.style.cssText = 'font-size:10px;color:var(--cyan);font-family:var(--font-mono);margin-top:6px;padding:4px 0;';
+          memoEl.innerHTML = 'On-chain Memo: <a href="https://explorer.solana.com/tx/' + sig + '?cluster=devnet" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">' + sig.slice(0,8) + '...' + sig.slice(-6) + '</a>';
+          chatArea.appendChild(memoEl);
+          var sc2 = document.getElementById('screenContent');
+          if (sc2) sc2.scrollTop = sc2.scrollHeight;
+        }
+      });
+    }
   }
   else if (step.type === 'engineWalkaway') {
     var res2 = step.result;
@@ -3108,6 +3239,20 @@ function executeCustomStep(step) {
       res2._hashPromise.then(function(hash) {
         var el = document.getElementById(hashId2);
         if (el) el.textContent = 'sha256:' + hash.substring(0, 16) + '...' + hash.substring(hash.length - 8);
+      });
+    }
+    // Send real Solana Devnet Memo transaction for walk-away if wallet connected
+    if (walletConnected && window.solanaWeb3) {
+      var walkMemo = JSON.stringify({p:"DNP/1.0",d:step.engine.dealId,s:step.serviceName,r:summary2.totalRounds,result:"walkaway",lastOffer:lastOffer,batna:step.batna});
+      sendRealMemoTransaction(walkMemo).then(function(sig) {
+        if (sig) {
+          var memoEl = document.createElement('div');
+          memoEl.style.cssText = 'font-size:10px;color:var(--cyan);font-family:var(--font-mono);margin-top:6px;padding:4px 0;';
+          memoEl.innerHTML = 'On-chain Memo: <a href="https://explorer.solana.com/tx/' + sig + '?cluster=devnet" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">' + sig.slice(0,8) + '...' + sig.slice(-6) + '</a>';
+          chatArea.appendChild(memoEl);
+          var sc2 = document.getElementById('screenContent');
+          if (sc2) sc2.scrollTop = sc2.scrollHeight;
+        }
       });
     }
   }
@@ -3369,6 +3514,35 @@ function getConfidenceStep(scenario, index) {
 }
 
 // ===================== ESCROW ON-CHAIN CONFIRMATION =====================
+async function sendRealMemoTransaction(memoText) {
+  try {
+    if (!window.solanaWeb3) { console.warn('solanaWeb3 not loaded'); return null; }
+    var provider = getPhantomProvider();
+    if (!provider) { console.warn('Phantom provider not available'); return null; }
+    var connection = new solanaWeb3.Connection('https://api.devnet.solana.com', 'confirmed');
+    var fromPubkey = provider.publicKey;
+    if (!fromPubkey) { console.warn('No public key on provider'); return null; }
+    var MEMO_PROGRAM_ID = new solanaWeb3.PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr');
+    var memoBytes = new TextEncoder().encode(memoText.slice(0, 500));
+    var instruction = new solanaWeb3.TransactionInstruction({
+      keys: [{ pubkey: fromPubkey, isSigner: true, isWritable: true }],
+      programId: MEMO_PROGRAM_ID,
+      data: memoBytes
+    });
+    var transaction = new solanaWeb3.Transaction();
+    transaction.add(instruction);
+    transaction.feePayer = fromPubkey;
+    var latestBlockhash = await connection.getLatestBlockhash('confirmed');
+    transaction.recentBlockhash = latestBlockhash.blockhash;
+    var result = await provider.signAndSendTransaction(transaction);
+    console.log('Memo tx signature:', result.signature);
+    return result.signature;
+  } catch (err) {
+    console.error('sendRealMemoTransaction error:', err);
+    return null;
+  }
+}
+
 function showEscrowConfirmation(parentEl, amount, txHash) {
   amount = amount || '7.5 SOL';
   txHash = txHash || 'Bx7k...9fQm';

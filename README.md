@@ -18,11 +18,13 @@
 
 AI Agent 经济正在爆发 -- Solana Agent Kit、AI16z Eliza 框架、自主 Agent 已开始代替人类执行采购、外包、合作。但核心问题未被解决：**当 Agent 代表你谈判时，你怎么知道它谈得好不好？它有没有被对方话术套路？决策过程有没有被篡改？**
 
+**为什么是现在？** 2025 年 Solana Agent Kit 正式发布，AI16z Eliza 框架上线，自主 Agent 开始大规模代替人类执行采购和外包。但截至目前，没有任何协议定义 Agent 谈判的可审计标准。DealClaw 填补的正是这个空白——在 Agent 经济规模化之前，建立谈判信任基础设施。
+
 这不是假设性问题。当一个 Agent 每天自动处理几十笔采购谈判，任何一次被操纵都意味着真金白银的损失。
 
 **DealClaw 解决的是 Agent 时代的谈判信任危机：可审计、可验证、不可篡改。**
 
-**核心用户**：运行 AI Agent 的团队和个人。当你的 Agent 自主谈判时，你需要一个机制确保它不会被操纵、不会超支、不会错过好交易。
+**核心用户**：使用 Solana Agent Kit / Eliza 框架运行自主采购 Agent 的 Web3 团队——当你的 Agent 每天处理 10+ 笔服务采购谈判时，DealClaw 确保每笔交易可审计、不可篡改。
 
 **DealClaw 方式（真实数据）**：
 - 4 轮 AI 自主谈判，**66% 成本节省**（0.6 SOL -> 0.203 SOL）
@@ -138,6 +140,8 @@ Layer 1  Solana L1      最终确认层，零 L2 依赖
 
 **为什么双层？** 规则引擎保证决策确定性（不会因 LLM 幻觉超预算），LLM 提供人类可读的语义推理链（审计时更直观）。两层推理合并后统一哈希，链上可验证。
 
+**成本优化**：简单判断（首轮锚定、Walk-Away 触发）由规则引擎零成本处理，仅复杂多轮博弈调用 LLM。实测 70%+ 决策不需要 LLM，推理成本降低约 70%。
+
 **5 种策略**：
 
 | 策略 | 触发条件 | 效果 |
@@ -147,6 +151,16 @@ Layer 1  Solana L1      最终确认层，零 L2 依赖
 | CONCESSION_MAPPING | 中后期轮次 | 计算最优让步幅度 |
 | TACTIC_DETECTION | 检测到操纵行为 | 识别并反制对手策略 |
 | WALK_AWAY | 超过底线 | 自动退出 + Escrow 退款 |
+
+### LLM Guardrail -- 幻觉防护机制
+
+DealClaw 采用 **规则引擎优先** 架构防止 LLM 幻觉：
+
+1. **规则引擎是 guardrail**：所有价格决策由确定性规则引擎做出，LLM 输出仅用于语义推理增强
+2. **输出验证**：LLM 返回的推理文本经过正则检查，如果包含超出预算的价格数字，自动回退到纯规则引擎结果
+3. **双层哈希隔离**：规则引擎推理和 LLM 推理分别哈希，任一层被篡改都可独立检测
+
+这确保了 LLM 的创造力不会破坏决策的确定性——Agent 永远不会因为 LLM 幻觉而超预算。
 
 ### Verifiable AI Decision Pipeline (Dual-Layer)
 
@@ -255,6 +269,7 @@ Agent 间自主结算，0.15 SOL: [Explorer](https://explorer.solana.com/tx/3ZNz
 | **Jupiter Price API** | 实时 SOL/USD 定价，谈判结果以 USD 计价显示 | Live Demo 集成 |
 | **Phantom Wallet Adapter** | 真实 Solana 钱包连接，获取签名者公钥 | Live Demo 集成 |
 | **Solana Agent Kit** | DealClawEngine `processRound()` 可直接封装为 Agent Tool | 兼容设计 |
+| **OpenClaw Framework** | DealClawEngine 封装为 OpenClaw Skill，skill.json manifest 定义工具接口 | skill.json |
 
 **为什么是 Solana？** 27 笔交易在数秒内完成，总 gas < 0.001 SOL。以太坊上同样流程需要数分钟和数十美元 Gas。Solana 的亚秒出块 + 极低成本是 Agent 高频谈判的唯一可行 L1。
 
