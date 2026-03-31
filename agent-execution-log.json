@@ -56,6 +56,31 @@
     "dealsWalkedAway": 1,
     "totalSaved": 0.25,
     "avgSavings": "50%",
-    "winRate": "100%"
+    "winRate": "100%",
+    "certificatesMinted": 2
+  },
+  "certificates": [
+    {
+      "name": "Deal Certificate: Smart Contract Audit",
+      "deal": "audit-001",
+      "outcome": "DEAL_CLOSED",
+      "mint": "9hPEnE3SfLB8K4GXwB2CA18L7duScHkmCc11YotF8dqg",
+      "holder": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
+      "explorer": "https://explorer.solana.com/address/9hPEnE3SfLB8K4GXwB2CA18L7duScHkmCc11YotF8dqg?cluster=devnet",
+      "metadataMemo": "4Gej8pWhAPhNtYs8HGX3fYvxeK5Axdcf1tgbboRHm9AFnUsQyeAprBkbYdkEdpTZ8wsa2Dkywmx71amAHeTnB3kU"
+    },
+    {
+      "name": "Deal Certificate: Logo Design",
+      "deal": "logo-002",
+      "outcome": "WALK_AWAY",
+      "mint": "Dowvv3fXdUuM9b3chjDqwSLFwx868MdWJAB75jZqK4yk",
+      "holder": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
+      "explorer": "https://explorer.solana.com/address/Dowvv3fXdUuM9b3chjDqwSLFwx868MdWJAB75jZqK4yk?cluster=devnet",
+      "metadataMemo": "3dRZLE3BdR3MCbb4DULav8fn7CVnkdAMrXYFMxWimK4gSMa2wNc2SpwtTCuzCEZtZcYKWrb4Gqk59bQfCfXLUNXT"
+    }
+  ],
+  "collection": {
+    "mint": "CWAm9apVFxRnBUyGcb2NJ96csa9JaFUrDEzgRLq9A2YM",
+    "explorer": "https://explorer.solana.com/address/CWAm9apVFxRnBUyGcb2NJ96csa9JaFUrDEzgRLq9A2YM?cluster=devnet"
   }
 }

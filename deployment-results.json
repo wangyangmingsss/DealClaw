@@ -57,6 +57,46 @@
       "label": "Escrow Refund: Escrow → Buyer (0.1 SOL walk-away refund)",
       "signature": "5VkDakES6vmHeviME3FPJZCvqna13Y8PqiMvcgB8uQefVmyabrda8cz38ErUstuAPvRCdSDsS11XYTyUCQ2K1GDv",
       "explorer": "https://explorer.solana.com/tx/5VkDakES6vmHeviME3FPJZCvqna13Y8PqiMvcgB8uQefVmyabrda8cz38ErUstuAPvRCdSDsS11XYTyUCQ2K1GDv?cluster=devnet"
+    },
+    {
+      "label": "Mint DealClaw Collection NFT",
+      "signature": "2Lsb15Agu1GJcLLLU7KW1haKP9itm33XozpsuRGc3bjAq4cV7shNZJE2qvEMAzHcZujq6uxMXhRbgq1ed2PEh4v",
+      "explorer": "https://explorer.solana.com/tx/2Lsb15Agu1GJcLLLU7KW1haKP9itm33XozpsuRGc3bjAq4cV7shNZJE2qvEMAzHcZujq6uxMXhRbgq1ed2PEh4v?cluster=devnet"
+    },
+    {
+      "label": "Revoke Collection Mint Authority (1-of-1)",
+      "signature": "3cNoUWxkXoabMKRi6NAVtEDb3ncosyfCGfzFKkKMk3aKbE83LzFsZbRsjDcPwTUtWmXJetCcF36jvqLjkFQ8PdpL",
+      "explorer": "https://explorer.solana.com/tx/3cNoUWxkXoabMKRi6NAVtEDb3ncosyfCGfzFKkKMk3aKbE83LzFsZbRsjDcPwTUtWmXJetCcF36jvqLjkFQ8PdpL?cluster=devnet"
+    },
+    {
+      "label": "Mint Certificate: Smart Contract Audit — DEAL_CLOSED (0.25 SOL, -50%)",
+      "signature": "5ebMgDe9t2HfdTbwfAi9YJraHWk4uEkDcNkvPzKC1bbvfV2mdkjsc8XwXVEx2bPMbZgNphB6djEoX2KHMXeD19GX",
+      "explorer": "https://explorer.solana.com/tx/5ebMgDe9t2HfdTbwfAi9YJraHWk4uEkDcNkvPzKC1bbvfV2mdkjsc8XwXVEx2bPMbZgNphB6djEoX2KHMXeD19GX?cluster=devnet"
+    },
+    {
+      "label": "Revoke Certificate #1 Mint Authority (immutable)",
+      "signature": "4EBMKiFZhVTD9ZZZ5nY5Ch38v6pm8Ws7EyGcjTDByKzTH6JSXfXXTcNaQzDgKxvu1ih9Y7P8VkyejiMuLwQM2U38",
+      "explorer": "https://explorer.solana.com/tx/4EBMKiFZhVTD9ZZZ5nY5Ch38v6pm8Ws7EyGcjTDByKzTH6JSXfXXTcNaQzDgKxvu1ih9Y7P8VkyejiMuLwQM2U38?cluster=devnet"
+    },
+    {
+      "label": "Memo: Certificate #1 Metadata (deal record on-chain)",
+      "signature": "4Gej8pWhAPhNtYs8HGX3fYvxeK5Axdcf1tgbboRHm9AFnUsQyeAprBkbYdkEdpTZ8wsa2Dkywmx71amAHeTnB3kU",
+      "explorer": "https://explorer.solana.com/tx/4Gej8pWhAPhNtYs8HGX3fYvxeK5Axdcf1tgbboRHm9AFnUsQyeAprBkbYdkEdpTZ8wsa2Dkywmx71amAHeTnB3kU?cluster=devnet"
+    },
+    {
+      "label": "Mint Certificate: Logo Design — WALK_AWAY (protected budget)",
+      "signature": "AKFDEPNNhXsofsdshuqjZQzCNQZNKN6ULhLWKmm4gAMKGt98hoL1EMtwwK8VmAWEBxkyi5p5bG8MLQdqoQThMGM",
+      "explorer": "https://explorer.solana.com/tx/AKFDEPNNhXsofsdshuqjZQzCNQZNKN6ULhLWKmm4gAMKGt98hoL1EMtwwK8VmAWEBxkyi5p5bG8MLQdqoQThMGM?cluster=devnet"
+    },
+    {
+      "label": "Revoke Certificate #2 Mint Authority (immutable)",
+      "signature": "5VQTzXgE6aj3c4GGHpscdVRj3CRtc2GWYYaHPTcfnMne6Tz9j8RVCpKQy2ZNshneAUZSwmViGyb6L1UBBsF8EXPc",
+      "explorer": "https://explorer.solana.com/tx/5VQTzXgE6aj3c4GGHpscdVRj3CRtc2GWYYaHPTcfnMne6Tz9j8RVCpKQy2ZNshneAUZSwmViGyb6L1UBBsF8EXPc?cluster=devnet"
+    },
+    {
+      "label": "Memo: Certificate #2 Metadata (walk-away record on-chain)",
+      "signature": "3dRZLE3BdR3MCbb4DULav8fn7CVnkdAMrXYFMxWimK4gSMa2wNc2SpwtTCuzCEZtZcYKWrb4Gqk59bQfCfXLUNXT",
+      "explorer": "https://explorer.solana.com/tx/3dRZLE3BdR3MCbb4DULav8fn7CVnkdAMrXYFMxWimK4gSMa2wNc2SpwtTCuzCEZtZcYKWrb4Gqk59bQfCfXLUNXT?cluster=devnet"
     }
   ],
   "negotiations": [
@@ -159,6 +199,30 @@
   "finalBalances": {
     "buyer": "0.9500",
     "seller": "0.9000",
-    "escrow": "1.5000"
-  }
+    "escrow": "1.4894"
+  },
+  "collection": {
+    "mint": "CWAm9apVFxRnBUyGcb2NJ96csa9JaFUrDEzgRLq9A2YM",
+    "explorer": "https://explorer.solana.com/address/CWAm9apVFxRnBUyGcb2NJ96csa9JaFUrDEzgRLq9A2YM?cluster=devnet"
+  },
+  "certificates": [
+    {
+      "name": "Deal Certificate: Smart Contract Audit",
+      "deal": "audit-001",
+      "outcome": "DEAL_CLOSED",
+      "mint": "9hPEnE3SfLB8K4GXwB2CA18L7duScHkmCc11YotF8dqg",
+      "holder": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
+      "explorer": "https://explorer.solana.com/address/9hPEnE3SfLB8K4GXwB2CA18L7duScHkmCc11YotF8dqg?cluster=devnet",
+      "metadataMemo": "4Gej8pWhAPhNtYs8HGX3fYvxeK5Axdcf1tgbboRHm9AFnUsQyeAprBkbYdkEdpTZ8wsa2Dkywmx71amAHeTnB3kU"
+    },
+    {
+      "name": "Deal Certificate: Logo Design",
+      "deal": "logo-002",
+      "outcome": "WALK_AWAY",
+      "mint": "Dowvv3fXdUuM9b3chjDqwSLFwx868MdWJAB75jZqK4yk",
+      "holder": "DzgRF9ReaE11PV3ViaLaADNCqQbfnw1QB2ukxotRSdsv",
+      "explorer": "https://explorer.solana.com/address/Dowvv3fXdUuM9b3chjDqwSLFwx868MdWJAB75jZqK4yk?cluster=devnet",
+      "metadataMemo": "3dRZLE3BdR3MCbb4DULav8fn7CVnkdAMrXYFMxWimK4gSMa2wNc2SpwtTCuzCEZtZcYKWrb4Gqk59bQfCfXLUNXT"
+    }
+  ]
 }
